@@ -29,7 +29,7 @@ class snowObj{
     }
   }
 
-  var CurrentFrameCount = 0;
+  var currFrame = 0;
   
   class introScreen{  //0
     constructor(){
@@ -106,7 +106,7 @@ class snowObj{
       textSize(64);
       textAlign(LEFT);
       text("INSTRUCTIONS", 20, 75);
-      let instr = "Use the WASD keys to move your character up the map. Avoid the angry poptarts. You start with 3 lives. Catching fish gives you an extra life. See if you can unlock all of the characters. Switch between characters using the Q and E keys.";
+      let instr = "Use the WASD keys to move your character up the map. Avoid the angry poptarts. You start with 3 lives. Catching fish gives you an extra life. See if you can unlock all of the characters. Switch between characters using the Q and E keys. Scroll through the menu below with the up and down arrow keys, and select an option with enter.";
       fill(50, 140, 220);
       textSize(32);
       textAlign(LEFT);
@@ -115,35 +115,79 @@ class snowObj{
 
       //menu
       textSize(48);
-      fill(0, 120, 175);
+      fill(25, 100, 175);    //font color of menu
       text("Start", 290, 425);
       text("Volume", 290, 470);
       text("High Scores", 290, 515);
       
       me.drawTriangle();
-      //if(currentFrameCount < (currFrame - 10)){
-        //currentFrameCount = currFrame;
+      if(currFrame < (frameCount - 10)){
+        currFrame = frameCount;
         me.changeOption();
-      //}
+        me.selectOption();
+      }
       
     }
   }
   
   class volumeScreen{  //2
     execute(me){
+        background(220, 250, 250);
       
+        fill(135, 206, 250);
+        textSize(64);
+        textAlign(LEFT);
+        text("VOLUME", 20, 75);
+
+        textSize(32);
+        textAlign(CENTER)
+        text('click to enter to return', width/2, 550);
+
+        if(currFrame < (frameCount - 10)){  //return to instructions screen
+            currFrame = frameCount;
+            if(keyArray[13] == 1){
+                me.currentState = 1;
+            }
+          }
     }  
   }
   
   class highscoreScreen{  //3
     execute(me){
-      background(220, 250, 250);
+        background(220, 250, 250);
+      
+        fill(135, 206, 250);
+        textSize(64);
+        textAlign(LEFT);
+        text("HIGH SCORES", 20, 75);
+
+        textSize(64);
+    
+        for(var i = 0; i < me.highScores.length; i++){
+            text((i + 1) + ". " + me.highScores[i], 100, 150 + i*75);
+        }
+
+        textSize(32);
+        textAlign(CENTER)
+        text('click to enter to return', width/2, 550);
+
+        if(currFrame < (frameCount - 10)){  //return to instructions screen
+            currFrame = frameCount;
+            if(keyArray[13] == 1){
+                me.currentState = 1;
+            }
+          }
     }
   }
   
   class gameScreen{  //4
     execute(me){
+        background(220, 250, 250);
       
+        fill(135, 206, 250);
+        textSize(64);
+        textAlign(LEFT);
+        text("TBD", 20, 75);
     }    
   }
   

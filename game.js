@@ -9,14 +9,16 @@ class gameObj{
       //for menu in instructions screen
       this.cursor = 0;
       this.cursorY = [400, 450, 500];
-      //this.cursorY = 400;
       this.cursorX = 270;
+
+      //for high scores
+      this.highScores = [0, 0, 0, 0, 0];
     }
     //drawScreen(){
       
     //for menu in instructions screen
     drawTriangle(){
-        fill(0);
+        fill(25, 100, 175); //color of triangle
         triangle(this.cursorX - 10, this.cursorY[this.cursor], this.cursorX - 10, this.cursorY[this.cursor] + 20, this.cursorX, this.cursorY[this.cursor] + 10);
     }
 
@@ -36,6 +38,20 @@ class gameObj{
             }
             else{
                 this.cursor++;
+            }
+        }
+    }
+
+    selectOption(){
+        if(keyArray[13] == 1){//select option with enter
+            if(this.cursor == 0){
+                this.currentState = 4;
+            }
+            else if(this.cursor == 1){
+                this.currentState = 2;
+            }
+            else if(this.cursor == 2){
+                this.currentState = 3;
             }
         }
     }
