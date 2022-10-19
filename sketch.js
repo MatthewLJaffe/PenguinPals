@@ -20,7 +20,7 @@ function draw() {
   
   game.state[game.currentState].execute(game);
 
-  //debugging
+  //use for debugging
   textSize(50);
-  text(game.cursor, mouseX, mouseY - 100);
+  //text(game.cursor, mouseX, mouseY - 100);
 }
