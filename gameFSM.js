@@ -28,6 +28,8 @@ class snowObj{
       
     }
   }
+
+  var CurrentFrameCount = 0;
   
   class introScreen{  //0
     constructor(){
@@ -97,13 +99,33 @@ class snowObj{
   }
   
   class instructionScreen{  //1
-    
     execute(me){
       background(220, 250, 250);
       
+      fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
       text("INSTRUCTIONS", 20, 75);
+      let instr = "Use the WASD keys to move your character up the map. Avoid the angry poptarts. You start with 3 lives. Catching fish gives you an extra life. See if you can unlock all of the characters. Switch between characters using the Q and E keys.";
+      fill(50, 140, 220);
+      textSize(32);
+      textAlign(LEFT);
+      text(instr, 25, 100, 775, 400);
+
+
+      //menu
+      textSize(48);
+      fill(0, 120, 175);
+      text("Start", 290, 425);
+      text("Volume", 290, 470);
+      text("High Scores", 290, 515);
+      
+      me.drawTriangle();
+      //if(currentFrameCount < (currFrame - 10)){
+        //currentFrameCount = currFrame;
+        me.changeOption();
+      //}
+      
     }
   }
   
