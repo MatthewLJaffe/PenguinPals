@@ -8,8 +8,8 @@ class gameObj{
 
       //for menu in instructions screen
       this.cursor = 0;
-      this.cursorY = [400, 450, 500];
-      this.cursorX = 270;
+      this.cursorY = [400, 445, 490];
+      this.cursorX = 280;
 
       //for high scores
       this.highScores = [0, 0, 0, 0, 0];

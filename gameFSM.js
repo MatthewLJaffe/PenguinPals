@@ -224,7 +224,7 @@ class snowObj
 
         textSize(32);
         textAlign(CENTER)
-        text('click to enter to return', width/2, 550);
+        text('click enter to return', width/2, 550);
         
         fill(50, 140, 220);
         let vol = "Adjust the volume using the left and right arrows. Press enter to return to the options menu.";
@@ -235,11 +235,18 @@ class snowObj
         for(var i = 0; i < me.volume; i++){
           rect(100 + i*60, 350, 58, 50);
         }
-
+        
+        //
         textSize(64);
         textAlign(CENTER);
         text("-", 52, 390);
         text("+", 750, 390);
+
+        //volume bar border
+        rect(100, 350, 600, 2);
+        rect(100, 350, 2, 50);
+        rect(100, 400, 600, 2);
+        rect(698, 350, 2, 50);
 
         //setVolume(me.volume * 0.1); //setVolume ranges from 0.0 to 1.0 so we scale accordingly
 
@@ -281,7 +288,7 @@ class snowObj
 
         textSize(32);
         textAlign(CENTER)
-        text('click to enter to return', width/2, 550);
+        text('click enter to return', width/2, 550);
 
         if(currFrame < (frameCount - 12)){  //return to instructions screen
             currFrame = frameCount;

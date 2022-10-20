@@ -23,5 +23,5 @@ function draw() {
   //use for debugging
   textSize(50);
   fill(0);
-  text(round(mouseX) + ", " + round(mouseY), mouseX, mouseY - 25);
+  //text(round(mouseX) + ", " + round(mouseY), mouseX, mouseY - 25);
 }
