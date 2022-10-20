@@ -1,3 +1,10 @@
+/*
+Project 7: Penguin Pals
+By: Katherine Pajares and Matthew Jaffe
+Matthew: pixel art and penguin animation, intro screen
+Katherine: game FSM, different screens
+*/
+
 var keyArray = [];
 function keyPressed() {
   keyArray[keyCode] = 1;

@@ -18,7 +18,6 @@ class gameObj{
       //for volume
       this.volume = 5;  //starts at 5
     }
-    //drawScreen(){
       
     //for menu in instructions screen
     drawTriangle(){
@@ -61,7 +60,7 @@ class gameObj{
     }
 
     updateHighScores(){
-        
+
     }
 
   
