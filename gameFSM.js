@@ -241,7 +241,7 @@ class snowObj
         text("-", 52, 390);
         text("+", 750, 390);
 
-        setVolume((me.volume * 0.1)); //setVolume ranges from 0.0 to 1.0 so we scale accordingly
+        //setVolume(me.volume * 0.1); //setVolume ranges from 0.0 to 1.0 so we scale accordingly
 
         if(currFrame < (frameCount - 12)){  //return to instructions screen
             currFrame = frameCount;
