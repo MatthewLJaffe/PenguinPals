@@ -46,6 +46,7 @@ class snowObj
       this.redPenguinAnim = [];
       this.blackPenguinAnim = [];
       this.bluePenguinAnim = [];
+      this.poptartAnim = [];
       this.walkingObjs = [];
 
       for (let i = 1; i <= 6; i ++)
@@ -54,12 +55,21 @@ class snowObj
         this.blackPenguinAnim.push(loadImage("images/BlackPenguin" + i + ".png"));
         this.bluePenguinAnim.push(loadImage("images/BluePenguin" + i + ".png"));
       }
+
+      for (let i = 1; i <= 5; i ++)
+      {
+        this.poptartAnim.push(loadImage("images/PoptartWalkRight" + i + ".png") );
+      }
+
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2, 500), createVector(64, 64), 2, this.bluePenguinAnim, 6));
+        createVector(width/2, 500), createVector(64, 64), 1, this.bluePenguinAnim, 6));
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 50, 500), createVector(64, 64), 2, this.redPenguinAnim, 6));
+        createVector(width/2 - 50, 500), createVector(64, 64), 1, this.redPenguinAnim, 6));
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 100, 500), createVector(64, 64), 2, this.blackPenguinAnim, 6));
+        createVector(width/2 - 100, 500), createVector(64, 64), 1, this.blackPenguinAnim, 6));
+      
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2 - 300, 500+5), createVector(40, 40), 1, this.poptartAnim, 6));
     }
 
     execute(me)
@@ -169,8 +179,8 @@ class snowObj
     update()
     {
       this.pos.x += this.speed;
-      if (this.pos.x - this.size.x/2 > width)
-        this.pos.x = -this.size.x/2;
+      if (this.pos.x - 32 > width)
+        this.pos.x = -32;
       if (frameCount % this.stepRate == 0)
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
