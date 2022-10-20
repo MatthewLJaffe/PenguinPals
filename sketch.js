@@ -10,7 +10,6 @@ function keyReleased() {
 function setup() {
   noSmooth();
   imageMode(CENTER);
-  rectMode(CENTER);
   createCanvas(800, 600);
 
   game = new gameObj();

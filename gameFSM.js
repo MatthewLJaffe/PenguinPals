@@ -1,4 +1,5 @@
-class snowObj{
+class snowObj
+{
     constructor(){
       this.size = random(8, 12);
       this.rate = random(0.5, 1.2);
@@ -35,6 +36,8 @@ class snowObj{
   {
     constructor()
     {
+      this.topIce = loadImage("images/IceBlocks1.png");
+      this.bottomIce = loadImage("images/IceBlocks2.png");
       this.snowDrops = [];
       
       for(let i = 0; i < 125; i++){
@@ -69,9 +72,13 @@ class snowObj{
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
-      stroke(8);
-      rect(width/2, 550, width, 100);
-      noStroke();
+      image(this.topIce, 20, 580, 40, 40);
+      for (let x = 20; x < 820; x += 40)
+      {
+        image(this.topIce, x, 540, 40, 40);
+        image(this.bottomIce, x, 580, 40, 40);
+      }
+      //make penguins walk
       for (let i = 0; i < this.walkingObjs.length; i++)
       {
         this.walkingObjs[i].update();
