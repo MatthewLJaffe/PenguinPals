@@ -31,71 +31,129 @@ class snowObj{
 
   var currFrame = 0;
   
-  class introScreen{  //0
-    constructor(){
+  class introScreen //0
+  {
+    constructor()
+    {
       this.snowDrops = [];
       
-      for(var i = 0; i < 125; i++){
+      for(let i = 0; i < 125; i++){
         this.snowDrops.push(new snowObj());
       }
+      this.redPenguinAnim = [];
+      this.blackPenguinAnim = [];
+      this.bluePenguinAnim = [];
+      this.walkingObjs = [];
+
+      for (let i = 1; i <= 6; i ++)
+      {
+        this.redPenguinAnim.push(loadImage("images/RedPenguin" + i + ".png") );
+        this.blackPenguinAnim.push(loadImage("images/BlackPenguin" + i + ".png"));
+        this.bluePenguinAnim.push(loadImage("images/BluePenguin" + i + ".png"));
+      }
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2, 500), createVector(64, 64), 2, this.bluePenguinAnim, 6));
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2 - 50, 500), createVector(64, 64), 2, this.redPenguinAnim, 6));
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2 - 100, 500), createVector(64, 64), 2, this.blackPenguinAnim, 6));
     }
-    execute(me){
+
+    execute(me)
+    {      
+      let yOffset = 100;
       background(220, 250, 250);
   
       //falling snow
-      for(var i = 0; i < this.snowDrops.length; i++){
+      for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
+      stroke(8);
+      rect(width/2, 550, width, 100);
+      noStroke();
+      for (let i = 0; i < this.walkingObjs.length; i++)
+      {
+        this.walkingObjs[i].update();
+      }
+      fill(255,255,255);
+
       
       //Title with icicles on letters
       fill(135, 206, 250);
       textAlign(CENTER);
       textSize(150);
       textFont('Georgia');
-      text('PENGUIN', width/2, 275);
-      text('PALS', width/2, 400);
+      text('PENGUIN', width/2, 275 - yOffset);
+      text('PALS', width/2, 400 - yOffset);
       
       textSize(32);
-      text('click to start', width/2, 550);
+      text('By Katherine and Matthew', width/2, 450 - yOffset);
+      //flash effect
+      if (frameCount % 80 < 40)
+        fill(135, 206, 250, 0);
+      text('click to start', width/2, 500 - yOffset);
+      fill (135, 206, 250);
       
       //icicles
       //P
-      triangle(93, 273, 95, 282, 97, 275);
-      triangle(95, 273, 98, 285, 101, 273);
+      triangle(93, 273 - yOffset, 95, 282 - yOffset, 97, 275 - yOffset);
+      triangle(95, 273 - yOffset, 98, 285 - yOffset, 101, 273 - yOffset);
       
       //E
-      triangle(162, 273, 166, 292, 170, 273);
-      triangle(158, 273, 161, 282, 164, 273);
-      triangle(171, 273, 170, 284,164, 273);
+      triangle(162, 273 - yOffset, 166, 292 - yOffset, 170, 273 - yOffset);
+      triangle(158, 273 - yOffset, 161, 282 - yOffset, 164, 273 - yOffset);
+      triangle(171, 273 - yOffset, 170, 284 - yOffset,164, 273 - yOffset);
       
       //N
-      triangle(342, 173, 346, 196, 350, 173);
-      triangle(347, 178, 350, 190, 353, 175);
+      triangle(342, 173 - yOffset, 346, 196 - yOffset, 350, 173 - yOffset);
+      triangle(347, 178 - yOffset, 350, 190 - yOffset, 353, 175 - yOffset);
       
       //G
-      triangle(416, 230, 420, 246, 424, 230);
-      triangle(421, 232, 424, 242, 427, 232);
+      triangle(416, 230 - yOffset, 420, 246 - yOffset, 424, 230 - yOffset);
+      triangle(421, 232 - yOffset, 424, 242 - yOffset, 427, 232 - yOffset);
       
       //U
-      triangle(533, 174, 535, 190, 537, 174);
-      triangle(566, 174, 568, 188, 570, 174);
-      triangle(568, 174, 571, 194, 574, 174);
+      triangle(533, 174 - yOffset, 535, 190 - yOffset, 537, 174 - yOffset);
+      triangle(566, 174 - yOffset, 568, 188 - yOffset, 570, 174 - yOffset);
+      triangle(568, 174 - yOffset, 571, 194 - yOffset, 574, 174 - yOffset);
       
       //I
-      triangle(622, 274, 624, 284, 626, 274);
+      triangle(622, 274 - yOffset, 624, 284 - yOffset, 626, 274 - yOffset);
       //N
       
       //P
       //A
       //L
       //S
-    
-      
-      
-      
     }
-  
+  }
+
+  class WalkingAnimation
+  {
+    constructor(pos, size, speed, anim, stepRate)
+    {
+      this.pos = pos;
+      this.size = size;
+      this.speed = speed;
+      this.anim = anim;
+      this.currAnimIndex = 0;
+      this.stepRate = stepRate;
+    }
+
+    update()
+    {
+      this.pos.x += this.speed;
+      if (this.pos.x - this.size.x/2 > width)
+        this.pos.x = -this.size.x/2;
+      if (frameCount % this.stepRate == 0)
+      {
+        this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
+      }
+      image(this.anim[this.currAnimIndex], this.pos.x, this.pos.y, this.size.x, this.size.y);
+    }
+
+    
   }
   
   class instructionScreen{  //1

@@ -8,16 +8,17 @@ function keyReleased() {
 }
 
 function setup() {
+  noSmooth();
+  imageMode(CENTER);
+  rectMode(CENTER);
   createCanvas(800, 600);
-  
+
   game = new gameObj();
-  
   
 }
 
 
 function draw() {
-  
   game.state[game.currentState].execute(game);
 
   //use for debugging
