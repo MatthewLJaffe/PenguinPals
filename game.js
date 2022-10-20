@@ -13,6 +13,9 @@ class gameObj{
 
       //for high scores
       this.highScores = [0, 0, 0, 0, 0];
+
+      //for volume
+      this.volume = 5;  //starts at 5
     }
     //drawScreen(){
       

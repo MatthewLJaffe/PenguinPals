@@ -204,7 +204,7 @@ class snowObj
       text("High Scores", 290, 515);
       
       me.drawTriangle();
-      if(currFrame < (frameCount - 10)){
+      if(currFrame < (frameCount - 12)){
         currFrame = frameCount;
         me.changeOption();
         me.selectOption();
@@ -225,11 +225,40 @@ class snowObj
         textSize(32);
         textAlign(CENTER)
         text('click to enter to return', width/2, 550);
+        
+        fill(50, 140, 220);
+        let vol = "Adjust the volume using the left and right arrows. Press enter to return to the options menu.";
+        textSize(32);
+        textAlign(LEFT);
+        text(vol, 25, 100, 775, 400);
 
-        if(currFrame < (frameCount - 10)){  //return to instructions screen
+        for(var i = 0; i < me.volume; i++){
+          rect(100 + i*60, 350, 58, 50);
+        }
+
+        textSize(64);
+        textAlign(CENTER);
+        text("-", 52, 390);
+        text("+", 750, 390);
+
+        setVolume((me.volume * 0.1)); //setVolume ranges from 0.0 to 1.0 so we scale accordingly
+
+        if(currFrame < (frameCount - 12)){  //return to instructions screen
             currFrame = frameCount;
             if(keyArray[13] == 1){
                 me.currentState = 1;
+            }
+
+            if(keyArray[LEFT_ARROW] == 1){  //lower volume
+              if(me.volume > 0){
+                me.volume--;
+              }
+            }
+    
+            if(keyArray[RIGHT_ARROW] == 1){ //increase volume
+              if(me.volume < 10){
+                me.volume++;
+              }
             }
           }
     }  
@@ -254,7 +283,7 @@ class snowObj
         textAlign(CENTER)
         text('click to enter to return', width/2, 550);
 
-        if(currFrame < (frameCount - 10)){  //return to instructions screen
+        if(currFrame < (frameCount - 12)){  //return to instructions screen
             currFrame = frameCount;
             if(keyArray[13] == 1){
                 me.currentState = 1;
