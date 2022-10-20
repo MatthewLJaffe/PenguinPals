@@ -95,7 +95,7 @@ class snowObj
       text('PALS', width/2, 400 - yOffset);
       
       textSize(32);
-      text('By Katherine and Matthew', width/2, 450 - yOffset);
+      text('By Katherine Pajares and Matthew Jaffe', width/2, 450 - yOffset);
       //flash effect
       if (frameCount % 80 < 40)
         fill(135, 206, 250, 0);
@@ -126,13 +126,31 @@ class snowObj
       triangle(568, 174 - yOffset, 571, 194 - yOffset, 574, 174 - yOffset);
       
       //I
-      triangle(622, 274 - yOffset, 624, 284 - yOffset, 626, 274 - yOffset);
+      triangle(621, 274 - yOffset, 623, 286 - yOffset, 625, 274 - yOffset);
+      triangle(619, 175, 620, 181, 623, 174);
+      triangle(623, 174, 625, 183, 627, 174);
+
       //N
-      
+      triangle(707, 76, 709, 87, 711, 76);
+      triangle(710, 76, 712, 84, 714, 76);
+
       //P
+      triangle(224, 200, 227, 215, 230, 200);
+      triangle(228, 198, 231, 210, 234, 198);
+
       //A
+      triangle(365, 262, 368, 274, 371, 262);
+      triangle(363, 260, 365, 272, 367, 260);
+      triangle(369, 260, 371, 272, 373, 260);
+
       //L
+      triangle(416, 198, 418, 209, 420, 198);
+      triangle(419, 198, 421, 215, 423, 198);
+
       //S
+      triangle(543, 198, 545, 215, 547, 198);
+      triangle(540, 198, 542, 208, 544, 198);
+      triangle(545, 198, 547, 212, 549, 198);
     }
   }
 

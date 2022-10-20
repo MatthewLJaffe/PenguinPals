@@ -22,5 +22,6 @@ function draw() {
 
   //use for debugging
   textSize(50);
-  //text(game.cursor, mouseX, mouseY - 100);
+  fill(0);
+  text(round(mouseX) + ", " + round(mouseY), mouseX, mouseY - 25);
 }
