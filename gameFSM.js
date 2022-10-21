@@ -50,7 +50,6 @@ class snowObj
       for(let i = 0; i < 400; i++){
         this.snowDrops.push(new snowObj());
       }
-
       this.walkingObjs.push(new WalkingAnimation(
         createVector(width/2, 500), createVector(64, 64), 1, animations.bluePenguinWalkRight, 6));
       this.walkingObjs.push(new WalkingAnimation(
@@ -226,6 +225,7 @@ class snowObj
     {
       this.animations = animations;
       this.pacingPoptart = new WalkBackAndForthAnimation(createVector(450 - 25, 160), createVector(40, 40), 1, animations.poptartWalkRight, animations.poptartWalkLeft, 6, 400 - 25, 500 - 25);
+      this.pacingPenguin = new WalkBackAndForthAnimation(createVector(415, 110), createVector(32, 32), 1, animations.blackPenguinWalkRight, animations.blackPenguinWalkLeft, 6, 415 - 50, 415+ 50);
       this.buttonPressed = "";
       this.buttons = [];
       this.buttons.push(new button(createVector(283, 380), createVector(120, 60),"Start", this));
@@ -254,6 +254,41 @@ class snowObj
       }
       this.buttonPressed = "";
       this.pacingPoptart.update();
+      this.pacingPenguin.update();
+      //smoke cloud animation
+      let smokeFrame = frameCount % 168;
+      if (smokeFrame < 60)
+        image(this.animations.redPenguinWalkRight[3], 425, 270, 32, 32);
+      else if (smokeFrame < 84)
+      {
+        let idx = Math.floor((smokeFrame - 60) / 6);
+        image(this.animations.smokeCloud[idx], 425, 270, 32, 32);
+      }
+      else if (smokeFrame < 144)
+      {
+        image(this.animations.blackPenguinWalkRight[3], 425, 270, 32, 32);
+      }
+      else
+      {
+        let idx = Math.floor((smokeFrame - 144) / 6);
+        image(this.animations.smokeCloud[idx], 425, 270, 32, 32);
+      }
+
+      //special move animation
+      let specialFrame = frameCount % 96;
+      if (specialFrame < 36)
+      {
+        image(this.animations.blackPenguinSpecialRight[Math.floor(specialFrame/6)], 435, 315, 40, 40);
+      }
+      if (specialFrame > 24)
+      {
+        image(this.animations.snowBall, 465 + (specialFrame - 36)*2, 315, 20, 20);
+      }
+      if (specialFrame >= 36)
+      {
+        image(this.animations.blackPenguinSpecialRight[5], 435, 315, 40, 40);
+      }
+
       image(this.animations.fish, 425, 220);
       
       fill(135, 206, 250);
@@ -346,29 +381,29 @@ class snowObj
   
   class highscoreScreen{  //3
     execute(me){
-        background(220, 250, 250);
-      
-        fill(135, 206, 250);
-        textSize(64);
-        textAlign(LEFT);
-        text("HIGH SCORES", 20, 75);
-
-        textSize(64);
+      background(220, 250, 250);
     
-        for(var i = 0; i < me.highScores.length; i++){
-            text((i + 1) + ". " + me.highScores[i], 100, 150 + i*75);
-        }
+      fill(135, 206, 250);
+      textSize(64);
+      textAlign(LEFT);
+      text("HIGH SCORES", 20, 75);
 
-        textSize(32);
-        textAlign(CENTER)
-        text('click enter to return', width/2, 550);
+      textSize(64);
+  
+      for(var i = 0; i < me.highScores.length; i++){
+          text((i + 1) + ". " + me.highScores[i], 100, 150 + i*75);
+      }
 
-        if(currFrame < (frameCount - 12)){  //return to instructions screen
-            currFrame = frameCount;
-            if(keyArray[13] == 1){
-                me.currentState = 1;
-            }
+      textSize(32);
+      textAlign(CENTER)
+      text('click enter to return', width/2, 550);
+
+      if(currFrame < (frameCount - 12)){  //return to instructions screen
+          currFrame = frameCount;
+          if(keyArray[13] == 1) {
+              me.currentState = 1;
           }
+        }
     }
   }
   

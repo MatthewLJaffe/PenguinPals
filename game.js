@@ -61,16 +61,19 @@ class gameObj
         this.blackPenguinWalkRight = [];
         this.bluePenguinWalkRight = [];
         this.blackPenguinWalkLeft = [];
+        this.blackPenguinSpecialRight = [];
         this.poptartWalkRight = [];
         this.poptartWalkLeft = [];
         this.smokeCloud = [];
         this.fish = loadImage("images/Fish.png");
+        this.snowBall = loadImage("images/Snowball.png");
     
         this.topIce = loadImage("images/IceBlocks1.png");
         this.bottomIce = loadImage("images/IceBlocks2.png");
     
         for (let i = 1; i <= 6; i ++)
         {
+            this.blackPenguinSpecialRight.push(loadImage("images/BlackPenguinSpecialRight" + i + ".png"));
             this.redPenguinWalkRight.push(loadImage("images/RedPenguin" + i + ".png") );
             this.blackPenguinWalkRight.push(loadImage("images/BlackPenguin" + i + ".png"));
             this.bluePenguinWalkRight.push(loadImage("images/BluePenguin" + i + ".png"));
