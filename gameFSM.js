@@ -34,42 +34,25 @@ class snowObj
   
   class introScreen //0
   {
-    constructor()
+    constructor(animations)
     {
-      this.topIce = loadImage("images/IceBlocks1.png");
-      this.bottomIce = loadImage("images/IceBlocks2.png");
+
       this.snowDrops = [];
+      this.walkingObjs = [];
       
       for(let i = 0; i < 125; i++){
         this.snowDrops.push(new snowObj());
       }
-      this.redPenguinAnim = [];
-      this.blackPenguinAnim = [];
-      this.bluePenguinAnim = [];
-      this.poptartAnim = [];
-      this.walkingObjs = [];
-
-      for (let i = 1; i <= 6; i ++)
-      {
-        this.redPenguinAnim.push(loadImage("images/RedPenguin" + i + ".png") );
-        this.blackPenguinAnim.push(loadImage("images/BlackPenguin" + i + ".png"));
-        this.bluePenguinAnim.push(loadImage("images/BluePenguin" + i + ".png"));
-      }
-
-      for (let i = 1; i <= 5; i ++)
-      {
-        this.poptartAnim.push(loadImage("images/PoptartWalkRight" + i + ".png") );
-      }
 
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2, 500), createVector(64, 64), 1, this.bluePenguinAnim, 6));
+        createVector(width/2, 500), createVector(64, 64), 1, animations.bluePenguinWalkRight, 6));
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 50, 500), createVector(64, 64), 1, this.redPenguinAnim, 6));
+        createVector(width/2 - 50, 500), createVector(64, 64), 1, animations.redPenguinWalkRight, 6));
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 100, 500), createVector(64, 64), 1, this.blackPenguinAnim, 6));
+        createVector(width/2 - 100, 500), createVector(64, 64), 1, animations.blackPenguinWalkRight, 6));
       
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 300, 500+5), createVector(40, 40), 1, this.poptartAnim, 6));
+        createVector(width/2 - 300, 500+5), createVector(40, 40), 1, animations.poptartWalkRight, 6));
     }
 
     execute(me)
@@ -82,11 +65,11 @@ class snowObj
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
-      image(this.topIce, 20, 580, 40, 40);
+      image(me.animations.topIce, 20, 580, 40, 40);
       for (let x = 20; x < 820; x += 40)
       {
-        image(this.topIce, x, 540, 40, 40);
-        image(this.bottomIce, x, 580, 40, 40);
+        image(me.animations.topIce, x, 540, 40, 40);
+        image(me.animations.bottomIce, x, 580, 40, 40);
       }
       //make penguins walk
       for (let i = 0; i < this.walkingObjs.length; i++)
@@ -120,7 +103,7 @@ class snowObj
       //E
       triangle(162, 273 - yOffset, 166, 292 - yOffset, 170, 273 - yOffset);
       triangle(158, 273 - yOffset, 161, 282 - yOffset, 164, 273 - yOffset);
-      triangle(171, 273 - yOffset, 170, 284 - yOffset,164, 273 - yOffset);
+      triangle(171, 273 - yOffset, 170, 284 - yOffset, 164, 273 - yOffset);
       
       //N
       triangle(342, 173 - yOffset, 346, 196 - yOffset, 350, 173 - yOffset);
@@ -187,23 +170,84 @@ class snowObj
       }
       image(this.anim[this.currAnimIndex], this.pos.x, this.pos.y, this.size.x, this.size.y);
     }
+  }
 
-    
+  class WalkBackAndForthAnimation
+  {
+    constructor(pos, size, speed, rightAnim, leftAnim, stepRate, xMin, xMax)
+    {
+      this.pos = pos;
+      this.size = size;
+      this.speed = speed;
+      this.rightAnim = rightAnim;
+      this.leftAnim = leftAnim;
+      this.currAnim = rightAnim;
+      this.currAnimIndex = 0;
+      this.stepRate = stepRate;
+      this.xMin = xMin;
+      this.xMax = xMax;
+    }
+  
+    update()
+    {
+      this.pos.x += this.speed;
+      if (this.pos.x > this.xMax)
+      {
+        this.currAnim = this.leftAnim;
+        this.currAnimIndex = 0;
+        this.speed *= -1;
+      }
+      else if (this.pos.x < this.xMin)
+      {
+        this.currAnim = this.rightAnim;
+        this.currAnimIndex = 0;
+        this.speed *= -1;
+      }
+      if (frameCount % this.stepRate == 0)
+      {
+        this.currAnimIndex = (this.currAnimIndex + 1) % this.currAnim.length;
+      }
+      image(this.currAnim[this.currAnimIndex], this.pos.x, this.pos.y, this.size.x, this.size.y);
+    }
+
   }
   
-  class instructionScreen{  //1
+  class InstructionsScreen
+  {  //1
+
+    constructor(animations)
+    {
+      this.animations = animations;
+      this.pacingPoptart = new WalkBackAndForthAnimation(createVector(450 - 25, 160), createVector(40, 40), 1, animations.poptartWalkRight, animations.poptartWalkLeft, 6, 400 - 25, 500 - 25);
+    }
+
     execute(me){
       background(220, 250, 250);
+      this.pacingPoptart.update();
+      image(this.animations.fish, 425, 220);
       
       fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
       text("INSTRUCTIONS", 20, 75);
-      let instr = "Use the WASD keys to move your character up the map. Avoid the angry poptarts. You start with 3 lives. Catching fish gives you an extra life. See if you can unlock all of the characters. Switch between characters using the Q and E keys. Scroll through the menu below with the up and down arrow keys, and select an option with enter.";
+      /*
+      WASD keys to move
+      Avoid Angry Poptarts
+      Collect Fish for extra lives
+      Q / E to switch penguins
+
+      */
       fill(50, 140, 220);
       textSize(32);
       textAlign(LEFT);
-      text(instr, 25, 100, 775, 400);
+      text("WASD keys to move", 25, 125);
+      text("Avoid angry Poptarts", 25, 175);
+      text("Collect fish for extra lives", 25, 225);
+      text("Q/E to switch penguins", 25, 275);
+      text("Space to use special move", 25, 325);
+
+
+
 
 
       //menu
