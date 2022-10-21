@@ -24,10 +24,17 @@ class snowObj
   function mouseClicked() {
     if(game.currentState == 0){
       game.currentState = 1; //changes to options screen
+      return;
     }
-    else if(game.currentState == 1){
-      
+    var buttons = game.state[game.currentState].buttons;
+    if (buttons)
+    {
+      for (let i = 0; i < buttons.length; i++)
+      {
+        buttons[i].checkPressed();
+      }
     }
+
   }
 
   var currFrame = 0;
@@ -219,10 +226,33 @@ class snowObj
     {
       this.animations = animations;
       this.pacingPoptart = new WalkBackAndForthAnimation(createVector(450 - 25, 160), createVector(40, 40), 1, animations.poptartWalkRight, animations.poptartWalkLeft, 6, 400 - 25, 500 - 25);
+      this.buttonPressed = "";
+      this.buttons = [];
+      this.buttons.push(new button(createVector(283, 380), createVector(120, 60),"Start", this));
+      this.buttons.push(new button(createVector(252, 453), createVector(180, 60), "Volume", this));
+      this.buttons.push(new button(createVector(213, 531), createVector(270, 60), "High Scores", this));
     }
 
-    execute(me){
+    execute(me)
+    {
       background(220, 250, 250);
+      for (let i = 0; i < this.buttons.length; i++)
+      {
+        this.buttons[i].drawButton();
+      }
+      if (this.buttonPressed == "Start")
+      {
+        me.currentState = 4;
+      }
+      else if (this.buttonPressed == "Volume")
+      {
+        me.currentState = 2;
+      }
+      else if (this.buttonPressed == "High Scores")
+      {
+        me.currentState = 3;
+      }
+      this.buttonPressed = "";
       this.pacingPoptart.update();
       image(this.animations.fish, 425, 220);
       
@@ -246,23 +276,12 @@ class snowObj
       text("Q/E to switch penguins", 25, 275);
       text("Space to use special move", 25, 325);
 
-
-
-
-
       //menu
       textSize(48);
       fill(25, 100, 175);    //font color of menu
       text("Start", 290, 425);
-      text("Volume", 290, 470);
-      text("High Scores", 290, 515);
-      
-      me.drawTriangle();
-      if(currFrame < (frameCount - 12)){
-        currFrame = frameCount;
-        me.changeOption();
-        me.selectOption();
-      }
+      text("Volume", 260, 500);
+      text("High Scores", 220, 575);
       
     }
   }
@@ -281,7 +300,7 @@ class snowObj
         text('click enter to return', width/2, 550);
         
         fill(50, 140, 220);
-        let vol = "Adjust the volume using the left and right arrows. Press enter to return to the options menu.";
+        let vol = "Adjust the volume using the left and right arrows.";
         textSize(32);
         textAlign(LEFT);
         text(vol, 25, 100, 775, 400);
