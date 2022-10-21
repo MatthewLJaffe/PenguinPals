@@ -1,8 +1,8 @@
 class snowObj
 {
     constructor(){
-      this.size = random(8, 12);
-      this.rate = random(0.5, 1.2);
+      this.size = random(4, 8);
+      this.rate = random(0.5,  0.8);
       this.x = random(this.size, 800 + this.size)
       this.y = random(-600, 600);
     }
@@ -40,7 +40,7 @@ class snowObj
       this.snowDrops = [];
       this.walkingObjs = [];
       
-      for(let i = 0; i < 125; i++){
+      for(let i = 0; i < 400; i++){
         this.snowDrops.push(new snowObj());
       }
 
