@@ -1,17 +1,20 @@
 class snowObj
 {
-    constructor(){
+    constructor()
+    {
       this.size = random(4, 8);
       this.rate = random(0.5,  0.8);
       this.x = random(this.size, 800 + this.size)
       this.y = random(-600, 600);
     }
-    draw(){
+    draw()
+    {
       fill(255);
       noStroke();
       ellipse(this.x, this.y, this.size, this.size);
     }
-    move(){
+    move()
+    {
       if(this.y < (height + this.size)){
         this.y += this.rate;
       }
@@ -407,18 +410,8 @@ class snowObj
     }
   }
   
-  class gameScreen{  //4
-    execute(me){
-        background(220, 250, 250);
-      
-        fill(135, 206, 250);
-        textSize(64);
-        textAlign(LEFT);
-        text("TBD", 20, 75);
-    }    
-  }
-  
-  class gameoverScreen{  //5
+  class gameoverScreen //5
+  {  
     execute(me){
       
     }  
