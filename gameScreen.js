@@ -9,3 +9,41 @@ class gameScreen //4
       text("TBD", 20, 75);
   }    
 }
+
+class Player
+{
+  constructor(pos, size, maxMoveSpeed, jumpHeight, animStates, specialMoveFunction)
+  {
+    this.pos = pos;
+    this.size = size;
+    this.speed = maxMoveSpeed;
+    this.jumpHeight = jumpHeight;
+    this.animStates = animStates;
+    this.specialMoveFunction = specialMoveFunction;
+    this.specialMoveCooldown = 30;
+    this.currSpecialMoveCooldown = 0;
+  }
+
+  updatePlayer()
+  {
+    this.updatePlayerPosition();
+    this.updatePlayerCollision();
+    this.updatePlayerAnim();
+    this.useSpecialMove();
+  }
+
+  updatePlayerCollision()
+  {
+
+  }
+
+  updatePlayerPosition()
+  {
+
+  }
+
+  updatePlayerAnim()
+  {
+
+  }
+}
