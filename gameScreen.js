@@ -79,6 +79,8 @@ class Player
     else{
       this.anim = this.animations.redPenguinWalkRight;
     }
+
+    //this.direction = "L"; //"L" is left, "R" is right (for powerups later)
   }
 
   updatePlayer()
@@ -98,8 +100,8 @@ class Player
   updatePlayerPosition()
   {
     fill(0);
-    textSize(24);
-    text(this.position.x + ", " + this.position.y, mouseX, mouseY);
+    //textSize(24);
+    //text(this.position.x + ", " + this.position.y, mouseX, mouseY);
       //using WASD for movement
     if(keyArray[65] == 1 && this.position.x - this.size > 0){  //player moving to the left
       if(this.penguin_type == 1){
