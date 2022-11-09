@@ -23,6 +23,7 @@ class gameScreen //4
         this.snowDrops[i].draw();
       }
 
+      this.player.volume = me.volume;
       this.player.updatePlayer();
   }    
 }
@@ -30,7 +31,7 @@ class gameScreen //4
 var keyArray = [];
 
 //for WASD movement of player
-function kdeyPressed() {
+function keyPressed() {
   keyArray[keyCode] = 1;
 }
 
@@ -42,14 +43,17 @@ class Player
 {
   constructor(x, y, size, penguin_type)
   {
+    //movement/forces
     //this.pos = pos;
     this.x = x;
     this.y = y;
     this.position = new p5.Vector(this.x, this.y);
 
-    this.animations = new Animations();
-
-    this.penguin_type = penguin_type; //1 = black, 2 = blue, 3 = red
+    //sound effects
+    this.sounds = new SoundEffects();
+    this.walkingSound = this.sounds.walkingSound;
+    this.volume = 0;
+    this.walkingSound.setVolume(this.volume * 0.1);  //volume comes from game object, set before playing game
 
     this.size = size;
     //this.speed = maxMoveSpeed;
@@ -59,9 +63,13 @@ class Player
     this.specialMoveCooldown = 30;
     this.currSpecialMoveCooldown = 0;
 
+    //animations/penguin
+    this.animations = new Animations();
+    this.penguin_type = penguin_type; //1 = black, 2 = blue, 3 = red
     this.moving = false;
     this.stepRate = 6;
     this.currAnimIndex = 0
+    //animation changes depending on penguin
     if(this.penguin_type == 1){
       this.anim = this.animations.blackPenguinWalkRight;
     }
@@ -71,11 +79,11 @@ class Player
     else{
       this.anim = this.animations.redPenguinWalkRight;
     }
-    //this.direction = "R"; //"R" == right, "L" == left, etc
   }
 
   updatePlayer()
   {
+    this.walkingSound.setVolume(this.volume * 0.1);
     this.updatePlayerPosition();
     this.updatePlayerCollision();
     this.updatePlayerAnim();
@@ -105,6 +113,11 @@ class Player
       }
       this.position.x--;
 
+      //sound effect
+      if(!this.walkingSound.isPlaying()){
+        this.walkingSound.play();
+      }
+
       this.moving = true;
     }
     else if(keyArray[68] == 1 && this.position.x  - this.size/3 < width){  //player moving to the right
@@ -118,11 +131,19 @@ class Player
         this.anim = this.animations.redPenguinWalkRight;
       }
       this.position.x++;
-
+            //sound effect
+      if(!this.walkingSound.isPlaying()){
+        this.walkingSound.play();
+      }
       this.moving = true;
     }
     else if(keyArray[87] == 1){  //player crouching
       this.position.y--;
+
+      //sound effect
+      if(!this.walkingSound.isPlaying()){
+        this.walkingSound.play();
+      }
 
       this.moving = true;
     }
@@ -130,6 +151,11 @@ class Player
       this.position.y++;
 
       this.moving = true;
+
+      //sound effect
+      if(!this.walkingSound.isPlaying()){
+        this.walkingSound.play();
+      }
     }
     else{
       this.moving = false;
