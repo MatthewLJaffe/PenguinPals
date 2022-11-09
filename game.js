@@ -22,6 +22,7 @@ class gameObj
       //for volume
       this.volume = 5;  //starts at 5
 
+      /*
       this.redPenguinWalkRight = [];
       this.blackPenguinWalkRight = [];
       this.bluePenguinWalkRight = [];
@@ -34,17 +35,18 @@ class gameObj
   
       for (let i = 1; i <= 6; i ++)
       {
-        this.redPenguinWalkRight.push(loadImage("images/RedPenguin" + i + ".png") );
-        this.blackPenguinWalkRight.push(loadImage("images/BlackPenguin" + i + ".png"));
-        this.bluePenguinWalkRight.push(loadImage("images/BluePenguin" + i + ".png"));
-        this.blackPenguinWalkLeft.push(loadImage("images/BlackPenguinWalkLeft" + i + ".png"));
+        this.redPenguinWalkRight.push(loadImage("images/characters/RedPenguin" + i + ".png") );
+        this.blackPenguinWalkRight.push(loadImage("images/characters/BlackPenguin" + i + ".png"));
+        this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguin" + i + ".png"));
+        this.blackPenguinWalkLeft.push(loadImage("images/characters/BlackPenguinWalkLeft" + i + ".png"));
       }
   
       for (let i = 1; i <= 5; i ++)
       {
-        this.poptartWalkRight.push(loadImage("images/PoptartWalkRight" + i + ".png"));
-        this.poptartWalkLeft.push(loadImage("images/PoptartWalkLeft" + i + ".png"));
+        this.poptartWalkRight.push(loadImage("images/characters/PoptartWalkRight" + i + ".png"));
+        this.poptartWalkLeft.push(loadImage("images/characters/PoptartWalkLeft" + i + ".png"));
       }
+      */
     }
 
 
@@ -95,17 +97,17 @@ class gameObj
     
         for (let i = 1; i <= 6; i ++)
         {
-            this.blackPenguinSpecialRight.push(loadImage("images/BlackPenguinSpecialRight" + i + ".png"));
-            this.redPenguinWalkRight.push(loadImage("images/RedPenguin" + i + ".png") );
-            this.blackPenguinWalkRight.push(loadImage("images/BlackPenguin" + i + ".png"));
-            this.bluePenguinWalkRight.push(loadImage("images/BluePenguin" + i + ".png"));
-            this.blackPenguinWalkLeft.push(loadImage("images/BlackPenguinWalkLeft" + i + ".png"));
+            this.blackPenguinSpecialRight.push(loadImage("images/characters/BlackPenguinSpecialRight" + i + ".png"));
+            this.redPenguinWalkRight.push(loadImage("images/characters/RedPenguin" + i + ".png") );
+            this.blackPenguinWalkRight.push(loadImage("images/characters/BlackPenguin" + i + ".png"));
+            this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguin" + i + ".png"));
+            this.blackPenguinWalkLeft.push(loadImage("images/characters/BlackPenguinWalkLeft" + i + ".png"));
         }
     
         for (let i = 1; i <= 5; i ++)
         {
-            this.poptartWalkRight.push(loadImage("images/PoptartWalkRight" + i + ".png"));
-            this.poptartWalkLeft.push(loadImage("images/PoptartWalkLeft" + i + ".png"));
+            this.poptartWalkRight.push(loadImage("images/characters/PoptartWalkRight" + i + ".png"));
+            this.poptartWalkLeft.push(loadImage("images/characters/PoptartWalkLeft" + i + ".png"));
         }
 
         for (let i = 1; i <= 4; i++)
