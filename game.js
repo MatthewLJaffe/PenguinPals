@@ -53,6 +53,16 @@ class gameObj
     }
   }
 
+  class SoundEffects{
+    constructor(){
+      this.poofSound = loadSound("sounds/poof.mp3");
+      this.gameLoseSound = loadSound("sounds/game_lose.wav");
+      this.gameWinSound = loadSound("sounds/game_win.wav");
+      this.loseLifeSound = loadSound("sounds/lose_life.wav");   //or lose_life2.wav
+      this.walkingSound = loadSound("sounds/walking.wav");
+    }
+  }
+
   class Animations
   {
     constructor()
@@ -65,6 +75,18 @@ class gameObj
         this.poptartWalkRight = [];
         this.poptartWalkLeft = [];
         this.smokeCloud = [];
+
+        /*
+        PLEASE ADD:
+        this.bluePenguinWalkLeft = [];
+        this.redPenguinWalkLeft = [];
+        this.blackPenguinSpecialLeft = [];
+        this.bluePenguinSpecialLeft = [];
+        this.redPenguinSpecialLeft = [];
+
+        */
+
+
         this.fish = loadImage("images/Fish.png");
         this.snowBall = loadImage("images/Snowball.png");
     
