@@ -65,6 +65,18 @@ class gameObj
         this.poptartWalkRight = [];
         this.poptartWalkLeft = [];
         this.smokeCloud = [];
+
+        /*
+        PLEASE ADD:
+        this.bluePenguinWalkLeft = [];
+        this.redPenguinWalkLeft = [];
+        this.blackPenguinSpecialLeft = [];
+        this.bluePenguinSpecialLeft = [];
+        this.redPenguinSpecialLeft = [];
+
+        */
+
+
         this.fish = loadImage("images/Fish.png");
         this.snowBall = loadImage("images/Snowball.png");
     

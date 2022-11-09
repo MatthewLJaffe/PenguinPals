@@ -1,8 +1,10 @@
 class snowObj
 {
-    constructor()
+    constructor(lower_limit, upper_limit)
     {
-      this.size = random(4, 8);
+      this.lower_limit = lower_limit;
+      this.upper_limit = upper_limit;
+      this.size = random(this.lower_limit, this.upper_limit);
       this.rate = random(0.5,  0.8);
       this.x = random(this.size, 800 + this.size)
       this.y = random(-600, 600);
@@ -51,7 +53,7 @@ class snowObj
       this.walkingObjs = [];
       
       for(let i = 0; i < 400; i++){
-        this.snowDrops.push(new snowObj());
+        this.snowDrops.push(new snowObj(4, 8));
       }
       this.walkingObjs.push(new WalkingAnimation(
         createVector(width/2, 500), createVector(64, 64), 1, animations.bluePenguinWalkRight, 6));
@@ -231,9 +233,9 @@ class snowObj
       this.pacingPenguin = new WalkBackAndForthAnimation(createVector(415, 110), createVector(32, 32), 1, animations.blackPenguinWalkRight, animations.blackPenguinWalkLeft, 6, 415 - 50, 415+ 50);
       this.buttonPressed = "";
       this.buttons = [];
-      this.buttons.push(new button(createVector(283, 380), createVector(120, 60),"Start", this));
-      this.buttons.push(new button(createVector(252, 453), createVector(180, 60), "Volume", this));
-      this.buttons.push(new button(createVector(213, 531), createVector(270, 60), "High Scores", this));
+      this.buttons.push(new button(createVector(width/2, 380), createVector(120, 60),"Start", this));
+      this.buttons.push(new button(createVector(width/2, 453), createVector(180, 60), "Volume", this));
+      this.buttons.push(new button(createVector(width/2, 531), createVector(270, 60), "High Scores", this));
     }
 
     execute(me)
@@ -317,9 +319,10 @@ class snowObj
       //menu
       textSize(48);
       fill(25, 100, 175);    //font color of menu
-      text("Start", 290, 425);
-      text("Volume", 260, 500);
-      text("High Scores", 220, 575);
+      textAlign(CENTER);
+      text("Start", width/2, 392);
+      text("Volume", width/2, 468);
+      text("High Scores", width/2, 544);
       
     }
   }
