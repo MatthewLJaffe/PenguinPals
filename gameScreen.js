@@ -28,8 +28,10 @@ class gameScreen //4
       this.snowDrops.push(new snowObj(2, 5));
     }
     this.backgroundScrollSpeed = .25;
+    this.foregroundScrollSpeed = .5;
     this.player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
-    this.background = loadImage("/images/Background.png");
+    this.background = loadImage("images/Background.png");
+    this.foreground = loadImage("images/Foreground.png");
     this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
     this.iceCornerImages = [];
     for (let i = 0; i < 4; i++)
@@ -111,6 +113,8 @@ class gameScreen //4
   execute(me)
   {
       background(220, 250, 250);
+      image(this.background, 400, constrain(-this.backgroundScrollSpeed*(this.player.position.y - 300), 0, 600));
+      image(this.foreground, 400, constrain(-this.foregroundScrollSpeed*(this.player.position.y - 300), 0, 600));
       image(this.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
       
       //snow falling
@@ -379,4 +383,37 @@ class CollisionObj
   {
     image(this.img, this.position.x, this.position.y);
   }
+}
+
+//return normal vector of collision if there is one otherwise return zero vector
+function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
+{
+  let left1 = x1 - w1/2;
+  let right1 = x1 + w1/2;
+  let top1 = y1 - h1/2;
+  let bottom1 = y1 + h1/2;
+
+  let left2 = x2 - w2/2;
+  let right2 = x2 + w2/2;
+  let top2 = y2 - h2/2;
+  let bottom2 = y2 + h2/2;
+
+  if (right1 > left2 && left1 < right2 && bottom1 > top2 && top1 < bottom2)
+  {
+    if (abs(x1 - x2) < abs(y1 - y2))
+    {
+      if (y1 > y2)
+        return createVector(0, 1);
+      else
+        return createVector(0, -1);
+    }
+    else
+    {
+      if (x1 > x2)
+        return createVector(1, 0);
+      else
+        return createVector(-1, 0);
+    }
+  }
+  return createVector(0, 0);
 }
