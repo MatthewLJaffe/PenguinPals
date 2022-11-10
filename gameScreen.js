@@ -29,7 +29,7 @@ class gameScreen //4
       this.snowDrops.push(new snowObj(2, 5));
     }
     this.backgroundScrollSpeed = .25;
-    this.player = new Player(400, 300, 50, 1);  //x, y, size, penguin_type
+    this.player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
     this.background = loadImage("/images/Background.png");
     this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
     this.iceCornerImages = [];
@@ -89,6 +89,13 @@ class gameScreen //4
   {
       background(220, 250, 250);
       image(this.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
+      
+      //snow fallingd
+      for(let i = 0; i < this.snowDrops.length; i++){
+        this.snowDrops[i].move();
+        this.snowDrops[i].draw();
+      }
+
       push();
       translate(0, height/2 - this.player.position.y+100);
       fill(135, 206, 250);
@@ -100,11 +107,6 @@ class gameScreen //4
       for (let i = 0; i < collisionObjs.length; i++)
         collisionObjs[i].drawCollisionObj();
       pop();
-      //snow falling
-      for(let i = 0; i < this.snowDrops.length; i++){
-        this.snowDrops[i].move();
-        this.snowDrops[i].draw();
-      }
       
 
   }    
@@ -138,6 +140,7 @@ class Player
     this.walkingSound.setVolume(this.volume * 0.1);  //volume comes from game object, set before playing game
 
     this.size = size;
+    this.height = this.size;
     //this.speed = maxMoveSpeed;
     //this.jumpHeight = jumpHeight;
     //this.animStates = animStates;
@@ -179,22 +182,38 @@ class Player
 
   }
 
+  updatePenguinLeft(){
+    if(this.penguin_type == 1){
+      this.anim = this.animations.blackPenguinWalkLeft;
+    }
+    else if(this.penguin_type == 2){
+      this.anim = this.animations.bluePenguinWalkLeft;
+    }
+    else{
+      this.anim = this.animations.redPenguinWalkLeft;
+    }
+  }
+
+  updatePenguinRight(){
+    if(this.penguin_type == 1){
+      this.anim = this.animations.blackPenguinWalkRight;
+    }
+    else if(this.penguin_type == 2){
+      this.anim = this.animations.bluePenguinWalkRight;
+    }
+    else{
+      this.anim = this.animations.redPenguinWalkRight;
+    }
+  }
+
   updatePlayerPosition()
   {
     fill(0);
     //textSize(24);
     //text(this.position.x + ", " + this.position.y, mouseX, mouseY);
       //using WASD for movement
-    if(keyArray[65] == 1 && this.position.x - this.size > 0){  //player moving to the left
-      if(this.penguin_type == 1){
-        this.anim = this.animations.blackPenguinWalkLeft;
-      }
-      else if(this.penguin_type == 2){
-        this.anim = this.animations.bluePenguinWalk;
-      }
-      else{
-        this.anim = this.animations.redPenguinWalkLeft;
-      }
+    if(keyArray[65] == 1 && this.position.x - 2*this.size/3 > 0){  //player moving to the left
+      this.updatePenguinLeft();
       this.position.x--;
 
       //sound effect
@@ -205,36 +224,29 @@ class Player
       this.moving = true;
     }
     else if(keyArray[68] == 1 && this.position.x  - this.size/3 < width){  //player moving to the right
-      if(this.penguin_type == 1){
-        this.anim = this.animations.blackPenguinWalkRight;
-      }
-      else if(this.penguin_type == 2){
-        this.anim = this.animations.bluePenguinWalkRight;
-      }
-      else{
-        this.anim = this.animations.redPenguinWalkRight;
-      }
+      this.updatePenguinRight();
       this.position.x++;
-            //sound effect
-      if(!this.walkingSound.isPlaying()){
-        this.walkingSound.play();
-      }
-      this.moving = true;
-    }
-    else if(keyArray[87] == 1){  //player crouching
-      this.position.y--;
 
       //sound effect
       if(!this.walkingSound.isPlaying()){
         this.walkingSound.play();
       }
-
       this.moving = true;
     }
-    else if(keyArray[83] == 1){  //player jumping
-      this.position.y++;
+    else if(keyArray[87] == 1){  //player jumping
+      this.position.y--;
+      //sound effect
+      if(!this.walkingSound.isPlaying()){
+        this.walkingSound.play();
+      }
 
-      this.moving = true;
+      //this.moving = true;
+    }
+    else if(keyArray[83] == 1){  //player crouching
+      //this.position.y++;
+      this.height = this.size*(4/5);
+
+      //this.moving = false;
 
       //sound effect
       if(!this.walkingSound.isPlaying()){
@@ -243,6 +255,7 @@ class Player
     }
     else{
       this.moving = false;
+      this.height = this.size;
     }
   }
 
@@ -253,10 +266,10 @@ class Player
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
       }
-      image(this.anim[this.currAnimIndex], this.position.x - this.size/2, this.position.y - this.size/2, this.size, this.size);
+      image(this.anim[this.currAnimIndex], this.position.x - this.size/2, this.position.y - this.height/2, this.size, this.height);
     }
     else{
-      image(this.anim[0], this.position.x - this.size/2, this.position.y - this.size/2, this.size, this.size);
+      image(this.anim[0], this.position.x - this.size/2, this.position.y - this.height/2, this.size, this.height);
     }
   }
 }
