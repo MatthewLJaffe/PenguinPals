@@ -1,30 +1,111 @@
+var tileMap = [
+  "                    ",
+  "                    ",
+  "                    ",
+  "     012            ",
+  "     345            ",
+  "     678            ",
+  "                    ",
+  "                    ",
+  "01111111111111111112",
+  "34444444444444444445",
+  "34444444444444444445",
+  "34444444444444444445",
+  "34444444444444444445",
+  "3TTTTTTTTTTTTTTTTTTT",
+  "3TTTTTTTTTTTTTTTTTTT",
+
+];
+
+var collisionObjs = [];
+
 class gameScreen //4
 { 
-  constructor(){
+  constructor()
+  {
     this.snowDrops = [];
       
     for(let i = 0; i < 400; i++){
       this.snowDrops.push(new snowObj(2, 5));
     }
+    this.backgroundScrollSpeed = .25;
+    this.player = new Player(400, 300, 50, 1);  //x, y, size, penguin_type
+    this.background = loadImage("/images/Background.png");
+    this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
+    this.iceCornerImages = [];
+    for (let i = 0; i < 4; i++)
+      this.iceCornerImages[i] = loadImage("images/tiles/IceCorner" + ( i + 1) + ".png");
+    this.iceFloorImages = [];
+    for (let i = 0; i < 4; i++)
+      this.iceFloorImages[i] = loadImage("images/tiles/IceFloor" + ( i + 1) + ".png");
+    this.icePlatformImages = [];
+    for (let i = 0; i < 3; i++)
+      this.icePlatformImages[i] = loadImage("images/tiles/IcePlatform" + ( i + 1) + ".png");
+    this.iceWallImages = [];
+    for (let i = 0; i < 3; i++)
+      this.iceWallImages[i] = loadImage("images/tiles/IceWall" + ( i + 1) + ".png");
+    this.iceWallFloorUpImage = loadImage("images/tiles/IceWallFloor1.png");
+    this.iceWallFloorDownImage = loadImage("images/tiles/IceWallFloor2.png");
+    for (let y = 0; y < tileMap.length; y++)
+    {
+      for (let x = 0; x < tileMap[y].length; x++)
+      {
+        switch (tileMap[y][x])
+        {
+          case '0':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceCornerImages[0]));
+            break;
+          case '1':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceFloorImages[0]));
+            break;
+          case '2':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceCornerImages[1]));
+            break;
+          case '3':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceFloorImages[3]));
+            break;
+          case '4':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceCenterImage));
+            break;
+          case '5':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceFloorImages[1]));
+            break;
+          case '6':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceCornerImages[2]));
+            break;
+          case '7':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceFloorImages[2]));
+            break;
+          case '8':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceCornerImages[3]));
+            break;
+        }
+      }
+    }
 
-    this.player = new Player(100, 100, 50, 1);  //x, y, size, penguin_type
-  } 
+  }
+
   execute(me)
   {
       background(220, 250, 250);
+      image(this.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
+      push();
+      translate(0, height/2 - this.player.position.y+100);
       fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
-      text("TBD", 20, 75);
 
       this.player.volume = me.volume;
       this.player.updatePlayer();
-
+      for (let i = 0; i < collisionObjs.length; i++)
+        collisionObjs[i].drawCollisionObj();
+      pop();
       //snow falling
       for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
+      
 
   }    
 }
@@ -177,5 +258,20 @@ class Player
     else{
       image(this.anim[0], this.position.x - this.size/2, this.position.y - this.size/2, this.size, this.size);
     }
+  }
+}
+
+class CollisionObj
+{
+  constructor(x, y, w, h, img)
+  {
+    this.position = createVector(x, y);
+    this.size = createVector(w, h);
+    this.img = img;
+  }
+
+  drawCollisionObj()
+  {
+    image(this.img, this.position.x, this.position.y);
   }
 }
