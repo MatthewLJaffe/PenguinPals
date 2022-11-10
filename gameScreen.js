@@ -127,8 +127,13 @@ class gameScreen //4
 
       this.player.volume = me.volume;
       this.player.updatePlayer();
-      for (let i = 0; i < collisionObjs.length; i++)
+
+      for (let i = 0; i < collisionObjs.length; i++){
         collisionObjs[i].drawCollisionObj();
+
+      }
+
+
       pop();
   }    
 }
@@ -149,10 +154,15 @@ class Player
   constructor(x, y, size, penguin_type)
   {
     //movement/forces
-    //this.pos = pos;
     this.x = x;
     this.y = y;
     this.position = new p5.Vector(this.x, this.y);
+    this.jump = 0;
+    this.jumpForce = new p5.Vector(0, -12);
+    this.velocity = new p5.Vector(0, 0);
+    this.acceleration = new p5.Vector(0 , 0);
+    this.gravity = new p5.Vector(0, 0.5);
+    this.fall = false;
 
     //sound effects
     this.sounds = new SoundEffects();
@@ -173,7 +183,7 @@ class Player
     this.animations = new Animations();
     this.penguin_type = penguin_type; //1 = black, 2 = blue, 3 = red
     this.moving = false;
-    this.stepRate = 6;
+    this.stepRate = 4;
     this.currAnimIndex = 0
     //animation changes depending on penguin
     if(this.penguin_type == 1){
@@ -200,7 +210,16 @@ class Player
 
   updatePlayerCollision()
   {
-
+    this.fall = true;
+    for(var i = 0; i < collisionObjs.length; i++){
+      if(abs(collisionObjs[i].position.y - this.position.y) <= (20) && this.position.y < collisionObjs[i].position.y && abs(this.position.x - collisionObjs[i].position.x) <= (20)){
+        this.fall = false;
+        this.height = this.size;
+        this.jump = 0;
+        this.velocity.y = 0;
+        this.position.y = collisionObjs[i].position.y - 19;
+      }
+    }
   }
 
   updatePenguinLeft(){
@@ -229,18 +248,12 @@ class Player
 
   updatePlayerPosition()
   {
-    fill(0);
-    //textSize(24);
-    //text(this.position.x + ", " + this.position.y, mouseX, mouseY);
+    var gravityForce = p5.Vector.mult(this.gravity, this.acceleration.add(gravityForce));
+
       //using WASD for movement
     if(keyArray[65] == 1 && this.position.x - 2*this.size/3 > 0){  //player moving to the left
       this.updatePenguinLeft();
       this.position.x--;
-
-      //sound effect
-      if(!this.walkingSound.isPlaying()){
-        this.walkingSound.play();
-      }
 
       this.moving = true;
     }
@@ -248,41 +261,47 @@ class Player
       this.updatePenguinRight();
       this.position.x++;
 
-      //sound effect
-      if(!this.walkingSound.isPlaying()){
-        this.walkingSound.play();
-      }
       this.moving = true;
     }
-    else if(keyArray[87] == 1){  //player jumping
-      this.position.y--;
+    else if(keyArray[87] == 1 && this.jump == 0){  //player jumping
+      //this.position.y--;
+      this.jump = 2;
       //sound effect
       if(!this.walkingSound.isPlaying()){
         this.walkingSound.play();
       }
-
-      //this.moving = true;
     }
     else if(keyArray[83] == 1 && this.penguin_type == 1){  //player crouching
       //this.position.y++;
       this.height = this.size*(4/5);
 
-      //this.moving = false;
-
-      //sound effect
-      if(!this.walkingSound.isPlaying()){
-        this.walkingSound.play();
-      }
     }
     else{
       this.moving = false;
       this.height = this.size;
     }
+    
+    //handling jumping
+    if(this.jump == 2){
+      this.acceleration.add(this.jumpForce);
+      this.jump = 1;
+    }
+    
+    if(this.jump > 0 || this.fall == true){
+      this.height = this.size*1.05;
+      this.acceleration.add(this.gravity);
+    }
+    
+    this.velocity.add(this.acceleration);
+    
+    this.position.add(this.velocity);
+
+    this.acceleration.set(0, 0);
   }
 
   updatePlayerAnim()
   {
-    if(this.moving == true){
+    if(this.moving == true && this.fall == false){
       if (frameCount % this.stepRate == 0)
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
