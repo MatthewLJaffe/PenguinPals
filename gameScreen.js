@@ -158,7 +158,7 @@ class Player
     this.y = y;
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
-    this.jumpForce = new p5.Vector(0, -20);
+    this.jumpForce = new p5.Vector(0, -10);
     this.velocity = new p5.Vector(0, 0);
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = new p5.Vector(0, 0.5);
@@ -212,13 +212,65 @@ class Player
   {
     this.fall = true;
     for(var i = 0; i < collisionObjs.length; i++){
-      if(abs(collisionObjs[i].position.y - this.position.y) <= (20) && this.position.y < collisionObjs[i].position.y && ((abs(this.position.x - collisionObjs[i].position.x) < (20 - this.size/2) && this.position.x < collisionObjs[i].position.x) || (abs(this.position.x - collisionObjs[i].position.x) < (20 + this.size/2) && this.position.x > collisionObjs[i].position.x))){
+      var verticalDist = abs(collisionObjs[i].position.y - this.position.y);
+      var horizontalDist = abs(this.position.x - collisionObjs[i].position.x);
+
+      //colliding with bottom of stairs
+      if( verticalDist <= (20) && this.position.y < collisionObjs[i].position.y && ((horizontalDist < (20 - this.size/2) && this.position.x < collisionObjs[i].position.x) || (horizontalDist < (20 + this.size/2) && this.position.x > collisionObjs[i].position.x))){
         this.fall = false;
         this.height = this.size;
         this.jump = 0;
         this.velocity.y = 0;
         this.position.y = collisionObjs[i].position.y - 19;
       }
+
+      
+      //colliding from the top
+      if(verticalDist <= this.size + 20 && this.position.y> collisionObjs[i].position.y && ((horizontalDist < (5) && this.position.x < collisionObjs[i].position.x) || (horizontalDist < (20 + this.size/2 + 10) && this.position.x > collisionObjs[i].position.x))){
+        this.height = this.size*1.05;
+        if(this.acceleration.y > 0){
+          this.acceleration.y = 0;
+        }
+      
+        if(this.velocity.y < 0){
+          this.velocity.y = 0;
+        }
+      
+      }
+      
+
+      //colliding on the right
+      var word = 0;
+      if(horizontalDist <= (1) && this.position.x < collisionObjs[i].position.x &&  verticalDist <= (this.size/2) && this.position.y > collisionObjs[i].position.y){
+        if(this.acceleration.x > 0){
+          this.acceleration.x *= -1;
+
+        }
+      
+        if(this.velocity.x > 0){
+          this.velocity.x *= 0;
+        }
+        this.position.x--;
+      }
+
+      if(horizontalDist <= (this.size) && this.position.x > collisionObjs[i].position.x &&  verticalDist <= (this.size/2) && this.position.y > collisionObjs[i].position.y){
+        word = 1;
+        if(this.acceleration.x < 0){
+          this.acceleration.x *= -1;
+
+        }
+      
+        if(this.velocity.x < 0){
+          this.velocity.x *= 0;
+        }
+        this.position.x++;
+      }
+
+      if(word == 1){
+        fill(255, 0, 0);
+        ellipse(mouseX, mouseY, 10, 10);
+      }
+
     }
   }
 
