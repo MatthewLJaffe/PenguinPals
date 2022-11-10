@@ -20,10 +20,9 @@ class Agent
     this.enabled = true;
     //npc states are refrenced by key 
     this.statesDict = {
-      "JumpToNextPlatform" : new JumpToNextPlatform(this),
-      "WalkForward" : new WalkForward(this),
-      "WalkBackward" : new WalkBackward(this),
-      "JumpOverBall" : new JumpOverBall(this)
+      "Jump" : new JumpToNextPlatform(this),
+      "Idle" : new WalkForward(this),
+      "ChasePlayer" : new WalkBackward(this),
     }
     this.currState = "WalkForward";
   }
@@ -190,6 +189,46 @@ class Agent
   }
 }
 
+class Jump
+{
+  constructor(agent)
+  {
+
+  }
+
+  tick()
+  {
+
+  }
+}
+
+class Idle
+{
+  constructor(agent)
+  {
+
+  }
+
+  tick()
+  {
+
+  }
+}
+
+class ChasePlayer
+{
+  constructor(agent)
+  {
+    
+  }
+
+  tick()
+  {
+
+  }
+}
+
+//////////////////////////////////////////////////
 //state where npc positions themself on current platform for jump
 class WalkForward
 {
