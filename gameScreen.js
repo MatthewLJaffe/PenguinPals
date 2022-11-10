@@ -113,7 +113,7 @@ class gameScreen //4
       background(220, 250, 250);
       image(this.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
       
-      //snow fallingd
+      //snow falling
       for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
@@ -130,11 +130,6 @@ class gameScreen //4
       for (let i = 0; i < collisionObjs.length; i++)
         collisionObjs[i].drawCollisionObj();
       pop();
-      //snow falling
-      for(let i = 0; i < this.snowDrops.length; i++){
-        this.snowDrops[i].move();
-        this.snowDrops[i].draw();
-      }
   }    
 }
 
@@ -268,7 +263,7 @@ class Player
 
       //this.moving = true;
     }
-    else if(keyArray[83] == 1){  //player crouching
+    else if(keyArray[83] == 1 && this.penguin_type == 1){  //player crouching
       //this.position.y++;
       this.height = this.size*(4/5);
 
