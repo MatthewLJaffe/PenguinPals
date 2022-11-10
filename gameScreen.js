@@ -28,8 +28,10 @@ class gameScreen //4
       this.snowDrops.push(new snowObj(2, 5));
     }
     this.backgroundScrollSpeed = .25;
+    this.foregroundScrollSpeed = .5;
     this.player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
-    this.background = loadImage("/images/Background.png");
+    this.background = loadImage("images/Background.png");
+    this.foreground = loadImage("images/Foreground.png");
     this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
     this.iceCornerImages = [];
     for (let i = 0; i < 4; i++)
@@ -111,7 +113,8 @@ class gameScreen //4
   execute(me)
   {
       background(220, 250, 250);
-      image(this.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
+      image(this.background, 400, constrain(-this.backgroundScrollSpeed*(this.player.position.y - 300), 0, 600));
+      image(this.foreground, 400, constrain(-this.foregroundScrollSpeed*(this.player.position.y - 300), 0, 600));
       push();
       translate(0, height/2 - this.player.position.y+100);
       fill(135, 206, 250);
