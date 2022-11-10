@@ -14,7 +14,6 @@ var tileMap = [
   "34444444444444444445",
   "3TTTTTTTTTTTTTTTTTTT",
   "3TTTTTTTTTTTTTTTTTTT",
-
 ];
 
 var collisionObjs = [];
@@ -29,7 +28,7 @@ class gameScreen //4
       this.snowDrops.push(new snowObj(2, 5));
     }
     this.backgroundScrollSpeed = .25;
-    this.player = new Player(400, 300, 50, 1);  //x, y, size, penguin_type
+    this.player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
     this.background = loadImage("/images/Background.png");
     this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
     this.iceCornerImages = [];
@@ -79,6 +78,30 @@ class gameScreen //4
           case '8':
             collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceCornerImages[3]));
             break;
+          case 'Q':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.icePlatformImages[0]));
+            break;
+          case 'W':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.icePlatformImages[1]));
+            break;
+          case 'E':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.icePlatformImages[2]));
+            break;
+          case 'A':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceWallImages[0]));
+            break;
+          case 'S':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceWallImages[1]));
+            break;
+          case 'D':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceWallImages[2]));
+            break;
+          case 'F':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceWallFloorUpImage));
+            break;
+          case 'G':
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, this.iceWallFloorDownImage));
+            break;
         }
       }
     }
@@ -105,8 +128,6 @@ class gameScreen //4
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
-      
-
   }    
 }
 
