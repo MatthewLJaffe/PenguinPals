@@ -5,7 +5,7 @@ class snowObj
       this.lower_limit = lower_limit;
       this.upper_limit = upper_limit;
       this.size = random(this.lower_limit, this.upper_limit);
-      this.rate = random(0.5,  0.8);
+      this.rate = random(this.lower_limit * 0.1,  this.upper_limit * 0.1);
       this.x = random(this.size, 800 + this.size)
       this.y = random(-600, 600);
     }

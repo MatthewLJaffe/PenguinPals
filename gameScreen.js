@@ -17,14 +17,15 @@ class gameScreen //4
       textAlign(LEFT);
       text("TBD", 20, 75);
 
+      this.player.volume = me.volume;
+      this.player.updatePlayer();
+
       //snow falling
       for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
 
-      this.player.volume = me.volume;
-      this.player.updatePlayer();
   }    
 }
 
