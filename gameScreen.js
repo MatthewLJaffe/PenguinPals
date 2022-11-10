@@ -158,7 +158,7 @@ class Player
     this.y = y;
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
-    this.jumpForce = new p5.Vector(0, -12);
+    this.jumpForce = new p5.Vector(0, -20);
     this.velocity = new p5.Vector(0, 0);
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = new p5.Vector(0, 0.5);
@@ -212,7 +212,7 @@ class Player
   {
     this.fall = true;
     for(var i = 0; i < collisionObjs.length; i++){
-      if(abs(collisionObjs[i].position.y - this.position.y) <= (20) && this.position.y < collisionObjs[i].position.y && abs(this.position.x - collisionObjs[i].position.x) <= (20)){
+      if(abs(collisionObjs[i].position.y - this.position.y) <= (20) && this.position.y < collisionObjs[i].position.y && ((abs(this.position.x - collisionObjs[i].position.x) < (20 - this.size/2) && this.position.x < collisionObjs[i].position.x) || (abs(this.position.x - collisionObjs[i].position.x) < (20 + this.size/2) && this.position.x > collisionObjs[i].position.x))){
         this.fall = false;
         this.height = this.size;
         this.jump = 0;
