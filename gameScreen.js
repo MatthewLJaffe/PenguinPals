@@ -25,6 +25,7 @@ class gameScreen //4
   constructor()
   {
     this.snowDrops = [];
+    this.score = 0;
       
     for(let i = 0; i < 400; i++){
       this.snowDrops.push(new snowObj(2, 5));
@@ -118,16 +119,47 @@ class gameScreen //4
 
       player.volume = me.volume;
       player.updatePlayer();
+      poptartObj.volume = me.volume;
       poptartObj.update();
 
       for (let i = 0; i < collisionObjs.length; i++){
         collisionObjs[i].drawCollisionObj();
 
       }
-
-
       pop();
-  }    
+
+      this.lifeDisplay();
+      this.scoreDisplay();
+  }
+  
+  lifeDisplay(){
+    if(player.lives > 0){
+      image(images.fullHeart, width - 105, 25, 45, 45);
+    }
+    else{
+      image(images.emptyHeart, width - 105, 25, 45, 45);
+    }
+    if(player.lives > 1){
+      image(images.fullHeart, width - 65, 25, 45, 45);
+    }
+    else{
+      image(images.emptyHeart, width - 65, 25, 45, 45);
+    }
+
+    if(player.lives > 2){
+      image(images.fullHeart, width - 25, 25, 45, 45);
+    }
+    else{
+      image(images.emptyHeart, width - 25, 25, 45, 45);
+    }
+  }
+
+  scoreDisplay(){
+    fill(135, 206, 250);
+    textAlign(LEFT);
+    textSize(32);
+    text("Score: " + this.score, 10, 32);
+  }
 }
 
 var keyArray = [];
@@ -148,6 +180,7 @@ class Player
     //movement/forces
     this.x = x;
     this.y = y;
+    this.lives = 3;
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
     this.jumpForce = new p5.Vector(0, -12);

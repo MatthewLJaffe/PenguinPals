@@ -2,6 +2,10 @@ class poptart
 {
   constructor(x, y)
   {
+    this.volume = 0;
+    this.collisionSound = sounds.loseLifeSound;
+    this.collisionSound.setVolume(this.volume*0.1);
+
     this.poptartWalkRight = [];
     this.poptartWalkLeft = [];
     this.position = createVector(x, y);
@@ -63,6 +67,7 @@ class poptart
 
   update()
   {
+    this.collisionSound.setVolume(this.volume*0.01);
     if (!this.enabled) return;
     this.updateStateMachine();
     this.updatePos();
@@ -246,6 +251,13 @@ class ChasePlayer
     if (this.agent.position.dist(player.position) > this.agent.maxChaseDistance)
       return "Idle";
     //walk towards player
+    text(!this.agent.collisionSound.isPlaying(), 300, 100);
+
+    if(this.agent.position.x - player.position.x < 3){
+      if(!this.agent.collisionSound.isPlaying())
+        this.agent.collisionSound.play();
+    }
+
     if (this.agent.position.x - player.position.x > 0)
     {
       this.agent.walkForward = 0;
