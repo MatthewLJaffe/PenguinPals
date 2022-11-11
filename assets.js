@@ -46,6 +46,7 @@ class Images
         {
             this.smokeCloud.push(loadImage("images/SmokeCloud" + i + ".png"));
         }
+
         this.background = loadImage("images/Background.png");
         this.foreground = loadImage("images/Foreground.png");
         this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
@@ -61,6 +62,11 @@ class Images
         this.iceWallImages = [];
         for (let i = 0; i < 3; i++)
           this.iceWallImages[i] = loadImage("images/tiles/IceWall" + ( i + 1) + ".png");
+        this.iceWallCornerImages = [];
+        for (let i = 1; i < 5; i++)
+        {
+          this.iceWallCornerImages.push(loadImage("images/tiles/IceWallCorner" + i + ".png"));
+        }
         this.iceWallFloorUpImage = loadImage("images/tiles/IceWallFloor1.png");
         this.iceWallFloorDownImage = loadImage("images/tiles/IceWallFloor2.png");
     }

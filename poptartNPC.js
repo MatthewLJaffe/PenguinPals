@@ -24,7 +24,7 @@ class poptart
     this.idleTime = 0;
     //+1 for right -1 for left
     this.facedDir = 1;
-    this.maxChaseDistance = 400;
+    this.maxChaseDistance = 200;
     this.findCurrentPlatform();
     //only simulate npc when enabled
     this.enabled = true;
@@ -356,10 +356,12 @@ class Platform
 
 function tileToPos(x, y)
 {
-  return createVector(x*40+20, y*40+20);
+  var yOffset = (tileMap.length - 15) * -40;
+  return createVector(x*40+20, yOffset + y*40+20);
 }
 
 function posToTile(x, y)
 {
-  return createVector(Math.round((x-20)/40), Math.round((y-20)/40));
+  var yOffset = (tileMap.length - 15) * -40;
+  return createVector(Math.round((x-20)/40), Math.round((y-20 - yOffset)/40));
 }
