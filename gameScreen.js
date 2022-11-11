@@ -1,3 +1,4 @@
+var player;
 var tileMap = [
   "                    ",
   "                    ",
@@ -7,7 +8,7 @@ var tileMap = [
   "     678            ",
   "                    ",
   "          P         ",
-  "01111111111111111112",
+  " 11 111111111 11111 ",
   "34444444444444444445",
   "34444444444444444445",
   "34444444444444444445",
@@ -30,7 +31,7 @@ class gameScreen //4
     }
     this.backgroundScrollSpeed = .25;
     this.foregroundScrollSpeed = .5;
-    this.player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
+    player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
     for (let y = 0; y < tileMap.length; y++)
     {
       for (let x = 0; x < tileMap[y].length; x++)
@@ -99,9 +100,9 @@ class gameScreen //4
   execute(me)
   {
       background(220, 250, 250);
-      image(images.background, 400, constrain(-this.backgroundScrollSpeed*(this.player.position.y - 300), 0, 600));
-      image(images.foreground, 400, constrain(-this.foregroundScrollSpeed*(this.player.position.y - 300), 0, 600));
-      image(images.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
+      image(images.background, 400, constrain(-this.backgroundScrollSpeed*(player.position.y - 300), 0, 600));
+      image(images.foreground, 400, constrain(-this.foregroundScrollSpeed*(player.position.y - 300), 0, 600));
+      image(images.background, 400, constrain(-.25*(player.position.y - 300), 0, 600));
       
       //snow falling
       for(let i = 0; i < this.snowDrops.length; i++){
@@ -110,13 +111,13 @@ class gameScreen //4
       }
 
       push();
-      translate(0, height/2 - this.player.position.y+100);
+      translate(0, height/2 - player.position.y+100);
       fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
 
-      this.player.volume = me.volume;
-      this.player.updatePlayer();
+      player.volume = me.volume;
+      player.updatePlayer();
       poptartObj.update();
 
       for (let i = 0; i < collisionObjs.length; i++){
@@ -265,25 +266,25 @@ class Player
 
   updatePenguinLeft(){
     if(this.penguin_type == 1){
-      this.anim = this.animations.blackPenguinWalkLeft;
+      this.anim = images.blackPenguinWalkLeft;
     }
     else if(this.penguin_type == 2){
-      this.anim = this.animations.bluePenguinWalkLeft;
+      this.anim = images.bluePenguinWalkLeft;
     }
     else{
-      this.anim = this.animations.redPenguinWalkLeft;
+      this.anim = images.redPenguinWalkLeft;
     }
   }
 
   updatePenguinRight(){
     if(this.penguin_type == 1){
-      this.anim = this.animations.blackPenguinWalkRight;
+      this.anim = images.blackPenguinWalkRight;
     }
     else if(this.penguin_type == 2){
-      this.anim = this.animations.bluePenguinWalkRight;
+      this.anim = images.bluePenguinWalkRight;
     }
     else{
-      this.anim = this.animations.redPenguinWalkRight;
+      this.anim =images.redPenguinWalkRight;
     }
   }
 

@@ -9,7 +9,7 @@ var keyArray = [];
 var startImages;
 var instructionImages;
 //I do this to get intellisense working images should be constructed in preload
-var images = new Images();
+var images;
 var sounds;
 function keyPressed() {
   keyArray[keyCode] = 1;
