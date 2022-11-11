@@ -21,6 +21,9 @@ class Images
 
         */
 
+        this.fullHeart = loadImage("images/Heart1.png");
+        this.emptyHeart = loadImage("images/Heart2.png");
+
         this.fish = loadImage("images/Fish.png");
         this.snowBall = loadImage("images/Snowball.png");
 
