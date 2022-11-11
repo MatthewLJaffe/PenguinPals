@@ -239,6 +239,8 @@ class Idle
   }
 }
 
+var currFrame = 0;
+
 class ChasePlayer
 {
   constructor(agent)
@@ -253,7 +255,10 @@ class ChasePlayer
     //walk towards player
     text(!this.agent.collisionSound.isPlaying(), 300, 100);
 
-    if(this.agent.position.x - player.position.x < 3){
+    if(this.agent.position.x - player.position.x < 3 && currFrame < (frameCount - 30)){
+      currFrame = frameCount
+      player.lives--;
+      player.score-=50;
       if(!this.agent.collisionSound.isPlaying())
         this.agent.collisionSound.play();
     }

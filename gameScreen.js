@@ -25,7 +25,6 @@ class gameScreen //4
   constructor()
   {
     this.snowDrops = [];
-    this.score = 0;
       
     for(let i = 0; i < 400; i++){
       this.snowDrops.push(new snowObj(2, 5));
@@ -158,7 +157,7 @@ class gameScreen //4
     fill(135, 206, 250);
     textAlign(LEFT);
     textSize(32);
-    text("Score: " + this.score, 10, 32);
+    text("Score: " + player.score, 10, 32);
   }
 }
 
@@ -181,6 +180,7 @@ class Player
     this.x = x;
     this.y = y;
     this.lives = 3;
+    this.score = 0;
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
     this.jumpForce = new p5.Vector(0, -12);
