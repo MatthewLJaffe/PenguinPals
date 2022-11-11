@@ -6,6 +6,11 @@ Katherine: game FSM, different screens general layout, snow and icicles on intro
 */
 
 var keyArray = [];
+var startImages;
+var instructionImages;
+//I do this to get intellisense working images should be constructed in preload
+var images = new Images();
+var sounds;
 function keyPressed() {
   keyArray[keyCode] = 1;
 }
@@ -14,13 +19,18 @@ function keyReleased() {
   keyArray[keyCode] = 0;
 }
 
+function preload()
+{
+  images = new Images();
+  sounds = new SoundEffects();
+}
+
+
 function setup() {
   noSmooth();
   imageMode(CENTER);
   createCanvas(800, 600);
-
   game = new gameObj();
-  
 }
 
 

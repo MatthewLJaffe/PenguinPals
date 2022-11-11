@@ -1,17 +1,25 @@
-class Agent
+class poptart
 {
   constructor(pos)
   {
+    this.poptartWalkRight = [];
+    this.poptartWalkLeft = [];
     this.position = createVector(pos.x, pos.y);
     this.velocity = createVector(0, 0);
     this.maxWalkSpeed = 4;
     this.maxWalkAcc = 1;
     this.acceleration = createVector(0, 0);
     this.force = createVector(0, 0);
-    this.currFrame = frameCount;
+    this.size = createVector(40, 40);
+    this.frameStepRate = 6;
+    this.animIdx = 0;
     this.jump = 0;
     this.walkForward = 0;
     this.walkBackward = 0;
+    this.walkForce = .4;
+    this.gravity = 1;
+    this.dragForce = .25;
+    this.jumpForce = -10;
     this.facedDir = 1;
     //keep track of next platform to jump to and current platform 
     this.targetPlatform = null;
@@ -19,12 +27,13 @@ class Agent
     //only simulate npc when enabled
     this.enabled = true;
     //npc states are refrenced by key 
-    this.statesDict = {
-      "Jump" : new JumpToNextPlatform(this),
-      "Idle" : new WalkForward(this),
-      "ChasePlayer" : new WalkBackward(this),
+    this.statesDict = 
+    {
+      //"Jump" : new JumpToNextPlatform(this),
+      "Idle" : new Idle(this),
+      //"ChasePlayer" : new WalkBackward(this),
     }
-    this.currState = "WalkForward";
+    this.currState = "Idle";
   }
 
   update()
@@ -52,35 +61,35 @@ class Agent
 
     //apply horizontal move forces
     if (this.walkForward === 1) {
-      this.applyForce(walkForce);
+      this.applyForce(this.walkForce);
     }
     else if (this.walkBackward === 1) {
-      this.applyForce(backForce);
+      this.applyForce(-this.walkForce);
     }
 
     //apply drag to npc if not walking in a direction
     else
     {
       if (this.velocity.x > .1) {
-        if (dragForce.x > 0)
-          dragForce.mult(-1);
-        this.applyForce(dragForce);
+        if (this.dragForce.x > 0)
+          this.dragForce.mult(-1);
+        this.applyForce(this.dragForce);
       }
       else if (this.velocity.x < -.1) {
-        if (dragForce.x < 0)
-          dragForce.mult(-1);
-        this.applyForce(dragForce);
+        if (this.dragForce.x < 0)
+          this.dragForce.mult(-1);
+        this.applyForce(this.dragForce);
       }
       else {
         this.velocity.x = 0;
       }
     }
     if (this.jump === 2) {
-      this.applyForce(jumpForce);
+      this.applyForce(this.jumpForce);
       this.jump = 1;
     }
     if (this.jump > 0) {
-      this.applyForce(gravity);
+      this.applyForce(this.gravity);
     }
     //limit speed and acceleration
     this.acceleration.x = constrain(this.acceleration.x, -this.maxWalkAcc, this.maxWalkAcc);
@@ -102,44 +111,19 @@ class Agent
     var grounded = false;
     for (let c = 0; c < collisionObjs.length; c++)
     {
-      if (collisionObjs[c].layer == "Platform")
-      {
-        let dir = detectCollision(this.position.x, this.position.y, 12, 25, 
-          collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
-          //make sure npc only collides with platform on way down
-        if (dir.mag() < .1 || this.velocity.y < -.01) continue;
-        if (this.position.y + 12.5 >= collisionObjs[c].position.y - collisionObjs[c].size.y/2 &&
-        this.position.y + 12.5 < collisionObjs[c].position.y - collisionObjs[c].size.y/2 + 5)
-        {
-          this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - 12.5 + .01;
-          this.velocity.y = 0;
-          this.jump = 0;
-          grounded = true;
-        }
-      }
-      if (collisionObjs[c].layer == "Coin")
-      {
-        let dir = detectCollision(this.position.x, this.position.y, 12, 25, 
-          collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
-        if (dir.mag() > .1)
-          lose = true;
-      }
-    }
-    for (let b = 0; b < ballObjs.length; b++)
-    {
-      let dir = detectCollision(this.position.x, this.position.y, 12, 25, 
-        ballObjs[b].position.x, ballObjs[b].position.y,ballObjs[b].size.x, ballObjs[b].size.y);
-      if (dir.mag() > .1)
-      {
-        this.enabled = false;
-        liveAgents--;
-        return;
-      }
-    }
-    if (this.position.y >= 380) {
-      this.enabled = false;
-      liveAgents--;
-      return;
+
+      let dir = detectCollision(this.position.x, this.position.y, 40, 40, 
+        collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
+        //make sure npc only collides with platform on way down
+      if (dir.mag() < .1) continue;
+      if (dir.x > .1)
+        this.position.x = collisionObjs[c].x + collisionObjs[c].size.x/2 + this.size.x/2;
+      if (dir.x < -.1)
+        this.position.x = collisionObjs[c].x - collisionObjs[c].size.x/2 - this.size.x/2;
+      if (this.dir.y > .1)
+        this.position.y = collisionObjs[c].y + collisionObjs[c].size.y/2 + this.size.y/2;
+      if (this.dir.y < -.1)
+        this.position.y = collisionObjs[c].y - collisionObjs[c].size.y/2 - this.size.y/2;
     }
     if (!grounded)
     {
@@ -149,43 +133,12 @@ class Agent
 
   drawAgent()
   {
-    //change direction of player based on velocity
+    if (frameCount % this.frameStepRate == 0)
+      this.animIdx = (this.animIdx + 1) % images.poptartWalkLeft.length;
     if (this.velocity.x > 0)
-      this.facedDir = 1;
-    if (this.velocity.x < 0)
-      this.facedDir = -1;
-
-     //face
-     noStroke();
-     fill(0,200,0);
-     rect(this.position.x, this.position.y-5, 10, 10);
-     fill(0);
-     circle (this.position.x + 2*this.facedDir, this.position.y-5, 3)
-     stroke(0, 200, 0);
-     strokeWeight(5);
-     //body
-     line(this.position.x, this.position.y, this.position.x,
-     this.position.y+12);
-
-     switch (this.jump) {
-       case 0:
-       stroke(0, 150, 0)
-       //arms forward
-       line(this.position.x, this.position.y+1, this.position.x+ this.facedDir*5,
-       this.position.y+5);
-       break;
-       case 1:
-       strokeWeight(4);
-       stroke(0, 150, 0)
-       //arms angled
-       line(this.position.x, this.position.y+1, this.position.x - this.facedDir*5,
-       this.position.y+5);
-       line(this.position.x, this.position.y+1, this.position.x + this.facedDir*5, this.position.y-3);
-       break;
-     }
-     
-     stroke(0)
-     strokeWeight(2);
+      image(images.poptartWalkRight[this.animIdx], this.position.x, this.position.y);
+    else
+      image(images.poptartWalkLeft[this.animIdx], this.position.x, this.position.y);
   }
 }
 
@@ -211,7 +164,7 @@ class Idle
 
   tick()
   {
-
+    return "Idle";
   }
 }
 
@@ -219,7 +172,7 @@ class ChasePlayer
 {
   constructor(agent)
   {
-    
+
   }
 
   tick()
@@ -228,140 +181,22 @@ class ChasePlayer
   }
 }
 
-//////////////////////////////////////////////////
-//state where npc positions themself on current platform for jump
-class WalkForward
+class Platform
 {
-  constructor(agent)
+  constructor(minX, maxX, y)
   {
-    this.agent = agent;
-  }
-
-  tick()
-  {
-    var ballPos = findClosestBallPos(this.agent.position);
-    if (ballPos && p5.Vector.dist(ballPos, this.agent.position) < 150)
-    {
-      return "WalkBackward"
-    }
-    if (this.currPlatform == null && this.targetPlatform == null)
-    {
-      this.agent.currPlatform = findCurrPlatform(this.agent.position);
-      for (let i = 0; i < platformObjs.length - 1; i++)
-      {
-        if (this.agent.currPlatform == platformObjs[i])  
-        {
-          this.agent.targetPlatform = platformObjs[i+1];
-        }
-      }
-    }
-    var onUpperPlatform = isUpperPlatform(this.agent.currPlatform);
-    if (onUpperPlatform)
-    {
-      this.agent.walkForward = 0;
-      this.agent.walkBackward = 1;
-    }
-    else
-    {
-      this.agent.walkBackward = 0;
-      this.agent.walkForward = 1;
-    }
-    if ((this.agent.walkForward == 1 && 
-      this.agent.position.x - this.agent.currPlatform.position.x > this.agent.currPlatform.size.x/2 - 15) 
-    || (this.agent.walkForward == 0 && 
-      this.agent.position.x - this.agent.currPlatform.position.x < -this.agent.currPlatform.size.x/2 + 15))
-    {
-      this.agent.jump = 2;
-      return "JumpToNextPlatform";
-    }
-    return "WalkForward";
+    this.minX = minX;
+    this.maxX = maxX;
+    this.y = y;
   }
 }
 
-//state where npc jumps to next platform
-class JumpToNextPlatform
+function tileToPos(x, y)
 {
-  constructor(agent)
-  {
-    this.agent = agent;
-  }
-
-  tick()
-  {
-    if (abs(this.agent.targetPlatform.position.x - this.agent.position.x) < 30)
-    {
-      this.agent.walkBackward = 0;
-      this.agent.walkForward = 0;
-    }
-    if (this.agent.jump > 0)
-    {
-      return "JumpToNextPlatform";
-    }
-    this.agent.currPlatform = findCurrPlatform(this.agent.position);
-    for (let i = 0; i < platformObjs.length - 1; i++)
-    {
-      if (this.agent.currPlatform == platformObjs[i])  
-      {
-        this.agent.targetPlatform = platformObjs[i+1];
-      }
-    }
-    return "WalkForward";
-  }
+  return createVector(x*40+20, y*40+20);
 }
 
-//state that moves npc backwards to increase chances of avoiding ball
-class WalkBackward
+function posToTile(x, y)
 {
-  constructor (agent)
-  {
-    this.agent = agent;
-  }
-
-  tick()
-  {
-    var ballPos = findClosestBallPos(this.agent.position);
-    if (!ballPos || p5.Vector.dist(ballPos, this.agent.position) > 150) return "WalkForward";
-    if (abs(this.agent.position.x - ballPos.x) < 40 && ballPos.y - this.agent.position.y > -30)
-    {
-      this.agent.walkForward = 0;
-      this.agent.walkBackward = 0;
-      this.agent.jump = 2;
-      return "JumpOverBall";
-    }
-    if (isUpperPlatform(this.agent.currPlatform))
-    {
-      this.agent.walkForward = 1;
-      this.agent.walkBackward = 0;
-    }
-    else
-    {
-      this.agent.walkBackward = 1;
-      this.agent.walkForward = 0;
-    }
-    if ((this.agent.walkForward == 1 && 
-      this.agent.position.x - this.agent.currPlatform.position.x > this.agent.currPlatform.size.x/2 - 15) 
-    || (this.agent.walkForward == 0 && 
-      this.agent.position.x - this.agent.currPlatform.position.x < -this.agent.currPlatform.size.x/2 + 15))
-    {
-      this.agent.walkForward = 0;
-      this.agent.walkBackward = 0;
-    }
-    return "WalkBackward";
-  }
-}
-
-//state that performs jump in place and then returns to walking forward
-class JumpOverBall
-{
-  constructor(agent)
-  {
-    this.agent = agent;
-  }
-
-  tick()
-  {
-    if (this.agent.jump == 0)
-      return "WalkForward";
-    return "JumpOverBall";
-  }
+  return createVector(Math.round(x-20)/40, Math.round(y-20)/40);
 }

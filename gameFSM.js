@@ -46,7 +46,7 @@ class snowObj
   
   class introScreen //0
   {
-    constructor(animations)
+    constructor()
     {
 
       this.snowDrops = [];
@@ -56,14 +56,14 @@ class snowObj
         this.snowDrops.push(new snowObj(4, 8));
       }
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2, 500), createVector(64, 64), 1, animations.bluePenguinWalkRight, 6));
+        createVector(width/2, 500), createVector(64, 64), 1, images.bluePenguinWalkRight, 6));
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 50, 500), createVector(64, 64), 1, animations.redPenguinWalkRight, 6));
+        createVector(width/2 - 50, 500), createVector(64, 64), 1, images.redPenguinWalkRight, 6));
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 100, 500), createVector(64, 64), 1, animations.blackPenguinWalkRight, 6));
+        createVector(width/2 - 100, 500), createVector(64, 64), 1, images.blackPenguinWalkRight, 6));
       
       this.walkingObjs.push(new WalkingAnimation(
-        createVector(width/2 - 300, 500+5), createVector(40, 40), 1, animations.poptartWalkRight, 6));
+        createVector(width/2 - 300, 500+5), createVector(40, 40), 1, images.poptartWalkRight, 6));
     }
 
     execute(me)
@@ -76,11 +76,11 @@ class snowObj
         this.snowDrops[i].move();
         this.snowDrops[i].draw();
       }
-      image(me.animations.topIce, 20, 580, 40, 40);
+      image(images.topIce, 20, 580, 40, 40);
       for (let x = 20; x < 820; x += 40)
       {
-        image(me.animations.topIce, x, 540, 40, 40);
-        image(me.animations.bottomIce, x, 580, 40, 40);
+        image(images.topIce, x, 540, 40, 40);
+        image(images.bottomIce, x, 580, 40, 40);
       }
       //make penguins walk
       for (let i = 0; i < this.walkingObjs.length; i++)
@@ -226,11 +226,10 @@ class snowObj
   class InstructionsScreen
   {  //1
 
-    constructor(animations)
+    constructor()
     {
-      this.animations = animations;
-      this.pacingPoptart = new WalkBackAndForthAnimation(createVector(450 - 25, 160), createVector(40, 40), 1, animations.poptartWalkRight, animations.poptartWalkLeft, 6, 400 - 25, 500 - 25);
-      this.pacingPenguin = new WalkBackAndForthAnimation(createVector(415, 110), createVector(32, 32), 1, animations.blackPenguinWalkRight, animations.blackPenguinWalkLeft, 6, 415 - 50, 415+ 50);
+      this.pacingPoptart = new WalkBackAndForthAnimation(createVector(450 - 25, 160), createVector(40, 40), 1, images.poptartWalkRight, images.poptartWalkLeft, 6, 400 - 25, 500 - 25);
+      this.pacingPenguin = new WalkBackAndForthAnimation(createVector(415, 110), createVector(32, 32), 1, images.blackPenguinWalkRight, images.blackPenguinWalkLeft, 6, 415 - 50, 415+ 50);
       this.buttonPressed = "";
       this.buttons = [];
       this.buttons.push(new button(createVector(width/2, 380), createVector(120, 60),"Start", this));
@@ -263,38 +262,38 @@ class snowObj
       //smoke cloud animation
       let smokeFrame = frameCount % 168;
       if (smokeFrame < 60)
-        image(this.animations.redPenguinWalkRight[3], 425, 270, 32, 32);
+        image(images.redPenguinWalkRight[3], 425, 270, 32, 32);
       else if (smokeFrame < 84)
       {
         let idx = Math.floor((smokeFrame - 60) / 6);
-        image(this.animations.smokeCloud[idx], 425, 270, 32, 32);
+        image(images.smokeCloud[idx], 425, 270, 32, 32);
       }
       else if (smokeFrame < 144)
       {
-        image(this.animations.blackPenguinWalkRight[3], 425, 270, 32, 32);
+        image(images.blackPenguinWalkRight[3], 425, 270, 32, 32);
       }
       else
       {
         let idx = Math.floor((smokeFrame - 144) / 6);
-        image(this.animations.smokeCloud[idx], 425, 270, 32, 32);
+        image(images.smokeCloud[idx], 425, 270, 32, 32);
       }
 
       //special move animation
       let specialFrame = frameCount % 96;
       if (specialFrame < 36)
       {
-        image(this.animations.blackPenguinSpecialRight[Math.floor(specialFrame/6)], 435, 315, 40, 40);
+        image(images.blackPenguinSpecialRight[Math.floor(specialFrame/6)], 435, 315, 40, 40);
       }
       if (specialFrame > 24)
       {
-        image(this.animations.snowBall, 465 + (specialFrame - 36)*2, 315, 20, 20);
+        image(images.snowBall, 465 + (specialFrame - 36)*2, 315, 20, 20);
       }
       if (specialFrame >= 36)
       {
-        image(this.animations.blackPenguinSpecialRight[5], 435, 315, 40, 40);
+        image(images.blackPenguinSpecialRight[5], 435, 315, 40, 40);
       }
 
-      image(this.animations.fish, 425, 220);
+      image(images.fish, 425, 220);
       
       fill(135, 206, 250);
       textSize(64);
