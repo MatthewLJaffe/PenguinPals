@@ -116,7 +116,8 @@ class gameScreen //4
       image(this.background, 400, constrain(-this.backgroundScrollSpeed*(this.player.position.y - 300), 0, 600));
       image(this.foreground, 400, constrain(-this.foregroundScrollSpeed*(this.player.position.y - 300), 0, 600));
       image(this.background, 400, constrain(-.25*(this.player.position.y - 300), 0, 600));
-      
+    
+
       //snow falling
       for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();

@@ -1,8 +1,8 @@
 /*
 Project 7: Penguin Pals
 By: Katherine Pajares and Matthew Jaffe
-Matthew: pixel art and character animations(3 different penguins and poptart), ice on the bottom of intro screen
-Katherine: game FSM, different screens general layout, snow and icicles on intro screen
+Matthew: pixel art and character animations(3 different penguins and poptart), ice on the bottom of intro screen, NPC AI
+Katherine: game FSM, different screens general layout, snow and icicles on intro screen, collision, sound effects, player movement
 */
 
 var keyArray = [];
