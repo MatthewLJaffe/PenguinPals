@@ -8,7 +8,7 @@ class poptart
     this.velocity = createVector(0, 0);
     this.maxWalkSpeed = 1;
     this.maxWalkAcc = 1;
-    this.maxFallSpeed = 2.5;
+    this.maxFallSpeed = 4;
     this.acceleration = createVector(0, 0);
     this.force = createVector(0, 0);
     this.size = createVector(40, 40);
