@@ -265,25 +265,25 @@ class Player
 
   updatePenguinLeft(){
     if(this.penguin_type == 1){
-      this.anim = this.animations.blackPenguinWalkLeft;
+      this.anim = images.blackPenguinWalkLeft;
     }
     else if(this.penguin_type == 2){
-      this.anim = this.animations.bluePenguinWalkLeft;
+      this.anim = images.bluePenguinWalkLeft;
     }
     else{
-      this.anim = this.animations.redPenguinWalkLeft;
+      this.anim = images.redPenguinWalkLeft;
     }
   }
 
   updatePenguinRight(){
     if(this.penguin_type == 1){
-      this.anim = this.animations.blackPenguinWalkRight;
+      this.anim = images.blackPenguinWalkRight;
     }
     else if(this.penguin_type == 2){
-      this.anim = this.animations.bluePenguinWalkRight;
+      this.anim = images.bluePenguinWalkRight;
     }
     else{
-      this.anim = this.animations.redPenguinWalkRight;
+      this.anim = images.redPenguinWalkRight;
     }
   }
 
