@@ -98,8 +98,8 @@ class poptart
     this.position.add(this.velocity);
     this.acceleration.set(0, 0);
     //prevent from going out of bounds horizontally
-    if (this.position.x > 394) {
-      this.position.x = 394;
+    if (this.position.x > width - this.size.x/2) {
+      this.position.x = width - this.size.x/2;
     }
     else if (this.position.x < 6) {
       this.position.x = 6;
