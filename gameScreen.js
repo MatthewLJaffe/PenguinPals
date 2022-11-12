@@ -166,8 +166,7 @@ class gameScreen //4
       textSize(64);
       textAlign(LEFT);
 
-      player.volume = me.volume;
-      player.updatePlayer();
+      player.updatePlayer(me.volume*0.1);
       for (let i = 0; i < poptarts.length; i++)
       {
         poptarts[i].update();
@@ -243,8 +242,8 @@ class Player
 
     //sound effects
     this.walkingSound = sounds.walkingSound;
-    this.volume = 0;
-    this.walkingSound.setVolume(this.volume * 0.1);  //volume comes from game object, set before playing game
+    //this.volume = 0;
+    //this.walkingSound.setVolume(this.volume);  //volume comes from game object, set before playing game
 
     this.size = size;
     this.height = this.size;
@@ -274,9 +273,9 @@ class Player
     //this.direction = "L"; //"L" is left, "R" is right (for powerups later)
   }
 
-  updatePlayer()
+  updatePlayer(volume)
   {
-    this.walkingSound.setVolume(this.volume * 0.1);
+    this.walkingSound.setVolume(volume);
     this.updatePlayerPosition();
     this.updatePlayerCollision();
     this.updatePlayerAnim();
