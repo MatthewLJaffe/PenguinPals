@@ -3,28 +3,6 @@ var player;
 //QWE ice platform
 //ASDFG ice wall
 
-/*
-var tileMap = [
-  "                    ",
-  "                    ",
-  "                    ",
-  "                    ",
-  "111111              ",
-  "                    ",
-  "       11111        ",
-  "       11111        ",
-  "              011112",
-  "              344445",
-  "01111111111111Z44445",
-  "34444444444444444445",
-  "34444444444444444445",
-  "34444444444444444445",
-  "34444444444444444445",
-  "3TTTTTTTTTTTTTTTTTTT",
-  "3TTTTTTTTTTTTTTTTTTT",
-];
-*/
-
 var tileMap = [
   "                    ",
   "                    ",
@@ -55,7 +33,7 @@ var tileMap = [
   "                    ",
   "                    ",
   "              011111",
-  "              344444",
+  "  N           344444",
   "01111111111111Z44444",
   "34444444444444444444",
   "34444444444444444444",
@@ -69,6 +47,8 @@ var collisionObjs = [];
 var poptarts = [];
 var snowballs = [];
 var fishes = [];
+var goldFish;
+
 
 class gameScreen //4
 { 
@@ -158,6 +138,9 @@ class gameScreen //4
           case 'B':
             fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40));
             break;
+          case 'N':
+            goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40);
+            break;
         }
       }
     }
@@ -199,8 +182,8 @@ class gameScreen //4
       {
         fishes[i].updateFish();
       }
+      goldFish.updateFish();
       pop();
-
       this.lifeDisplay();
       this.scoreDisplay();
 
@@ -589,7 +572,6 @@ class Snowball
         snowballs.splice(i, 1);
     }
   }
-
 }
 
 class Fish
@@ -609,13 +591,31 @@ class Fish
         if (this == fishes[i]) 
         {
           fishes.splice(i, 1);
-          player.score += 500;
+          player.score += 100;
           if (player.lives < 3)
           {
             player.lives++;
           }
         }
       }
+    }
+  }
+}
+
+class GoldFish
+{
+  constructor(x, y)
+  {
+    this.position = createVector(x, y);
+  }
+
+  updateFish()
+  {
+    image(images.goldFish, this.position.x, this.position.y);
+    if (detectCollision(this.position.x, this.position.y, 40, 40, player.position.x, player.position.y, 64, 64).mag() > 0)
+    {
+      //WIN CONDITION
+      console.log("win");
     }
   }
 }
