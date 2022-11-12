@@ -175,9 +175,7 @@ class gameScreen //4
       for (let i = 0; i < collisionObjs.length; i++){
         fill(0, 255 ,0);
         collisionObjs[i].drawCollisionObj();
-        ellipse(collisionObjs[i].position.x, collisionObjs[i].position.y, 5, 5);
       }
-      text(player.position.x +", " + player.position.y, player.position.x, player.position.y - 100);
       pop();
 
       this.lifeDisplay();
@@ -295,7 +293,6 @@ class Player
 
       //colliding with bottom of stairs
       if(distance  < (this.height/2 + 20)&& this.position.y + this.height/2 <= collisionObjs[i].position.y - 10){
-        fill(255);
         this.fall = false;
         this.height = this.size;
         this.jump = 0;
@@ -307,7 +304,6 @@ class Player
       //colliding from the top
       if(distance  < (this.height/2 + 25)&& this.position.y + this.height/2 >= collisionObjs[i].position.y + 20 && horizontalDist <(this.siz/4 + 20)){
         this.height = this.size*1.05;
-        fill(0);
         if(this.velocity.y < 0){
           this.velocity.y *= -1;
         }
@@ -317,9 +313,7 @@ class Player
       
 
       //colliding on the right
-      var word = 0;
       if(distance  < (this.size/4 + 20) && this.position.x + this.size/4 <= collisionObjs[i].position.x + 20){
-        fill(255, 0, 0);
         if(this.acceleration.x > 0){
           this.acceleration.x *= -1;
 
@@ -333,14 +327,7 @@ class Player
       }
 
       //colliding on the left
-      var xs = 0;
-      var ys = 0;
       if(distance  < (this.size/4 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
-        word = 1;
-        fill(0, 0, 255);
-
-        xs = collisionObjs[i].position.x;
-        ys = collisionObjs[i].position.y;
 
         if(this.acceleration.x < 0){
           this.acceleration.x *= -1;
@@ -354,11 +341,6 @@ class Player
         this.position.x++;
       }
 
-      if(word == 1){
-        fill(255, 0, 0);
-        ellipse(xs, ys, 25, 35);
-        text(xs +", " + ys, mouseX, mouseY - 20);
-      }
 
     }
   }
@@ -454,7 +436,6 @@ class Player
       image(this.anim[0], this.position.x, this.position.y, this.size, this.height);
     }
 
-    ellipse(this.position.x, this.position.y, 5, 5);
   }
 }
 
