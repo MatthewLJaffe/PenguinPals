@@ -28,7 +28,7 @@ class poptart
     this.idleTime = 0;
     //+1 for right -1 for left
     this.facedDir = 1;
-    this.maxChaseDistance = 200;
+    this.maxChaseDistance = 350;
     this.findCurrentPlatform();
     //only simulate npc when enabled
     this.enabled = true;
