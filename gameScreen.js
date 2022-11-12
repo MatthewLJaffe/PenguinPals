@@ -229,7 +229,10 @@ class gameScreen //4
   }
 
   scoreDisplay(){
-    fill(135, 206, 250);
+    fill(200, 245, 255, 230);
+    noStroke();
+    rect(0, 0, 180, 50);
+    fill(100, 200, 245);
     textAlign(LEFT);
     textSize(32);
     text("Score: " + player.score, 10, 32);
