@@ -27,6 +27,17 @@ var tileMap = [
 
 var tileMap = [
   "                    ",
+  "                    ",
+  "                    ",
+  "    P 11 P 11       ",
+  "111111111111111     ",
+  "                    ",
+  "                 111",
+  "                    ",
+  "             B      ",
+  "          11111     ",
+  "     11111          ",
+  "                   ",
   "P                   ",
   "11111111111111    11",
   "                 1  ",
@@ -34,11 +45,11 @@ var tileMap = [
   "              11    ",
   "                    ",
   "        11          ",
-  "        1111        ",
+  "        11111       ",
   "      11            ",
   "      11            ",
   "    11        11    ",
-  "P   11              ",
+  "P B 11              ",
   "111111              ",
   "                  11",
   "                    ",
@@ -57,6 +68,7 @@ var tileMap = [
 var collisionObjs = [];
 var poptarts = [];
 var snowballs = [];
+var fishes = [];
 
 class gameScreen //4
 { 
@@ -143,7 +155,9 @@ class gameScreen //4
           case 'P':
             poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40));
             break;
-          
+          case 'B':
+            fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40));
+            break;
         }
       }
     }
@@ -179,6 +193,10 @@ class gameScreen //4
       for (let i = 0; i < snowballs.length; i++)
       {
         snowballs[i].updateSnowBall();
+      }
+      for (let i = 0; i < fishes.length; i++)
+      {
+        fishes[i].updateFish();
       }
       pop();
 
@@ -524,6 +542,35 @@ class Snowball
     {
       if (snowballs[i] == this)
         snowballs.splice(i, 1);
+    }
+  }
+
+}
+
+class Fish
+{
+  constructor(x, y)
+  {
+    this.position = createVector(x, y);
+  }
+
+  updateFish()
+  {
+    image(images.fish, this.position.x, this.position.y);
+    if (detectCollision(this.position.x, this.position.y, 40, 40, player.position.x, player.position.y, 64, 64).mag() > 0)
+    {
+      for (let i = 0; i < fishes.length; i++)
+      {
+        if (this == fishes[i]) 
+        {
+          fishes.splice(i, 1);
+          player.score += 500;
+          if (player.lives < 3)
+          {
+            player.lives++;
+          }
+        }
+      }
     }
   }
 }
