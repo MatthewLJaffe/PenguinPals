@@ -1,3 +1,4 @@
+//simple button that can be checked for if it is pressed in game loop
 class button
 {
     constructor(pos, size, name, state)
@@ -19,7 +20,6 @@ class button
 
     drawButton()
     {
-
         strokeWeight(2);
         stroke(0,0,0);
         noStroke();

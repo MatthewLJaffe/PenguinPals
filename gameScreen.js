@@ -6,7 +6,7 @@ var tileMap = [
   "                    ",
   "                    ",
   "                    ",
-  "    P 11 P 11       ",
+  " N  P 11 P 11       ",
   "111111111111111     ",
   "                    ",
   "                 111",
@@ -32,7 +32,7 @@ var tileMap = [
   "                    ",
   "                    ",
   "              011111",
-  "  N           344444",
+  "              344444",
   "01111111111111Z44444",
   "34444444444444444444",
   "34444444444444444444",
@@ -154,6 +154,7 @@ class gameScreen //4
   execute(me)
   {
       background(220, 250, 250);
+      //scrolling foreground and background layers at different speeds
       image(images.background, 400, constrain(-this.backgroundScrollSpeed*(player.position.y - 300), 0, 600));
       image(images.foreground, 400, constrain(-this.foregroundScrollSpeed*(player.position.y - 300), 0, 600));
       
@@ -164,17 +165,20 @@ class gameScreen //4
       }
 
       push();
+      //translate to center y around player
       translate(0, height/2 - player.position.y+100);
       fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
-
+      //adjust volume
       player.updatePlayer(me.volume*0.1);
+      //update poptarts
       for (let i = 0; i < poptarts.length; i++)
       {
         poptarts[i].update();
         poptarts[i].volume = me.volume*0.005;
       }
+      //draw tiles
       for (let i = 0; i < collisionObjs.length; i++){
         fill(0, 255 ,0);
         collisionObjs[i].drawCollisionObj();
@@ -211,6 +215,7 @@ class gameScreen //4
       }
   }
   
+  //ui display of current life count
   lifeDisplay(){
     if(player.lives > 0){
       image(images.fullHeart, width - 105, 25, 45, 45);
@@ -233,6 +238,7 @@ class gameScreen //4
     }
   }
 
+  //show score ui
   scoreDisplay(){
     fill(135, 206, 250);
     textAlign(LEFT);
@@ -267,6 +273,8 @@ class gameScreen //4
     me.win = false;
 
   }
+
+  //add a new highscore when a player finishes the game
   updateHighScore(me){
     this.newHighScores = [];
     this.added = false;
@@ -308,6 +316,7 @@ function keyReleased() {
   keyArray[keyCode] = 0;
 }
 
+//class encapsulating different penguin playable characters
 class Player
 {
   constructor(x, y, size, penguin_type)
@@ -330,8 +339,7 @@ class Player
     this.currSpecialMoveFrames = 0;
     //sound effects
     this.walkingSound = sounds.walkingSound;
-    //this.volume = 0;
-    //this.walkingSound.setVolume(this.volume);  //volume comes from game object, set before playing game
+
 
     this.size = size;
     this.height = this.size;
@@ -340,7 +348,6 @@ class Player
 
     this.playerSwitchCooldown = 60;
     this.currPlayerSwitchCooldown = 0;
-
 
     this.penguin_type = penguin_type; //1 = black, 2 = blue
     this.moving = false;
@@ -355,13 +362,16 @@ class Player
     }
   }
 
+
   updatePlayer(volume)
   {
+    //handle input for switching penguins
     if (keyArray[69] == 1 && this.currPlayerSwitchCooldown <= 0)
     {
       this.currPlayerSwitchCooldown = this.playerSwitchCooldown;
       if (this.penguin_type == 1)
       {
+        //set up blue penguin animations
         this.penguin_type = 2;
         if (this.facedDir == 1)
           this.anim = images.bluePenguinWalkRight;
@@ -370,6 +380,7 @@ class Player
       }
       else
       {
+        //set up black penguin animations 
         this.penguin_type = 1;
         if (this.facedDir == 1)
           this.anim = images.blackPenguinWalkRight;
@@ -384,8 +395,10 @@ class Player
     this.updatePlayerAnim();
   }
 
+  //different special moves for penguins executable with the space key
   specialMove()
   {
+    //black penguin throw snowball
     if (this.penguin_type == 1)
     {
       this.currAnimIndex = 0;
@@ -399,6 +412,7 @@ class Player
       }
       snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
     }
+    //blue penguin lateral dash in faced direction
     else
     {
       if (this.facedDir == 1)
@@ -408,6 +422,7 @@ class Player
     }
   }
 
+  //make sure player does not collide with tiles
   updatePlayerCollision()
   {
     var grounded = false;
@@ -435,6 +450,7 @@ class Player
     }
   }
 
+  //update left facing animations for player
   updatePenguinLeft(){
     if(this.penguin_type == 1){
       this.anim = images.blackPenguinWalkLeft;
@@ -447,6 +463,7 @@ class Player
     }
   }
 
+  //update right facing animations for player
   updatePenguinRight(){
     if(this.penguin_type == 1){
       this.anim = images.blackPenguinWalkRight;
@@ -459,6 +476,7 @@ class Player
     }
   }
 
+  //update position velocity and acceleration for player and handle input for special moves / jumping
   updatePlayerPosition()
   {
     var gravityForce = p5.Vector.mult(this.gravity, this.acceleration.add(gravityForce));
@@ -510,8 +528,7 @@ class Player
       this.moving = true;
     }
     
-    
-    
+    //update position velocity and acceleration 
     if(this.jump > 0 || this.fall == true){
       this.height = this.size*1.05;
       this.acceleration.add(this.gravity);
@@ -530,6 +547,7 @@ class Player
     this.acceleration.set(0, 0);
   }
 
+  //loop through current player animation
   updatePlayerAnim()
   {
     if(this.moving == true && (this.fall == false || this.currSpecialMoveCooldown > 0))
@@ -547,6 +565,7 @@ class Player
   }
 }
 
+//class for tiles that can be collided with by npcs/ player
 class CollisionObj
 {
   constructor(x, y, w, h, img)
@@ -595,6 +614,7 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
   return createVector(0, 0);
 }
 
+//projectile for player spawned with special move
 class Snowball
 {
   constructor(x, y, dir)
@@ -609,6 +629,7 @@ class Snowball
     this.currTime = 0;
   }
 
+  //move snowball and check for collision with enemies
   updateSnowBall()
   {
     if (this.currTime > this.liveTime)
@@ -637,6 +658,7 @@ class Snowball
     this.currTime++
   }
 
+  //remove snowball from array so it is no longer updated
   destroySnowball()
   {
     for (let i = 0; i < snowballs.length; i++)
@@ -647,6 +669,7 @@ class Snowball
   }
 }
 
+//gives the player an extra life and extra score on collision
 class Fish
 {
   constructor(x, y)
@@ -655,6 +678,7 @@ class Fish
     this.show = true;
   }
 
+  //check for collision with player and update plaer score and lives if collision
   updateFish()
   {
     if(this.show == true){
@@ -679,6 +703,7 @@ class Fish
   }
 }
 
+//similar to fish but collision wins the game for the player
 class GoldFish
 {
   constructor(x, y)

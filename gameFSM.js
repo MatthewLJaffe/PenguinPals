@@ -1,3 +1,5 @@
+
+//particle system that softly rains down snow
 class snowObj
 {
     constructor(lower_limit, upper_limit)
@@ -15,6 +17,7 @@ class snowObj
       noStroke();
       ellipse(this.x, this.y, this.size, this.size);
     }
+    //update individual paritcles
     move()
     {
       if(this.y < (height + this.size)){
@@ -26,7 +29,9 @@ class snowObj
     }
   }
   
-  function mouseClicked() {
+  //input handling for menu buttons
+  function mouseClicked() 
+  {
     if(game.currentState == 0){
       game.currentState = 1; //changes to options screen
       //return;
@@ -45,6 +50,7 @@ class snowObj
 
   var currFrame = 0;
   
+  //state encapslating functionality of intro screen
   class introScreen //0
   {
     constructor()
@@ -53,9 +59,11 @@ class snowObj
       this.snowDrops = [];
       this.walkingObjs = [];
       
+      //add snow
       for(let i = 0; i < 400; i++){
         this.snowDrops.push(new snowObj(4, 8));
       }
+      //add walking animations
       this.walkingObjs.push(new WalkingAnimation(
         createVector(width/2, 500), createVector(64, 64), 1, images.bluePenguinWalkRight, 6));
       this.walkingObjs.push(new WalkingAnimation(
@@ -67,6 +75,7 @@ class snowObj
         createVector(width/2 - 300, 500+5), createVector(40, 40), 1, images.poptartWalkRight, 6));
     }
 
+    //loop for intro screen
     execute(me)
     {      
       let yOffset = 100;
@@ -159,6 +168,7 @@ class snowObj
     }
   }
 
+  //simple class for playing walking animation and advancing player
   class WalkingAnimation
   {
     constructor(pos, size, speed, anim, stepRate)
@@ -184,6 +194,7 @@ class snowObj
     }
   }
 
+  //similar to walkinganimation but stays within confined x range
   class WalkBackAndForthAnimation
   {
     constructor(pos, size, speed, rightAnim, leftAnim, stepRate, xMin, xMax)
@@ -223,12 +234,14 @@ class snowObj
     }
 
   }
-  
+
+  //state for instructions screen
   class InstructionsScreen
   {  //1
 
     constructor()
     {
+      //initialize walking animations and ui
       this.pacingPoptart = new WalkBackAndForthAnimation(createVector(450 - 25, 160), createVector(40, 40), 1, images.poptartWalkRight, images.poptartWalkLeft, 6, 400 - 25, 500 - 25);
       this.pacingPenguin = new WalkBackAndForthAnimation(createVector(415, 110), createVector(32, 32), 1, images.blackPenguinWalkRight, images.blackPenguinWalkLeft, 6, 415 - 50, 415+ 50);
       this.buttonPressed = "";
@@ -238,9 +251,11 @@ class snowObj
       this.buttons.push(new button(createVector(width/2, 531), createVector(270, 60), "High Scores", this));
     }
 
+    //loop for intro screen
     execute(me)
     {
       background(220, 250, 250);
+      //update state based on ui presses
       for (let i = 0; i < this.buttons.length; i++)
       {
         this.buttons[i].drawButton();
@@ -258,6 +273,7 @@ class snowObj
         me.currentState = 3;
       }
       this.buttonPressed = "";
+      //update animations
       this.pacingPoptart.update();
       this.pacingPenguin.update();
       //smoke cloud animation
@@ -327,6 +343,7 @@ class snowObj
     }
   }
   
+  //screen in state maching for updating volume
   class volumeScreen{  //2
     execute(me){
         background(220, 250, 250);
@@ -385,6 +402,7 @@ class snowObj
     }  
   }
   
+  //screen in state machine for displaying high scores
   class highscoreScreen{  //3
     execute(me){
       background(220, 250, 250);
@@ -413,6 +431,7 @@ class snowObj
     }
   }
   
+  //screen in state machine for displaying loss or win
   class gameoverScreen //5
   {  
     constructor(){
@@ -424,6 +443,7 @@ class snowObj
       textSize(48);
       textAlign(CENTER);
 
+      //show correct ui based on win / lose conditions
       if(me.lose == true){
         text("You lose!", width/2, height/3);
         if(!sounds.gameLoseSound.isPlaying() && this.played == false){
