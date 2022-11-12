@@ -339,7 +339,7 @@ class Player
       }
 
       //colliding on the left
-      if(distance  < (this.size/2 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
+      if(distance  < (this.size/4 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
 
         if(this.acceleration.x < 0){
           this.acceleration.x *= -1;
