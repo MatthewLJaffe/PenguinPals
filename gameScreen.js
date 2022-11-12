@@ -185,6 +185,7 @@ class gameScreen //4
       for (let i = 0; i < poptarts.length; i++)
       {
         poptarts[i].update();
+        poptarts[i].volume = me.volume*0.005;
       }
       for (let i = 0; i < collisionObjs.length; i++){
         fill(0, 255 ,0);
@@ -202,6 +203,12 @@ class gameScreen //4
 
       this.lifeDisplay();
       this.scoreDisplay();
+
+      if(player.lives == 0){
+        me.gameOver = true;
+        me.lose = true;
+        me.currentState = 5;
+      }
   }
   
   lifeDisplay(){
