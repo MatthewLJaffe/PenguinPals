@@ -37,7 +37,7 @@ var tileMap = [
   "             B      ",
   "          11111     ",
   "     11111          ",
-  "                   ",
+  "                    ",
   "P                   ",
   "11111111111111    11",
   "                 1  ",
@@ -265,6 +265,7 @@ class Player
     this.jump = 0;
     this.jumpForce = new p5.Vector(0, -12);
     this.velocity = new p5.Vector(0, 0);
+    this.drag = createVector(.2, 0);
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = new p5.Vector(0, 0.45);
     this.speed = 2;
@@ -280,6 +281,9 @@ class Player
     this.height = this.size;
     this.specialMoveCooldown = 30;
     this.currSpecialMoveCooldown = 0;
+
+    this.playerSwitchCooldown = 60;
+    this.currPlayerSwitchCooldown = 0;
 
 
     this.penguin_type = penguin_type; //1 = black, 2 = blue
@@ -297,6 +301,27 @@ class Player
 
   updatePlayer(volume)
   {
+    if (keyArray[69] == 1 && this.currPlayerSwitchCooldown <= 0)
+    {
+      this.currPlayerSwitchCooldown = this.playerSwitchCooldown;
+      if (this.penguin_type == 1)
+      {
+        this.penguin_type = 2;
+        if (this.facedDir == 1)
+          this.anim = images.bluePenguinWalkRight;
+        else
+          this.anim = images.bluePenguinWalkLeft;
+      }
+      else
+      {
+        this.penguin_type = 1;
+        if (this.facedDir == 1)
+          this.anim = images.blackPenguinWalkRight;
+        else
+          this.anim = images.blackPenguinWalkLeft;
+      }
+    }
+    this.currPlayerSwitchCooldown--;
     this.walkingSound.setVolume(volume);
     this.updatePlayerPosition();
     this.updatePlayerCollision();
@@ -317,6 +342,13 @@ class Player
         this.anim = images.blackPenguinSpecialLeft;
       }
       snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
+    }
+    else
+    {
+      if (this.facedDir == 1)
+        this.acceleration.add(8, 0);
+      else
+        this.acceleration.add(-8, 0);
     }
   }
 
@@ -428,9 +460,15 @@ class Player
       this.height = this.size*1.05;
       this.acceleration.add(this.gravity);
     }
-    
+    if (this.velocity.x > 0) {
+      this.acceleration.add(createVector(-this.drag.x, 0))
+    }
+    else if (this.velocity.x < 0) {
+      this.acceleration.add(createVector(this.drag.x, 0))
+    }
     this.velocity.add(this.acceleration);
-    
+    if (abs(this.velocity.x) < this.drag.x)
+      this.velocity.x = 0;
     this.position.add(this.velocity);
 
     this.acceleration.set(0, 0);
