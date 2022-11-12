@@ -23,9 +23,4 @@ class gameObj
       this.volume = 5;  //starts at 5
     }
 
-
-    updateHighScores()
-    {
-      
-    }
   }

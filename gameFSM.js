@@ -31,6 +31,9 @@ class snowObj
       game.currentState = 1; //changes to options screen
       return;
     }
+    else if(game.currentState == 5){
+     //reset vars
+    }
     var buttons = game.state[game.currentState].buttons;
     if (buttons)
     {
@@ -414,8 +417,33 @@ class snowObj
   
   class gameoverScreen //5
   {  
+    constructor(){
+      this.played = false;
+    }
     execute(me){
-      
+      background(220, 250, 250);
+      fill(135, 206, 250)
+      textSize(48);
+      textAlign(CENTER);
+
+      if(me.lose == true){
+        text("You lose!", width/2, height/3);
+        if(!sounds.gameLoseSound.isPlaying() && this.played == false){
+          sounds.gameLoseSound.setVolume(me.volume*0.01);
+          this.played = true;
+          sounds.gameLoseSound.play();
+        }
+      }
+      if(me.win == true){
+        text("You win!", width/2, height/3);
+        if(!sounds.gameWinSound.isPlaying() && this.played == false){
+          sounds.gameWinSound.setVolume(me.volume*0.01);
+          this.played = true;
+          sounds.gameWinSound.play();
+        }
+      }
+      text("Play again?", width/2, height/3 + 80);
+      text("click to restart", width/2, height/3 + 160);
     }  
   }
   
