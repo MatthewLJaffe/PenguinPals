@@ -43,15 +43,15 @@ var tileMap = [
   "                  11",
   "                    ",
   "                    ",
-  "              111111",
-  "              111111",
-  "11111111111111111111",
-  "11111111111111111111",
-  "11111111111111111111",
-  "11111111111111111111",
-  "11111111111111111111",
-  "11111111111111111111",
-  "11111111111111111111",
+  "              011111",
+  "              344444",
+  "01111111111111Z44444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "3TTTTTTTTTTTTTTTTTTT",
+  "3TTTTTTTTTTTTTTTTTTT",
 ];
 
 var collisionObjs = [];
@@ -304,63 +304,28 @@ class Player
 
   updatePlayerCollision()
   {
-    this.fall = true;
-    for(var i = 0; i < collisionObjs.length; i++){
-      var verticalDist = abs(collisionObjs[i].position.y - this.position.y);
-      var horizontalDist = abs(this.position.x - collisionObjs[i].position.x);
-      var distance = dist(collisionObjs[i].position.x, collisionObjs[i].position.y, this.position.x, this.position.y);
-
-      //colliding with bottom of stairs
-      if(distance  < (this.height/2 + 26)&& this.position.y + this.height/2 <= collisionObjs[i].position.y - 10){
-        this.fall = false;
-        this.height = this.size;
+    var grounded = false;
+    for(var c = 0; c < collisionObjs.length; c++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 35, 64, collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
+      if (dir.mag() == 0) continue;
+      if (dir.x > .1)
+        this.position.x = collisionObjs[c].position.x + collisionObjs[c].size.x/2 + 18;
+      if (dir.x < -.1)
+        this.position.x = collisionObjs[c].position.x - collisionObjs[c].size.x/2 - 18;
+      if (dir.y > .1)
+        this.position.y = collisionObjs[c].position.y + collisionObjs[c].size.y/2 + 32;
+      if (dir.y < -.1)
+      {
+        this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - 32;
+        grounded = true;
         this.jump = 0;
         this.velocity.y = 0;
-        this.position.y = collisionObjs[i].position.y - 18 - this.height/2;
       }
-
-      
-      //colliding from the top
-      if(distance  < (this.height/2 + 22)&& this.position.y + this.height/2 >= collisionObjs[i].position.y + 20 && horizontalDist <(this.size/4 + 20)){
-        this.height = this.size*1.05;
-        if(this.velocity.y < 0){
-          this.velocity.y *= -0.1;
-        }
-
-      
-      }
-      
-
-      //colliding on the right
-      if(distance  < (this.size/4 + 20) && this.position.x + this.size/4 <= collisionObjs[i].position.x + 20){
-        if(this.acceleration.x > 0){
-          this.acceleration.x *= -1;
-
-        }
-      
-        if(this.velocity.x > 0){
-          this.velocity.x *= -1;
-        }
-        this.position.x += this.velocity.x;
-        this.position.x-=3;
-      }
-
-      //colliding on the left
-      if(distance  < (this.size/4 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
-
-        if(this.acceleration.x < 0){
-          this.acceleration.x *= -1;
-
-        }
-      
-        if(this.velocity.x < 0){
-          this.velocity.x *= -1;
-        }
-        this.position.x += this.velocity.x;
-        this.position.x++;
-      }
-
-
+    }
+    if (!grounded)
+    {
+      this.jump = 1;
     }
   }
 
@@ -523,9 +488,9 @@ class Snowball
   constructor(x, y, dir)
   {
     if (dir == 1)
-      this.position = createVector(x-20, y - 35);
+      this.position = createVector(x, y );
     else
-      this.position = createVector(x-40, y - 35);
+      this.position = createVector(x-10, y);
     this.dir = dir;
     this.speed = 5;
     this.liveTime = 60;
