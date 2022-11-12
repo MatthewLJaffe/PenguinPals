@@ -2,7 +2,6 @@ var player;
 //0-8 floor tiles
 //QWE ice platform
 //ASDFG ice wall
-
 var tileMap = [
   "                    ",
   "                    ",
@@ -43,13 +42,15 @@ var tileMap = [
   "3TTTTTTTTTTTTTTTTTTT",
 ];
 
+//objects that need to be updated every frame
 var collisionObjs = [];
 var poptarts = [];
 var snowballs = [];
 var fishes = [];
 var goldFish;
 
-
+//entry point to game loop
+//contains much of game state 
 class gameScreen //4
 { 
   constructor()
@@ -59,10 +60,13 @@ class gameScreen //4
     for(let i = 0; i < 400; i++){
       this.snowDrops.push(new snowObj(2, 5));
     }
+    //parallax effect with background
     this.backgroundScrollSpeed = .25;
     this.foregroundScrollSpeed = .5;
     player = new Player(400, 289, 64, 1);  //x, y, size, penguin_type
+    //correcly position things dynamically based off height of tilemap=
     var yOffset = (tileMap.length - 15) * -40;
+    //iterate through tilemap and instantiate objects
     for (let y = 0; y < tileMap.length; y++)
     {
       for (let x = 0; x < tileMap[y].length; x++)
@@ -146,6 +150,7 @@ class gameScreen //4
     }
   }
 
+  //game loop
   execute(me)
   {
       background(220, 250, 250);
