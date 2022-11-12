@@ -29,11 +29,9 @@ class snowObj
   function mouseClicked() {
     if(game.currentState == 0){
       game.currentState = 1; //changes to options screen
-      return;
+      //return;
     }
-    else if(game.currentState == 5){
-     //reset vars
-    }
+
     var buttons = game.state[game.currentState].buttons;
     if (buttons)
     {
@@ -443,8 +441,19 @@ class snowObj
         }
       }
       text("Play again?", width/2, height/3 + 80);
-      text("click to restart", width/2, height/3 + 160);
+      textSize(24);
+      text("click enter to restart", width/2, height - 100);
+
+      if(currFrame < (frameCount - 12)){  //return to instructions screen
+        currFrame = frameCount;
+        if(keyArray[13] == 1) {
+          me.state[4].updateHighScore(me);
+          me.state[4].resetVariables(me);
+          me.currentState = 1;
+        }
+      }
+      }
     }  
-  }
+
   
   
