@@ -197,6 +197,13 @@ class gameScreen //4
           poptarts[i].enabled = false;
         }
       }
+
+      if (detectCollision(goldFish.position.x, goldFish.position.y, 40, 40, player.position.x, player.position.y, 64, 16).mag() > 0)
+      {
+        me.gameOver = true;
+        me.win = true;
+        me.currentState = 5;
+      }
   }
   
   lifeDisplay(){
@@ -677,10 +684,5 @@ class GoldFish
   updateFish()
   {
     image(images.goldFish, this.position.x, this.position.y);
-    if (detectCollision(this.position.x, this.position.y, 40, 40, player.position.x, player.position.y, 64, 64).mag() > 0)
-    {
-      //WIN CONDITION
-      console.log("win");
-    }
   }
 }
