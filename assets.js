@@ -5,6 +5,7 @@ class Images
         this.redPenguinWalkRight = [];
         this.blackPenguinWalkRight = [];
         this.bluePenguinWalkRight = [];
+        this.bluePenguinWalkLeft = [];
         this.blackPenguinWalkLeft = [];
         this.blackPenguinSpecialRight = [];
         this.blackPenguinSpecialLeft = [];
@@ -39,6 +40,7 @@ class Images
             this.blackPenguinWalkRight.push(loadImage("images/characters/BlackPenguin" + i + ".png"));
             this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguin" + i + ".png"));
             this.blackPenguinWalkLeft.push(loadImage("images/characters/BlackPenguinWalkLeft" + i + ".png"));
+            this.bluePenguinWalkLeft.push(loadImage("images/characters/BluePenguinWalkLeft" + i + ".png"));
         }
 
         for (let i = 1; i <= 5; i ++)
