@@ -9,7 +9,6 @@ class gameObj
       this.gameOver = false; //true if the game is over
       this.lose = false; //true if the player lost the game
       this.win = false;  //true if the player won the game
-      this.score = 0;
 
       //for menu in instructions screen
       this.cursor = 0;

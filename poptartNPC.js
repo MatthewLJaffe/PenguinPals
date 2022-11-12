@@ -8,6 +8,9 @@ class poptart
     this.poptartWalkRight = [];
     this.poptartWalkLeft = [];
     this.position = createVector(x, y);
+
+    this.initialPosition = createVector(x, y);
+
     this.velocity = createVector(0, 0);
     this.maxWalkSpeed = 1;
     this.maxWalkAcc = 1;
@@ -251,7 +254,7 @@ class ChasePlayer
     if (this.agent.position.dist(player.position) > this.agent.maxChaseDistance)
       return "Idle";
     //walk towards player
-    if(this.agent.position.dist(player.position) < 60 && currFrame < (frameCount - 80) ){
+    if(this.agent.position.dist(player.position) < 55 && currFrame < (frameCount - 60) ){
       currFrame = frameCount
       this.agent.collisionSound.setVolume(this.agent.volume);
       player.lives--;

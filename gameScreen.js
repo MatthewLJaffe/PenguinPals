@@ -191,6 +191,11 @@ class gameScreen //4
         me.gameOver = true;
         me.lose = true;
         me.currentState = 5;
+
+        for (let i = 0; i < poptarts.length; i++)
+        {
+          poptarts[i].enabled = false;
+        }
       }
   }
   
@@ -222,6 +227,62 @@ class gameScreen //4
     textSize(32);
     text("Score: " + player.score, 10, 32);
   }
+
+  //reseting the variables to replay
+  resetVariables(me){
+    for (let i = 0; i < fishes.length; i++)
+    {
+      fishes[i].show = true;
+    }
+
+    for (let i = 0; i < poptarts.length; i++)
+    {
+      poptarts[i].position = poptarts[i].initialPosition;
+      poptarts[i].enabled = true;
+      poptarts[i].currState = "Idle";
+    }
+
+    player.lives = 3;
+    player.score = 0;
+    player.position.x = 400;
+    player.position.y = 289;
+    player.jump = 0;
+    player.penguin_type = 1;
+
+    //resetting game variables
+    me.gameOver = false;
+    me.lose = false;
+    me.win = false;
+
+  }
+  updateHighScore(me){
+    this.newHighScores = [];
+    this.added = false;
+    if(me.highScores.length < 5){
+      for(var i = 0; i < me.highScores.length; i++){
+        if(player.score > me.highScores[i] && this.added == false){
+          this.added = true;
+          this.newHighScores.push(player.score)
+        }
+          this.newHighScores.push(me.highScores[i]);
+      }
+      me.highScores = this.newHighScores;
+    }
+    else{
+      if(player.score > me.highScores[me.highScores.length - 1]){
+        for(var i = 0; i < me.highScores.length - 1; i++){
+          if(player.score > me.highScores[i] && this.added == false){
+            this.added = true;
+            this.newHighScores.push(player.score)
+          }
+            this.newHighScores.push(me.highScores[i]);
+        }
+      }
+      me.highScores = this.newHighScores;
+    }
+  }
+
+
 }
 
 var keyArray = [];
@@ -409,7 +470,7 @@ class Player
         this.jump = 1;
       }
       //A/D Movement
-      else if(keyArray[65] == 1 && this.position.x - 2*this.size/3 > 0)
+      else if(keyArray[65] == 1 && this.position.x > 20)
       {  //player moving to the left
         this.facedDir = -1;
         this.updatePenguinLeft();
@@ -579,19 +640,23 @@ class Fish
   constructor(x, y)
   {
     this.position = createVector(x, y);
+    this.show = true;
   }
 
   updateFish()
   {
-    image(images.fish, this.position.x, this.position.y);
-    if (detectCollision(this.position.x, this.position.y, 40, 40, player.position.x, player.position.y, 64, 64).mag() > 0)
+    if(this.show == true){
+      image(images.fish, this.position.x, this.position.y);
+    }
+    if (detectCollision(this.position.x, this.position.y, 40, 40, player.position.x, player.position.y, 64, 64).mag() > 0 && this.show == true)
     {
       for (let i = 0; i < fishes.length; i++)
       {
         if (this == fishes[i]) 
         {
-          fishes.splice(i, 1);
-          player.score += 100;
+          //fishes.splice(i, 1);
+          this.show = false;
+          player.score += 500;
           if (player.lives < 3)
           {
             player.lives++;
