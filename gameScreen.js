@@ -238,10 +238,10 @@ class Player
     this.score = 0;
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
-    this.jumpForce = new p5.Vector(0, -10);
+    this.jumpForce = new p5.Vector(0, -12);
     this.velocity = new p5.Vector(0, 0);
     this.acceleration = new p5.Vector(0 , 0);
-    this.gravity = new p5.Vector(0, 0.3);
+    this.gravity = new p5.Vector(0, 0.45);
     this.speed = 2;
     this.fall = false;
     this.specialMoveFrames = 60;
@@ -259,7 +259,7 @@ class Player
 
     this.penguin_type = penguin_type; //1 = black, 2 = blue
     this.moving = false;
-    this.stepRate = 3;
+    this.stepRate = 6;
     this.currAnimIndex = 0
     //animation changes depending on penguin
     if(this.penguin_type == 1){
@@ -304,7 +304,7 @@ class Player
       var distance = dist(collisionObjs[i].position.x, collisionObjs[i].position.y, this.position.x, this.position.y);
 
       //colliding with bottom of stairs
-      if(distance  < (this.height/2 + 20)&& this.position.y + this.height/2 <= collisionObjs[i].position.y - 10){
+      if(distance  < (this.height/2 + 26)&& this.position.y + this.height/2 <= collisionObjs[i].position.y - 10){
         this.fall = false;
         this.height = this.size;
         this.jump = 0;
@@ -314,10 +314,10 @@ class Player
 
       
       //colliding from the top
-      if(distance  < (this.height/2 + 25)&& this.position.y + this.height/2 >= collisionObjs[i].position.y + 20 && horizontalDist <(this.siz/4 + 20)){
+      if(distance  < (this.height/2 + 22)&& this.position.y + this.height/2 >= collisionObjs[i].position.y + 20 && horizontalDist <(this.size/4 + 20)){
         this.height = this.size*1.05;
         if(this.velocity.y < 0){
-          this.velocity.y *= -1;
+          this.velocity.y *= -0.1;
         }
 
       
@@ -339,7 +339,7 @@ class Player
       }
 
       //colliding on the left
-      if(distance  < (this.size/4 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
+      if(distance  < (this.size/2 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
 
         if(this.acceleration.x < 0){
           this.acceleration.x *= -1;
@@ -412,7 +412,7 @@ class Player
 
         this.moving = true;
       }
-      else if(keyArray[68] == 1 && this.position.x  - this.size/3 < width)
+      else if(keyArray[68] == 1 && this.position.x  + this.size/4 < width)
       {  //player moving to the right
         this.facedDir = 1;
         this.updatePenguinRight();
