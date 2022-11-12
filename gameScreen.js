@@ -56,6 +56,7 @@ var tileMap = [
 
 var collisionObjs = [];
 var poptarts = [];
+var snowballs = [];
 
 class gameScreen //4
 { 
@@ -77,7 +78,7 @@ class gameScreen //4
         switch (tileMap[y][x])
         {
           case '0':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0]));
             break;
           case '1':
             collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0]));
@@ -89,7 +90,7 @@ class gameScreen //4
             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3]));
             break;
           case '4':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCenterImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage));
             break;
           case '5':
             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1]));
@@ -175,6 +176,10 @@ class gameScreen //4
         fill(0, 255 ,0);
         collisionObjs[i].drawCollisionObj();
       }
+      for (let i = 0; i < snowballs.length; i++)
+      {
+        snowballs[i].updateSnowBall();
+      }
       pop();
 
       this.lifeDisplay();
@@ -239,7 +244,8 @@ class Player
     this.gravity = new p5.Vector(0, 0.3);
     this.speed = 2;
     this.fall = false;
-
+    this.specialMoveFrames = 60;
+    this.currSpecialMoveFrames = 0;
     //sound effects
     this.walkingSound = sounds.walkingSound;
     //this.volume = 0;
@@ -247,15 +253,11 @@ class Player
 
     this.size = size;
     this.height = this.size;
-    //this.speed = maxMoveSpeed;
-    //this.jumpHeight = jumpHeight;
-    //this.animStates = animStates;
-    //this.specialMoveFunction = specialMoveFunction;
     this.specialMoveCooldown = 30;
     this.currSpecialMoveCooldown = 0;
 
 
-    this.penguin_type = penguin_type; //1 = black, 2 = blue, 3 = red
+    this.penguin_type = penguin_type; //1 = black, 2 = blue
     this.moving = false;
     this.stepRate = 3;
     this.currAnimIndex = 0
@@ -266,11 +268,6 @@ class Player
     else if(this.penguin_type == 2){
       this.anim = images.blackPenguinWalkLeft;
     }
-    else{
-      this.anim = images.redPenguinWalkLeft;
-    }
-
-    //this.direction = "L"; //"L" is left, "R" is right (for powerups later)
   }
 
   updatePlayer(volume)
@@ -279,7 +276,23 @@ class Player
     this.updatePlayerPosition();
     this.updatePlayerCollision();
     this.updatePlayerAnim();
-    //this.useSpecialMove();
+  }
+
+  specialMove()
+  {
+    if (this.penguin_type == 1)
+    {
+      this.currAnimIndex = 0;
+      if (this.facedDir == 1)
+      {
+        this.anim = images.blackPenguinSpecialRight;
+      }
+      else 
+      {
+        this.anim = images.blackPenguinSpecialLeft;
+      }
+      snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
+    }
   }
 
   updatePlayerCollision()
@@ -372,43 +385,54 @@ class Player
   {
     var gravityForce = p5.Vector.mult(this.gravity, this.acceleration.add(gravityForce));
 
-      //using WASD for movement
-      if(keyArray[87] == 1 && this.jump == 0){  //player jumping
-        //this.position.y--;
-        this.jump = 2;
+    //not executing special move
+    if (this.currSpecialMoveCooldown <= 0)
+    {
+      if (keyArray[32] == 1)
+      {
+        this.currSpecialMoveCooldown = this.specialMoveCooldown;
+        this.specialMove();
+      }
+      //Jump
+      else if(keyArray[87] == 1 && this.jump == 0)
+      {  //player jumping
         //sound effect
         if(!this.walkingSound.isPlaying()){
           this.walkingSound.play();
         }
+        this.acceleration.add(this.jumpForce);
+        this.jump = 1;
       }
-    if(keyArray[65] == 1 && this.position.x - 2*this.size/3 > 0){  //player moving to the left
-      this.updatePenguinLeft();
-      this.position.x -= this.speed;
+      //A/D Movement
+      else if(keyArray[65] == 1 && this.position.x - 2*this.size/3 > 0)
+      {  //player moving to the left
+        this.facedDir = -1;
+        this.updatePenguinLeft();
+        this.position.x -= this.speed;
 
+        this.moving = true;
+      }
+      else if(keyArray[68] == 1 && this.position.x  - this.size/3 < width)
+      {  //player moving to the right
+        this.facedDir = 1;
+        this.updatePenguinRight();
+        this.position.x += this.speed;
+        this.moving = true;
+      }
+      else
+      {
+        this.moving = false;
+        this.height = this.size;
+      }
+    }
+    //executing special move
+    else
+    {
+      this.currSpecialMoveCooldown--;
       this.moving = true;
-    }
-    else if(keyArray[68] == 1 && this.position.x  - this.size/3 < width){  //player moving to the right
-      this.updatePenguinRight();
-      this.position.x += this.speed;
-      this.moving = true;
-    }
-    /*
-    else if(keyArray[83] == 1 && this.penguin_type == 1){  //player crouching
-      //this.position.y++;
-      this.height = this.size*(4/5);
-
-    }
-    */
-    else{
-      this.moving = false;
-      this.height = this.size;
     }
     
-    //handling jumping
-    if(this.jump == 2){
-      this.acceleration.add(this.jumpForce);
-      this.jump = 1;
-    }
+    
     
     if(this.jump > 0 || this.fall == true){
       this.height = this.size*1.05;
@@ -424,7 +448,8 @@ class Player
 
   updatePlayerAnim()
   {
-    if(this.moving == true && this.fall == false){
+    if(this.moving == true && (this.fall == false || this.currSpecialMoveCooldown > 0))
+    {
       if (frameCount % this.stepRate == 0)
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
@@ -484,4 +509,56 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
     }
   }
   return createVector(0, 0);
+}
+
+class Snowball
+{
+  constructor(x, y, dir)
+  {
+    if (dir == 1)
+      this.position = createVector(x-20, y - 35);
+    else
+      this.position = createVector(x-40, y - 35);
+    this.dir = dir;
+    this.speed = 5;
+    this.liveTime = 60;
+    this.currTime = 0;
+  }
+
+  updateSnowBall()
+  {
+    if (this.currTime > this.liveTime)
+    {
+      this.destroySnowball();
+      return;
+    }
+    this.position.x += this.speed * this.dir;
+    image(images.snowBall, this.position.x, this.position.y);
+    for (let i = 0; i < collisionObjs.length; i++)
+    {
+      if (detectCollision(this.position.x, this.position.y, 20, 20, collisionObjs[i].position.x, collisionObjs[i].position.y, collisionObjs[i].size.x, collisionObjs[i].size.y).mag() > 0) 
+      {
+        this.destroySnowball();
+      }
+    }
+    for (let i = 0; i < poptarts.length; i ++)
+    {
+      if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0)
+      {
+        poptarts.splice(i, 1);
+        this.destroySnowball();
+        return;
+      }
+    }
+    this.currTime++
+  }
+
+  destroySnowball()
+  {
+    for (let i = 0; i < snowballs.length; i++)
+    {
+      if (snowballs[i] == this)
+        snowballs.splice(i, 1);
+    }
+  }
 }
