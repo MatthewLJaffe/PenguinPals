@@ -68,7 +68,7 @@ class gameScreen //4
     }
     this.backgroundScrollSpeed = .25;
     this.foregroundScrollSpeed = .5;
-    player = new Player(400, 300, 64, 1);  //x, y, size, penguin_type
+    player = new Player(400, 289, 64, 1);  //x, y, size, penguin_type
     var yOffset = (tileMap.length - 15) * -40;
     for (let y = 0; y < tileMap.length; y++)
     {
@@ -173,8 +173,11 @@ class gameScreen //4
         poptarts[i].update();
       }
       for (let i = 0; i < collisionObjs.length; i++){
+        fill(0, 255 ,0);
         collisionObjs[i].drawCollisionObj();
+        ellipse(collisionObjs[i].position.x, collisionObjs[i].position.y, 5, 5);
       }
+      text(player.position.x +", " + player.position.y, player.position.x, player.position.y - 100);
       pop();
 
       this.lifeDisplay();
@@ -233,11 +236,11 @@ class Player
     this.score = 0;
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
-    this.jumpForce = new p5.Vector(0, -12);
+    this.jumpForce = new p5.Vector(0, -10);
     this.velocity = new p5.Vector(0, 0);
     this.acceleration = new p5.Vector(0 , 0);
-    this.gravity = new p5.Vector(0, 0.5);
-    this.speed = 3;
+    this.gravity = new p5.Vector(0, 0.3);
+    this.speed = 2;
     this.fall = false;
 
     //sound effects
@@ -257,7 +260,7 @@ class Player
 
     this.penguin_type = penguin_type; //1 = black, 2 = blue, 3 = red
     this.moving = false;
-    this.stepRate = 6;
+    this.stepRate = 3;
     this.currAnimIndex = 0
     //animation changes depending on penguin
     if(this.penguin_type == 1){
@@ -288,61 +291,73 @@ class Player
     for(var i = 0; i < collisionObjs.length; i++){
       var verticalDist = abs(collisionObjs[i].position.y - this.position.y);
       var horizontalDist = abs(this.position.x - collisionObjs[i].position.x);
+      var distance = dist(collisionObjs[i].position.x, collisionObjs[i].position.y, this.position.x, this.position.y);
 
       //colliding with bottom of stairs
-      if( verticalDist <= (20) && this.position.y < collisionObjs[i].position.y && ((horizontalDist < (20 - this.size/2) && this.position.x < collisionObjs[i].position.x) || (horizontalDist < (20 + this.size/2) && this.position.x > collisionObjs[i].position.x))){
+      if(distance  < (this.height/2 + 20)&& this.position.y + this.height/2 <= collisionObjs[i].position.y - 10){
+        fill(255);
         this.fall = false;
         this.height = this.size;
         this.jump = 0;
         this.velocity.y = 0;
-        this.position.y = collisionObjs[i].position.y - 19;
+        this.position.y = collisionObjs[i].position.y - 18 - this.height/2;
       }
 
       
       //colliding from the top
-      if(verticalDist <= this.size + 20 && this.position.y> collisionObjs[i].position.y && ((horizontalDist < (5) && this.position.x < collisionObjs[i].position.x) || (horizontalDist < (20 + this.size/2 + 10) && this.position.x > collisionObjs[i].position.x))){
+      if(distance  < (this.height/2 + 25)&& this.position.y + this.height/2 >= collisionObjs[i].position.y + 20 && horizontalDist <(this.siz/4 + 20)){
         this.height = this.size*1.05;
-        if(this.acceleration.y > 0){
-          this.acceleration.y = 0;
-        }
-      
+        fill(0);
         if(this.velocity.y < 0){
-          this.velocity.y = 0;
+          this.velocity.y *= -1;
         }
+
       
       }
       
 
       //colliding on the right
       var word = 0;
-      if(horizontalDist <= (1) && this.position.x < collisionObjs[i].position.x &&  verticalDist <= (this.size/2) && this.position.y > collisionObjs[i].position.y){
+      if(distance  < (this.size/4 + 20) && this.position.x + this.size/4 <= collisionObjs[i].position.x + 20){
+        fill(255, 0, 0);
         if(this.acceleration.x > 0){
           this.acceleration.x *= -1;
 
         }
       
         if(this.velocity.x > 0){
-          this.velocity.x *= 0;
+          this.velocity.x *= -1;
         }
-        this.position.x -= this.speed;
+        this.position.x += this.velocity.x;
+        this.position.x-=3;
       }
 
-      if(horizontalDist <= (this.size) && this.position.x > collisionObjs[i].position.x &&  verticalDist <= (this.size/2) && this.position.y > collisionObjs[i].position.y){
+      //colliding on the left
+      var xs = 0;
+      var ys = 0;
+      if(distance  < (this.size/4 + 20) && this.position.x - this.size/4 > collisionObjs[i].position.x  - 20){
         word = 1;
+        fill(0, 0, 255);
+
+        xs = collisionObjs[i].position.x;
+        ys = collisionObjs[i].position.y;
+
         if(this.acceleration.x < 0){
           this.acceleration.x *= -1;
 
         }
       
         if(this.velocity.x < 0){
-          this.velocity.x *= 0;
+          this.velocity.x *= -1;
         }
-        this.position.x += this.speed;
+        this.position.x += this.velocity.x;
+        this.position.x++;
       }
 
       if(word == 1){
         fill(255, 0, 0);
-        ellipse(mouseX, mouseY, 10, 10);
+        ellipse(xs, ys, 25, 35);
+        text(xs +", " + ys, mouseX, mouseY - 20);
       }
 
     }
@@ -396,11 +411,13 @@ class Player
       this.position.x += this.speed;
       this.moving = true;
     }
+    /*
     else if(keyArray[83] == 1 && this.penguin_type == 1){  //player crouching
       //this.position.y++;
       this.height = this.size*(4/5);
 
     }
+    */
     else{
       this.moving = false;
       this.height = this.size;
@@ -431,11 +448,13 @@ class Player
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
       }
-      image(this.anim[this.currAnimIndex], this.position.x - this.size/2, this.position.y - this.height/2, this.size, this.height);
+      image(this.anim[this.currAnimIndex], this.position.x, this.position.y, this.size, this.height);
     }
     else{
-      image(this.anim[0], this.position.x - this.size/2, this.position.y - this.height/2, this.size, this.height);
+      image(this.anim[0], this.position.x, this.position.y, this.size, this.height);
     }
+
+    ellipse(this.position.x, this.position.y, 5, 5);
   }
 }
 

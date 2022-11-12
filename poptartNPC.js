@@ -255,7 +255,7 @@ class ChasePlayer
     //walk towards player
     text(!this.agent.collisionSound.isPlaying(), 300, 100);
 
-    if(this.agent.position.x - player.position.x < 3 && currFrame < (frameCount - 30)){
+    if(this.agent.position.dist(player.position) < 30 && currFrame < (frameCount - 30)){
       currFrame = frameCount
       player.lives--;
       player.score-=50;
