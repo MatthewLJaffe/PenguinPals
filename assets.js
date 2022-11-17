@@ -1,3 +1,4 @@
+//used to load all static assets in preload function
 class Images
 {
     constructor()

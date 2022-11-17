@@ -6,7 +6,7 @@ var tileMap = [
   "                    ",
   "                    ",
   "                    ",
-  " N  P 11 P 11       ",
+  " N    11   11       ",
   "111111111111111     ",
   "                    ",
   "                 111",
@@ -15,21 +15,21 @@ var tileMap = [
   "          11111     ",
   "     11111          ",
   "                    ",
-  "P                   ",
+  "                    ",
   "11111111111111    11",
   "                 1  ",
   "                1   ",
   "              11    ",
-  "                    ",
+  "        P           ",
   "        11          ",
   "        11111       ",
   "      11            ",
   "      11            ",
-  "    11        11    ",
-  "P B 11              ",
+  "    11              ",
+  "  B 11        11    ",
   "111111              ",
-  "                  11",
   "                    ",
+  "                  11",
   "                    ",
   "              011111",
   "              344444",
@@ -429,6 +429,7 @@ class Player
   updatePlayerCollision()
   {
     var grounded = false;
+    //check for collision with tiles
     for(var c = 0; c < collisionObjs.length; c++)
     {
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
@@ -450,6 +451,20 @@ class Player
     if (!grounded)
     {
       this.jump = 1;
+    }
+    //check for collision with poptarts
+    for (let p = 0; p < poptarts.length; p++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 35, 64, poptarts[p].position.x, poptarts[p].position.y, poptarts[p].size.x*.9, poptarts[p].size.y*.9);
+      if (dir.mag() == 0) continue;
+      if(currFrame < (frameCount - 60) ) {
+        currFrame = frameCount
+        poptarts[p].collisionSound.setVolume(poptarts[p].volume);
+        player.lives--;
+        player.score-=50;
+        if(!poptarts[p].collisionSound.isPlaying() && player.lives > 0)
+        poptarts[p].collisionSound.play();
+      }
     }
   }
 
@@ -597,7 +612,7 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
   let top2 = y2 - h2/2;
   let bottom2 = y2 + h2/2;
 
-  if (right1 > left2 && left1 < right2 && bottom1 > top2 && top1 < bottom2)
+  if (right1 >= left2 && left1 <= right2 && bottom1 >= top2 && top1 <= bottom2)
   {
     if (abs(x1 - x2) < abs(y1 - y2))
     {

@@ -44,10 +44,11 @@ class poptart
     this.currState = "Idle";
   }
 
+  //used to find the walkable space under the npc
   findCurrentPlatform()
   {
     let currTile = posToTile(this.position.x, this.position.y);
-    this.currPlatform = new Platform(0, 600, this.position.y - 20);
+    this.currPlatform = new Platform(0, 800, this.position.y - 20);
     currTile.y += 1;
     for (let x = currTile.x - 1; x >= 0; x--)
     {
@@ -67,6 +68,7 @@ class poptart
     }
   }
 
+  //update npc
   update()
   {
     if (!this.enabled) return;
@@ -86,6 +88,7 @@ class poptart
     this.acceleration.add(force);
   }
 
+  //position based on kinematic positoin velocity and acceleration
   updatePos()
   {
     this.acceleration.set(0, 0);
@@ -137,6 +140,7 @@ class poptart
     this.acceleration.set(0, 0);
   }
 
+  //check for collision tiles
   checkCollision()
   {
     var grounded = false;
@@ -166,6 +170,7 @@ class poptart
     }
   }
 
+  //animate npc
   drawAgent()
   {
     if (frameCount % this.frameStepRate == 0)
@@ -177,6 +182,7 @@ class poptart
   }
 }
 
+//state that moves in same direction until landing
 class Jump
 {
   constructor(agent)
@@ -195,6 +201,7 @@ class Jump
   }
 }
 
+//state that paces back and forth
 class Idle
 {
   constructor(agent)
@@ -204,6 +211,8 @@ class Idle
 
   tick()
   {
+    if (this.agent.jump == 1)
+      return "Jump"
     if (this.agent.idleTime > 0)
       this.agent.idleTime -= deltaTime;
     if (this.agent.facedDir == 1)
@@ -242,6 +251,7 @@ class Idle
 
 var currFrame = 0;
 
+//state that chases player and jumps to where player is
 class ChasePlayer
 {
   constructor(agent)
@@ -251,17 +261,11 @@ class ChasePlayer
 
   tick()
   {
+    if (this.agent.jump == 1)
+      return "Jump"
     if (this.agent.position.dist(player.position) > this.agent.maxChaseDistance)
       return "Idle";
     //walk towards player
-    if(this.agent.position.dist(player.position) < 55 && currFrame < (frameCount - 60) ){
-      currFrame = frameCount
-      this.agent.collisionSound.setVolume(this.agent.volume);
-      player.lives--;
-      player.score-=50;
-      if(!this.agent.collisionSound.isPlaying() && player.lives > 0)
-        this.agent.collisionSound.play();
-    }
 
     if (this.agent.position.x - player.position.x > 0)
     {
@@ -274,12 +278,13 @@ class ChasePlayer
       this.agent.walkBackward = 0;
     }
     //if at edge determine if you can make a jump
-    if (this.agent.position.x + this.agent.size.x/2 >= this.agent.currPlatform.maxX 
-    || this.agent.position.x - this.agent.size.x/2 <= this.agent.currPlatform.minX)
+    if ((this.agent.position.x + this.agent.size.x/2 >= this.agent.currPlatform.maxX && this.agent.walkForward == 1)
+    || this.agent.position.x - this.agent.size.x/2 <= this.agent.currPlatform.minX && this.agent.walkBackward == 1)
     {
       var targetPlatform = this.findTargetPlatform();
       //Jump to different platform to reach player
-      if (targetPlatform != this.agent.currPlatform) {
+      if (targetPlatform != this.agent.currPlatform || player.position.y - this.agent.position.y > 80) 
+      {
         this.agent.jump = 2;
         return "Jump";
       }
@@ -361,6 +366,7 @@ class ChasePlayer
   }
 }
 
+//encapsulation of platform
 class Platform
 {
   constructor(minX, maxX, y)
@@ -371,6 +377,7 @@ class Platform
   }
 }
 
+//conversion functions\
 function tileToPos(x, y)
 {
   var yOffset = (tileMap.length - 15) * -40;
