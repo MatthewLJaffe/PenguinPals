@@ -374,6 +374,10 @@ class Player
       this.currPlayerSwitchCooldown = this.playerSwitchCooldown;
       if (this.penguin_type == 1)
       {
+        if(!sounds.poofSound.isPlaying()){
+          sounds.poofSound.setVolume(volume*0.2);
+          sounds.poofSound.play();
+        }
         //set up blue penguin animations
         this.penguin_type = 2;
         if (this.facedDir == 1)
@@ -383,6 +387,12 @@ class Player
       }
       else
       {
+
+        if(!sounds.poofSound.isPlaying()){
+          sounds.poofSound.setVolume(volume*0.2);
+          sounds.poofSound.play();
+        }
+
         //set up black penguin animations 
         this.penguin_type = 1;
         if (this.facedDir == 1)
@@ -392,6 +402,7 @@ class Player
       }
     }
     this.currPlayerSwitchCooldown--;
+    this.volume = volume;
     this.walkingSound.setVolume(volume);
     this.updatePlayerPosition();
     this.updatePlayerCollision();
@@ -669,6 +680,10 @@ class Snowball
       if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0)
       {
         poptarts.splice(i, 1);
+        if(!sounds.NPCDeathSound.isPlaying()){
+          sounds.NPCDeathSound.setVolume(player.volume);
+          sounds.NPCDeathSound.play();
+        }
         this.destroySnowball();
         return;
       }
