@@ -2,6 +2,7 @@ var player;
 //0-8 floor tiles
 //QWE ice platform
 //ASDFG ice wall
+/*
 var tileMap = [
   "                    ",
   "                    ",
@@ -32,7 +33,47 @@ var tileMap = [
   "                  11",
   "                    ",
   "              011111",
-  "              344444",
+  "   B   B      344444",
+  "01111111111111Z44444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "3TTTTTTTTTTTTTTTTTTT",
+  "3TTTTTTTTTTTTTTTTTTT",
+];
+*/
+var tileMap = [
+  "                    ",
+  " NPB                ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "         11         ",
+  "                    ",
+  "                    ",
+  "  11                ",
+  "                    ",
+  "                    ",
+  "       11           ",
+  "                    ",
+  "                    ",
+  "            11      ",
+  "                    ",
+  "                    ",
+  "              011111",
+  "   B   B      344444",
   "01111111111111Z44444",
   "34444444444444444444",
   "34444444444444444444",
@@ -42,6 +83,7 @@ var tileMap = [
   "3TTTTTTTTTTTTTTTTTTT",
 ];
 
+var blockingTiles = [];
 //objects that need to be updated every frame
 var collisionObjs = [];
 var poptarts = [];
@@ -64,7 +106,7 @@ class gameScreen //4
     this.backgroundScrollSpeed = .25;
     this.foregroundScrollSpeed = .5;
     player = new Player(400, 289, 64, 1);  //x, y, size, penguin_type
-    //correcly position things dynamically based off height of tilemap=
+    //correctly position things dynamically based off height of tilemap
     var yOffset = (tileMap.length - 15) * -40;
     //iterate through tilemap and instantiate objects
     for (let y = 0; y < tileMap.length; y++)
@@ -74,76 +116,76 @@ class gameScreen //4
         switch (tileMap[y][x])
         {
           case '0':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0], '0'));
             break;
           case '1':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0], '1'));
             break;
           case '2':
-            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, images.iceCornerImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, images.iceCornerImages[1], '2'));
             break;
           case '3':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3], '3'));
             break;
           case '4':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage, '4'));
             break;
           case '5':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1], '5'));
             break;
           case '6':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[2], '6'));
             break;
           case '7':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[2], '7'));
             break;
           case '8':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[3]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[3], '8'));
             break;
           case 'Q':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.icePlatformImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.icePlatformImages[0], 'Q'));
             break;
           case 'W':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[1], 'W'));
             break;
           case 'E':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[2], 'E'));
             break;
           case 'A':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[0], 'A'));
             break;
           case 'S':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[1], 'S'));
             break;
           case 'D':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[2], 'D'));
             break;
           case 'F':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorUpImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorUpImage, 'F'));
             break;
           case 'G':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorDownImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorDownImage, 'G'));
             break;
           case 'Z':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[0], 'Z'));
             break;
           case 'X':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[1], 'X'));
             break;
           case 'C':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[2], 'C'));
             break;
           case 'V':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[3]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[3], 'V'));
             break;
           case 'P':
-            poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40));
+            poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40, 'P'));
             break;
           case 'B':
-            fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40));
+            fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40, 'B'));
             break;
           case 'N':
-            goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40);
+            goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40, 'N');
             break;
         }
       }
@@ -335,7 +377,16 @@ class Player
     this.velocity = new p5.Vector(0, 0);
     this.drag = createVector(.2, 0);
     this.acceleration = new p5.Vector(0 , 0);
-    this.gravity = new p5.Vector(0, 0.45);
+    this.gravity = .45;
+    this.gravityForce = new p5.Vector(0, this.gravity);
+    this.maxDashSpeed = 8;
+    this.dashSpeedTimeGraph = [
+      {'time': 0, 'speed': 0 },
+      {'time': .25, 'speed': 1 },
+      {'time': .6, 'speed': 1 },
+      {'time': 1, 'speed': 0 },
+    ];
+
     this.speed = 2;
     this.fall = false;
     this.specialMoveFrames = 60;
@@ -343,11 +394,13 @@ class Player
     //sound effects
     this.walkingSound = sounds.walkingSound;
 
-
     this.size = size;
     this.height = this.size;
-    this.specialMoveCooldown = 30;
+    this.dashCooldown = 35;
+    this.throwCooldown = 30;
     this.currSpecialMoveCooldown = 0;
+    this.dashing = false;
+    this.dashDir = createVector(0, 0);
 
     this.playerSwitchCooldown = 60;
     this.currPlayerSwitchCooldown = 0;
@@ -364,7 +417,6 @@ class Player
       this.anim = images.blackPenguinWalkLeft;
     }
   }
-
 
   updatePlayer(volume)
   {
@@ -410,7 +462,7 @@ class Player
   }
 
   //different special moves for penguins executable with the space key
-  specialMove()
+  startSpecialMove()
   {
     //black penguin throw snowball
     if (this.penguin_type == 1)
@@ -426,14 +478,75 @@ class Player
       }
       snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
     }
+    
     //blue penguin lateral dash in faced direction
-    else
+    if (this.penguin_type == 2)
     {
-      if (this.facedDir == 1)
-        this.acceleration.add(8, 0);
+      this.dashing = true;
+      //up right
+      if (keyArray[87] && keyArray[68])
+      {
+        this.dashDir = createVector(1, -1).normalize();
+      }
+      //up left
+      else if (keyArray[87] && keyArray[65])
+      {
+        this.dashDir = createVector(-1, -1).normalize();
+      }
+      //up
+      else if (keyArray[87])
+      {
+        this.dashDir = createVector(0, -1);
+      }
+      //down right
+      else if (keyArray[83] && keyArray[68])
+      {
+        this.dashDir = createVector(1, 1).normalize();
+      }
+      //down left
+      else if (keyArray[83] && keyArray[65])
+      {
+        this.dashDir = createVector(-1, 1).normalize();
+      }
+      //down
+      else if (keyArray[83])
+      {
+        this.dashDir = createVector(0, 1);
+      }
+      //right
+      else if (this.facedDir == 1)
+      this.dashDir = createVector(1, 0);
+      //left
       else
-        this.acceleration.add(-8, 0);
+        this.dashDir = createVector(-1, 0);
     }
+  }
+
+  updateSpecialMove(frame)
+  {
+    if (this.penguin_type == 2)
+    {
+      let t = 1 - frame / this.dashCooldown;
+      for (let i = 0; i < this.dashSpeedTimeGraph.length - 1; i++)
+      {
+        //current point in dash speed time graph
+        if (t >= this.dashSpeedTimeGraph[i].time && t < this.dashSpeedTimeGraph[i+1].time)
+        {
+          let speed = lerp(this.dashSpeedTimeGraph[i].speed, this.dashSpeedTimeGraph[i+1].speed, 
+            (t - this.dashSpeedTimeGraph[i].time)/(this.dashSpeedTimeGraph[i+1].time - this.dashSpeedTimeGraph[i].time));
+          speed *= this.maxDashSpeed;
+          this.velocity.x = this.dashDir.x * speed;
+          this.velocity.y = this.dashDir.y * speed;
+          this.position.add(this.velocity);
+          break;
+        }
+      }
+      if (frame == 0)
+      {
+        this.dashing = false;
+      }
+    }
+
   }
 
   //make sure player does not collide with tiles
@@ -474,7 +587,7 @@ class Player
         player.lives--;
         player.score-=50;
         if(!poptarts[p].collisionSound.isPlaying() && player.lives > 0)
-        poptarts[p].collisionSound.play();
+          poptarts[p].collisionSound.play();
       }
     }
   }
@@ -508,15 +621,16 @@ class Player
   //update position velocity and acceleration for player and handle input for special moves / jumping
   updatePlayerPosition()
   {
-    var gravityForce = p5.Vector.mult(this.gravity, this.acceleration.add(gravityForce));
-
     //not executing special move
-    if (this.currSpecialMoveCooldown <= 0)
+    if (this.currSpecialMoveCooldown < 0)
     {
       if (keyArray[32] == 1)
       {
-        this.currSpecialMoveCooldown = this.specialMoveCooldown;
-        this.specialMove();
+        if (this.penguin_type == 1)
+          this.currSpecialMoveCooldown = this.throwCooldown;
+        else if (this.penguin_type == 2)
+          this.currSpecialMoveCooldown = this.dashCooldown;
+        this.startSpecialMove();
       }
       //Jump
       else if(keyArray[87] == 1 && this.jump == 0)
@@ -553,27 +667,30 @@ class Player
     //executing special move
     else
     {
+      this.updateSpecialMove(this.currSpecialMoveCooldown);
       this.currSpecialMoveCooldown--;
       this.moving = true;
     }
-    
-    //update position velocity and acceleration 
-    if(this.jump > 0 || this.fall == true){
-      this.height = this.size*1.05;
-      this.acceleration.add(this.gravity);
-    }
-    if (this.velocity.x > 0) {
-      this.acceleration.add(createVector(-this.drag.x, 0))
-    }
-    else if (this.velocity.x < 0) {
-      this.acceleration.add(createVector(this.drag.x, 0))
-    }
-    this.velocity.add(this.acceleration);
-    if (abs(this.velocity.x) < this.drag.x)
-      this.velocity.x = 0;
-    this.position.add(this.velocity);
 
-    this.acceleration.set(0, 0);
+    if (!this.dashing)
+    {
+      //update position velocity and acceleration 
+      if(this.jump > 0 || this.fall == true){
+        this.height = this.size*1.05;
+        this.acceleration.add(this.gravityForce);
+      }
+      if (this.velocity.x > 0) {
+        this.acceleration.add(createVector(-this.drag.x, 0))
+      }
+      else if (this.velocity.x < 0) {
+        this.acceleration.add(createVector(this.drag.x, 0))
+      }
+      this.velocity.add(this.acceleration);
+      if (abs(this.velocity.x) < this.drag.x)
+        this.velocity.x = 0;
+      this.position.add(this.velocity);
+      this.acceleration.set(0, 0);
+    }
   }
 
   //loop through current player animation
@@ -597,11 +714,12 @@ class Player
 //class for tiles that can be collided with by npcs/ player
 class CollisionObj
 {
-  constructor(x, y, w, h, img)
+  constructor(x, y, w, h, img, char)
   {
     this.position = createVector(x, y);
     this.size = createVector(w, h);
     this.img = img;
+    blockingTiles[char] = true;
   }
 
   drawCollisionObj()
@@ -748,4 +866,9 @@ class GoldFish
   {
     image(images.goldFish, this.position.x, this.position.y);
   }
+}
+
+function lerp(a, b, t)
+{
+  return a * (1 - t) + b * t;
 }

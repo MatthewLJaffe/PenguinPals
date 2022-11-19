@@ -52,7 +52,8 @@ class poptart
     currTile.y += 1;
     for (let x = currTile.x - 1; x >= 0; x--)
     {
-      if (tileMap[currTile.y][x] == ' ' || tileMap[currTile.y - 1][x] != ' ')
+      //there is a ground tile and the above tile can be walked through
+      if (!blockingTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
       {
         this.currPlatform.minX = tileToPos(x, 0).x + 20;
         break;
@@ -60,7 +61,8 @@ class poptart
     }
     for (let x = currTile.x + 1; x < tileMap[currTile.y].length; x++)
     {
-      if (tileMap[currTile.y][x] == ' ' || tileMap[currTile.y - 1][x] != ' ')
+      //there is a ground tile and the above tile can be walked through
+      if (!blockingTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
       {
         this.currPlatform.maxX = tileToPos(x, 0).x - 20;
         break;
@@ -308,11 +310,13 @@ class ChasePlayer
       let minTileY = constrain(leftEdgeTile.y - 1, 0, tileMap.length - 1);
       let maxTileY = constrain(leftEdgeTile.y + 2, 0, tileMap.length - 1);
       let newPlatform;
+      //searching for walkable tile that can be jumped to
       for (var tileX = maxTileX; tileX >= minTileX; tileX--)
       {
         for (var tileY = minTileY; tileY <= maxTileY; tileY++)
         {
-          if (tileMap[tileY][tileX] != ' ' && tileMap[tileY - 1][tileX] == ' ')
+          //there is a ground tile and above tile that poptart can walk through
+          if (blockingTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
           {
             newPlatform = new Platform(0, tileToPos(tileX, tileY).x, tileToPos(tileX, tileY).y - 20);
             break;
@@ -325,7 +329,7 @@ class ChasePlayer
       }
       for (; tileX > 0; tileX--)
       {
-        if (tileMap[tileY][tileX] == ' ') {
+        if (!blockingTiles[tileMap[tileY][tileX]]) {
           newPlatform.minX = tileToPos(tileX+1, tileY).x - 20;
         }
       }
@@ -340,11 +344,13 @@ class ChasePlayer
       let minTileY = constrain(rightEdgeTile.y - 1, 0, tileMap.length - 1);
       let maxTileY = constrain(rightEdgeTile.y + 2, 0, tileMap.length - 1);
       let newPlatform;
+      //searching for walkable tile that can be jumped to
       for (var tileX = minTileX; tileX <= maxTileX; tileX++)
       {
         for (var tileY = minTileY; tileY <= maxTileY; tileY++)
         {
-          if (tileMap[tileY][tileX] != ' ' && tileMap[tileY - 1][tileX] == ' ')
+          //there is a ground tile and above tile that poptart can walk through
+          if (blockingTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
           {
             newPlatform = new Platform(tileToPos(tileX, tileY).x, 800, tileToPos(tileX, tileY).y - 20);
             break;
@@ -357,7 +363,7 @@ class ChasePlayer
       }
       for (; tileX < tileMap[0].length; tileX++)
       {
-        if (tileMap[tileY][tileX] == ' ') {
+        if (!blockingTiles[tileMap[tileY][tileX]]) {
           newPlatform.maxX = tileToPos(tileX-1, tileY).x + 20;
         }
       }
