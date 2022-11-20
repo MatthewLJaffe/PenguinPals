@@ -23,10 +23,10 @@ class poptart
     this.jump = 1;
     this.walkForward = 0;
     this.walkBackward = 0;
-    this.walkForce = createVector(.15, 0);
+    this.walkForce = createVector(.2, 0);
     this.gravity = createVector(0, .25);
     this.dragForce = .25;
-    this.jumpForce = createVector(0, -8);
+    this.jumpForce = createVector(0, -8.5);
     this.idleTime = 0;
     //+1 for right -1 for left
     this.facedDir = 1;
@@ -48,12 +48,12 @@ class poptart
   findCurrentPlatform()
   {
     let currTile = posToTile(this.position.x, this.position.y);
-    this.currPlatform = new Platform(0, 800, this.position.y - 20);
+    this.currPlatform = new WalkableSurface(0, 800, this.position.y - 20);
     currTile.y += 1;
     for (let x = currTile.x - 1; x >= 0; x--)
     {
-      //there is a ground tile and the above tile can be walked through
-      if (!blockingTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
+      //searching for left end of walkable space
+      if (!walkableTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
       {
         this.currPlatform.minX = tileToPos(x, 0).x + 20;
         break;
@@ -61,8 +61,8 @@ class poptart
     }
     for (let x = currTile.x + 1; x < tileMap[currTile.y].length; x++)
     {
-      //there is a ground tile and the above tile can be walked through
-      if (!blockingTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
+      //searching for right end of walkable space
+      if (!walkableTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
       {
         this.currPlatform.maxX = tileToPos(x, 0).x - 20;
         break;
@@ -161,6 +161,18 @@ class poptart
       if (dir.y < -.1)
       {
         this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - this.size.y/2;
+        grounded = true;
+        this.jump = 0;
+        this.velocity.y = 0;
+      }
+    }
+    for (let p = 0; p < platforms.length; p++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 40, 40, 
+        platforms[p].position.x, platforms[p].position.y, platforms[p].size.x, platforms[p].size.y);
+      if (dir.y < -.1 && this.velocity.y >= 0)
+      {
+        this.position.y = platforms[p].position.y - platforms[p].size.y/2 - this.size.y/2;
         grounded = true;
         this.jump = 0;
         this.velocity.y = 0;
@@ -316,9 +328,9 @@ class ChasePlayer
         for (var tileY = minTileY; tileY <= maxTileY; tileY++)
         {
           //there is a ground tile and above tile that poptart can walk through
-          if (blockingTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
+          if (walkableTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
           {
-            newPlatform = new Platform(0, tileToPos(tileX, tileY).x, tileToPos(tileX, tileY).y - 20);
+            newPlatform = new WalkableSurface(0, tileToPos(tileX, tileY).x, tileToPos(tileX, tileY).y - 20);
             break;
           }
         }
@@ -329,7 +341,7 @@ class ChasePlayer
       }
       for (; tileX > 0; tileX--)
       {
-        if (!blockingTiles[tileMap[tileY][tileX]]) {
+        if (!walkableTiles[tileMap[tileY][tileX]]) {
           newPlatform.minX = tileToPos(tileX+1, tileY).x - 20;
         }
       }
@@ -350,9 +362,9 @@ class ChasePlayer
         for (var tileY = minTileY; tileY <= maxTileY; tileY++)
         {
           //there is a ground tile and above tile that poptart can walk through
-          if (blockingTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
+          if (walkableTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
           {
-            newPlatform = new Platform(tileToPos(tileX, tileY).x, 800, tileToPos(tileX, tileY).y - 20);
+            newPlatform = new WalkableSurface(tileToPos(tileX, tileY).x, 800, tileToPos(tileX, tileY).y - 20);
             break;
           }
         }
@@ -363,7 +375,7 @@ class ChasePlayer
       }
       for (; tileX < tileMap[0].length; tileX++)
       {
-        if (!blockingTiles[tileMap[tileY][tileX]]) {
+        if (!walkableTiles[tileMap[tileY][tileX]]) {
           newPlatform.maxX = tileToPos(tileX-1, tileY).x + 20;
         }
       }
@@ -372,8 +384,8 @@ class ChasePlayer
   }
 }
 
-//encapsulation of platform
-class Platform
+//encapsulation of walkable surface
+class WalkableSurface
 {
   constructor(minX, maxX, y)
   {

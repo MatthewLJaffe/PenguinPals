@@ -1,7 +1,9 @@
 var player;
 //0-8 floor tiles
 //QWE ice platform
+//RTYU platform
 //ASDFG ice wall
+//IOP platforms
 /*
 var tileMap = [
   "                    ",
@@ -45,7 +47,7 @@ var tileMap = [
 */
 var tileMap = [
   "                    ",
-  " NPB                ",
+  " N B                ",
   "                    ",
   "                    ",
   "                    ",
@@ -68,13 +70,13 @@ var tileMap = [
   "                    ",
   "       11           ",
   "                    ",
+  "        TYU         ",
   "                    ",
-  "            11      ",
-  "                    ",
-  "                    ",
-  "              011111",
-  "   B   B      344444",
-  "01111111111111Z44444",
+  "            TYU     ",
+  "   TYU              ",
+  "                TYU ",
+  "    P               ",
+  "011111111111111     ",
   "34444444444444444444",
   "34444444444444444444",
   "34444444444444444444",
@@ -84,6 +86,8 @@ var tileMap = [
 ];
 
 var blockingTiles = [];
+var walkableTiles = [];
+var platforms = [];
 //objects that need to be updated every frame
 var collisionObjs = [];
 var poptarts = [];
@@ -98,14 +102,13 @@ class gameScreen //4
   constructor()
   {
     this.snowDrops = [];
-      
     for(let i = 0; i < 400; i++){
       this.snowDrops.push(new snowObj(2, 5));
     }
     //parallax effect with background
     this.backgroundScrollSpeed = .25;
     this.foregroundScrollSpeed = .5;
-    player = new Player(400, 289, 64, 1);  //x, y, size, penguin_type
+    player = new Player(400, 289, 35, 64, 1);  //x, y, size, penguin_type
     //correctly position things dynamically based off height of tilemap
     var yOffset = (tileMap.length - 15) * -40;
     //iterate through tilemap and instantiate objects
@@ -187,6 +190,18 @@ class gameScreen //4
           case 'N':
             goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40, 'N');
             break;
+          case 'R':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[0], 'R'));
+            break;
+          case 'T':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[1], 'T'));
+            break;
+          case 'Y':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[2], 'Y'));
+            break;
+          case 'U':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[3], 'U'));
+            break;
         }
       }
     }
@@ -232,6 +247,10 @@ class gameScreen //4
       for (let i = 0; i < fishes.length; i++)
       {
         fishes[i].updateFish();
+      }
+      for (let i = 0; i < platforms.length; i++)
+      {
+        platforms[i].drawPlatform();
       }
       goldFish.updateFish();
       pop();
@@ -364,7 +383,7 @@ function keyReleased() {
 //class encapsulating different penguin playable characters
 class Player
 {
-  constructor(x, y, size, penguin_type)
+  constructor(x, y, w, h, penguin_type)
   {
     //movement/forces
     this.x = x;
@@ -394,7 +413,7 @@ class Player
     //sound effects
     this.walkingSound = sounds.walkingSound;
 
-    this.size = size;
+    this.size = createVector(w, h);
     this.height = this.size;
     this.dashCooldown = 35;
     this.throwCooldown = 30;
@@ -559,14 +578,25 @@ class Player
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
       if (dir.mag() == 0) continue;
       if (dir.x > .1)
-        this.position.x = collisionObjs[c].position.x + collisionObjs[c].size.x/2 + 18;
+        this.position.x = collisionObjs[c].position.x + collisionObjs[c].size.x/2 + this.size.x/2;
       if (dir.x < -.1)
-        this.position.x = collisionObjs[c].position.x - collisionObjs[c].size.x/2 - 18;
+        this.position.x = collisionObjs[c].position.x - collisionObjs[c].size.x/2 - this.size.x/2;
       if (dir.y > .1)
-        this.position.y = collisionObjs[c].position.y + collisionObjs[c].size.y/2 + 32;
+        this.position.y = collisionObjs[c].position.y + collisionObjs[c].size.y/2 + this.size.y/2;
       if (dir.y < -.1)
       {
-        this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - 32;
+        this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - this.size.y/2;
+        grounded = true;
+        this.jump = 0;
+        this.velocity.y = 0;
+      }
+    }
+    for(var p = 0; p < platforms.length; p++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 35, 64, platforms[p].position.x, platforms[p].position.y, platforms[p].size.x, platforms[p].size.y)
+      if (dir.y < -.1 && this.velocity.y > 0)
+      {
+        this.position.y = platforms[p].position.y - platforms[p].size.y/2 - 32;
         grounded = true;
         this.jump = 0;
         this.velocity.y = 0;
@@ -643,7 +673,7 @@ class Player
         this.jump = 1;
       }
       //A/D Movement
-      else if(keyArray[65] == 1 && this.position.x > 20)
+      else if(keyArray[65] == 1 && this.position.x > this.size.x/2)
       {  //player moving to the left
         this.facedDir = -1;
         this.updatePenguinLeft();
@@ -651,7 +681,7 @@ class Player
 
         this.moving = true;
       }
-      else if(keyArray[68] == 1 && this.position.x  + this.size/4 < width)
+      else if(keyArray[68] == 1 && this.position.x + this.size.x/2 < width)
       {  //player moving to the right
         this.facedDir = 1;
         this.updatePenguinRight();
@@ -661,7 +691,7 @@ class Player
       else
       {
         this.moving = false;
-        this.height = this.size;
+        this.height = this.size.y;
       }
     }
     //executing special move
@@ -702,12 +732,14 @@ class Player
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
       }
-      image(this.anim[this.currAnimIndex], this.position.x, this.position.y, this.size, this.height);
+      image(this.anim[this.currAnimIndex], this.position.x, this.position.y);
     }
     else{
-      image(this.anim[0], this.position.x, this.position.y, this.size, this.height);
+      image(this.anim[0], this.position.x, this.position.y);
     }
-
+    fill(255,0,0);
+    //rectMode(CENTER);
+    //rect(this.position.x, this.position.y, this.size.x, this.size.y);
   }
 }
 
@@ -720,6 +752,7 @@ class CollisionObj
     this.size = createVector(w, h);
     this.img = img;
     blockingTiles[char] = true;
+    walkableTiles[char] = true;
   }
 
   drawCollisionObj()
@@ -871,4 +904,20 @@ class GoldFish
 function lerp(a, b, t)
 {
   return a * (1 - t) + b * t;
+}
+
+class Platform
+{
+  constructor(x, y, w, h, img, char)
+  {
+    this.position = createVector(x, y);
+    this.size = createVector(w, h);
+    this.img = img;
+    walkableTiles[char] = true;
+  }
+
+  drawPlatform()
+  {
+    image(this.img, this.position.x, this.position.y+15);
+  }
 }
