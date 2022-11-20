@@ -7,6 +7,7 @@ class snowObj
       this.lower_limit = lower_limit;
       this.upper_limit = upper_limit;
       this.size = random(this.lower_limit, this.upper_limit);
+      this.img = images.snowParticleImages[Math.floor(Math.random()*3)];
       this.rate = random(this.lower_limit * 0.1,  this.upper_limit * 0.1);
       this.x = random(this.size, 800 + this.size)
       this.y = random(-600, 600);
@@ -15,7 +16,8 @@ class snowObj
     {
       fill(255);
       noStroke();
-      ellipse(this.x, this.y, this.size, this.size);
+      //ellipse(this.x, this.y, 10, 10);
+      image(this.img, this.x, this.y);
     }
     //update individual paritcles
     move()

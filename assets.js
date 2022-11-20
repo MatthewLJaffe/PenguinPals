@@ -77,6 +77,11 @@ class Images
         }
         this.iceWallFloorUpImage = loadImage("images/tiles/IceWallFloor1.png");
         this.iceWallFloorDownImage = loadImage("images/tiles/IceWallFloor2.png");
+        this.snowParticleImages = [];
+        for (let i = 1; i <= 3; i++)
+        {
+          this.snowParticleImages.push(loadImage("images/SnowParticles" + i + ".png"));
+        }
     }
 
     
