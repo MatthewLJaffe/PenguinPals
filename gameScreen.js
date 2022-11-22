@@ -1,12 +1,15 @@
 var player;
 //0-8 floor tiles
 //QWE ice platform
+//RTYU platform
 //ASDFG ice wall
+//IOP platforms
+/*
 var tileMap = [
   "                    ",
   "                    ",
   "                    ",
-  " N  P 11 P 11       ",
+  " N    11   11       ",
   "111111111111111     ",
   "                    ",
   "                 111",
@@ -15,24 +18,24 @@ var tileMap = [
   "          11111     ",
   "     11111          ",
   "                    ",
-  "P                   ",
+  "                    ",
   "11111111111111    11",
   "                 1  ",
   "                1   ",
   "              11    ",
-  "                    ",
+  "        P           ",
   "        11          ",
   "        11111       ",
   "      11            ",
   "      11            ",
-  "    11        11    ",
-  "P B 11              ",
+  "    11              ",
+  "  B 11        11    ",
   "111111              ",
+  "                    ",
   "                  11",
   "                    ",
-  "                    ",
   "              011111",
-  "              344444",
+  "   B   B      344444",
   "01111111111111Z44444",
   "34444444444444444444",
   "34444444444444444444",
@@ -41,7 +44,50 @@ var tileMap = [
   "3TTTTTTTTTTTTTTTTTTT",
   "3TTTTTTTTTTTTTTTTTTT",
 ];
+*/
+var tileMap = [
+  "                    ",
+  " N B                ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "         11         ",
+  "                    ",
+  "                    ",
+  "  11                ",
+  "                    ",
+  "                    ",
+  "       11           ",
+  "                    ",
+  "        TYU         ",
+  "                    ",
+  "            TYU     ",
+  "   TYU              ",
+  "                TYU ",
+  "    P               ",
+  "011111111111111     ",
+  "34444444444444444444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "34444444444444444444",
+  "3TTTTTTTTTTTTTTTTTTT",
+  "3TTTTTTTTTTTTTTTTTTT",
+];
 
+var blockingTiles = [];
+var walkableTiles = [];
+var platforms = [];
 //objects that need to be updated every frame
 var collisionObjs = [];
 var poptarts = [];
@@ -56,15 +102,14 @@ class gameScreen //4
   constructor()
   {
     this.snowDrops = [];
-      
     for(let i = 0; i < 400; i++){
       this.snowDrops.push(new snowObj(2, 5));
     }
     //parallax effect with background
     this.backgroundScrollSpeed = .25;
     this.foregroundScrollSpeed = .5;
-    player = new Player(400, 289, 64, 1);  //x, y, size, penguin_type
-    //correcly position things dynamically based off height of tilemap=
+    player = new Player(400, 289, 35, 64, 1);  //x, y, size, penguin_type
+    //correctly position things dynamically based off height of tilemap
     var yOffset = (tileMap.length - 15) * -40;
     //iterate through tilemap and instantiate objects
     for (let y = 0; y < tileMap.length; y++)
@@ -74,76 +119,88 @@ class gameScreen //4
         switch (tileMap[y][x])
         {
           case '0':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0], '0'));
             break;
           case '1':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0], '1'));
             break;
           case '2':
-            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, images.iceCornerImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20, y*40+20, 40, 40, images.iceCornerImages[1], '2'));
             break;
           case '3':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3], '3'));
             break;
           case '4':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage, '4'));
             break;
           case '5':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1], '5'));
             break;
           case '6':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[2], '6'));
             break;
           case '7':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[2], '7'));
             break;
           case '8':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[3]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[3], '8'));
             break;
           case 'Q':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.icePlatformImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.icePlatformImages[0], 'Q'));
             break;
           case 'W':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[1], 'W'));
             break;
           case 'E':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[2], 'E'));
             break;
           case 'A':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[0], 'A'));
             break;
           case 'S':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[1], 'S'));
             break;
           case 'D':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[2], 'D'));
             break;
           case 'F':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorUpImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorUpImage, 'F'));
             break;
           case 'G':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorDownImage));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorDownImage, 'G'));
             break;
           case 'Z':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[0]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[0], 'Z'));
             break;
           case 'X':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[1]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[1], 'X'));
             break;
           case 'C':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[2]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[2], 'C'));
             break;
           case 'V':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[3]));
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[3], 'V'));
             break;
           case 'P':
-            poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40));
+            poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40, 'P'));
             break;
           case 'B':
-            fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40));
+            fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40, 'B'));
             break;
           case 'N':
-            goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40);
+            goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40, 'N');
+            break;
+          case 'R':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[0], 'R'));
+            break;
+          case 'T':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[1], 'T'));
+            break;
+          case 'Y':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[2], 'Y'));
+            break;
+          case 'U':
+            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[3], 'U'));
             break;
         }
       }
@@ -190,6 +247,10 @@ class gameScreen //4
       for (let i = 0; i < fishes.length; i++)
       {
         fishes[i].updateFish();
+      }
+      for (let i = 0; i < platforms.length; i++)
+      {
+        platforms[i].drawPlatform();
       }
       goldFish.updateFish();
       pop();
@@ -322,7 +383,7 @@ function keyReleased() {
 //class encapsulating different penguin playable characters
 class Player
 {
-  constructor(x, y, size, penguin_type)
+  constructor(x, y, w, h, penguin_type)
   {
     //movement/forces
     this.x = x;
@@ -335,7 +396,16 @@ class Player
     this.velocity = new p5.Vector(0, 0);
     this.drag = createVector(.2, 0);
     this.acceleration = new p5.Vector(0 , 0);
-    this.gravity = new p5.Vector(0, 0.45);
+    this.gravity = .45;
+    this.gravityForce = new p5.Vector(0, this.gravity);
+    this.maxDashSpeed = 8;
+    this.dashSpeedTimeGraph = [
+      {'time': 0, 'speed': 0 },
+      {'time': .25, 'speed': 1 },
+      {'time': .6, 'speed': 1 },
+      {'time': 1, 'speed': 0 },
+    ];
+
     this.speed = 2;
     this.fall = false;
     this.specialMoveFrames = 60;
@@ -343,11 +413,13 @@ class Player
     //sound effects
     this.walkingSound = sounds.walkingSound;
 
-
-    this.size = size;
+    this.size = createVector(w, h);
     this.height = this.size;
-    this.specialMoveCooldown = 30;
+    this.dashCooldown = 35;
+    this.throwCooldown = 30;
     this.currSpecialMoveCooldown = 0;
+    this.dashing = false;
+    this.dashDir = createVector(0, 0);
 
     this.playerSwitchCooldown = 60;
     this.currPlayerSwitchCooldown = 0;
@@ -364,7 +436,6 @@ class Player
       this.anim = images.blackPenguinWalkLeft;
     }
   }
-
 
   updatePlayer(volume)
   {
@@ -410,7 +481,7 @@ class Player
   }
 
   //different special moves for penguins executable with the space key
-  specialMove()
+  startSpecialMove()
   {
     //black penguin throw snowball
     if (this.penguin_type == 1)
@@ -426,33 +497,106 @@ class Player
       }
       snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
     }
+    
     //blue penguin lateral dash in faced direction
-    else
+    if (this.penguin_type == 2)
     {
-      if (this.facedDir == 1)
-        this.acceleration.add(8, 0);
+      this.dashing = true;
+      //up right
+      if (keyArray[87] && keyArray[68])
+      {
+        this.dashDir = createVector(1, -1).normalize();
+      }
+      //up left
+      else if (keyArray[87] && keyArray[65])
+      {
+        this.dashDir = createVector(-1, -1).normalize();
+      }
+      //up
+      else if (keyArray[87])
+      {
+        this.dashDir = createVector(0, -1);
+      }
+      //down right
+      else if (keyArray[83] && keyArray[68])
+      {
+        this.dashDir = createVector(1, 1).normalize();
+      }
+      //down left
+      else if (keyArray[83] && keyArray[65])
+      {
+        this.dashDir = createVector(-1, 1).normalize();
+      }
+      //down
+      else if (keyArray[83])
+      {
+        this.dashDir = createVector(0, 1);
+      }
+      //right
+      else if (this.facedDir == 1)
+      this.dashDir = createVector(1, 0);
+      //left
       else
-        this.acceleration.add(-8, 0);
+        this.dashDir = createVector(-1, 0);
     }
+  }
+
+  updateSpecialMove(frame)
+  {
+    if (this.penguin_type == 2)
+    {
+      let t = 1 - frame / this.dashCooldown;
+      for (let i = 0; i < this.dashSpeedTimeGraph.length - 1; i++)
+      {
+        //current point in dash speed time graph
+        if (t >= this.dashSpeedTimeGraph[i].time && t < this.dashSpeedTimeGraph[i+1].time)
+        {
+          let speed = lerp(this.dashSpeedTimeGraph[i].speed, this.dashSpeedTimeGraph[i+1].speed, 
+            (t - this.dashSpeedTimeGraph[i].time)/(this.dashSpeedTimeGraph[i+1].time - this.dashSpeedTimeGraph[i].time));
+          speed *= this.maxDashSpeed;
+          this.velocity.x = this.dashDir.x * speed;
+          this.velocity.y = this.dashDir.y * speed;
+          this.position.add(this.velocity);
+          break;
+        }
+      }
+      if (frame == 0)
+      {
+        this.dashing = false;
+      }
+    }
+
   }
 
   //make sure player does not collide with tiles
   updatePlayerCollision()
   {
     var grounded = false;
+    //check for collision with tiles
     for(var c = 0; c < collisionObjs.length; c++)
     {
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, collisionObjs[c].position.x, collisionObjs[c].position.y, collisionObjs[c].size.x, collisionObjs[c].size.y);
       if (dir.mag() == 0) continue;
       if (dir.x > .1)
-        this.position.x = collisionObjs[c].position.x + collisionObjs[c].size.x/2 + 18;
+        this.position.x = collisionObjs[c].position.x + collisionObjs[c].size.x/2 + this.size.x/2;
       if (dir.x < -.1)
-        this.position.x = collisionObjs[c].position.x - collisionObjs[c].size.x/2 - 18;
+        this.position.x = collisionObjs[c].position.x - collisionObjs[c].size.x/2 - this.size.x/2;
       if (dir.y > .1)
-        this.position.y = collisionObjs[c].position.y + collisionObjs[c].size.y/2 + 32;
+        this.position.y = collisionObjs[c].position.y + collisionObjs[c].size.y/2 + this.size.y/2;
       if (dir.y < -.1)
       {
-        this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - 32;
+        this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - this.size.y/2;
+        grounded = true;
+        this.jump = 0;
+        this.velocity.y = 0;
+      }
+    }
+    for(var p = 0; p < platforms.length; p++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 35, 64, platforms[p].position.x, platforms[p].position.y, platforms[p].size.x, platforms[p].size.y)
+      if (dir.y < -.1 && this.velocity.y > 0)
+      {
+        this.position.y = platforms[p].position.y - platforms[p].size.y/2 - 32;
         grounded = true;
         this.jump = 0;
         this.velocity.y = 0;
@@ -461,6 +605,20 @@ class Player
     if (!grounded)
     {
       this.jump = 1;
+    }
+    //check for collision with poptarts
+    for (let p = 0; p < poptarts.length; p++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 35, 64, poptarts[p].position.x, poptarts[p].position.y, poptarts[p].size.x*.9, poptarts[p].size.y*.9);
+      if (dir.mag() == 0) continue;
+      if(currFrame < (frameCount - 60) ) {
+        currFrame = frameCount
+        poptarts[p].collisionSound.setVolume(poptarts[p].volume);
+        player.lives--;
+        player.score-=50;
+        if(!poptarts[p].collisionSound.isPlaying() && player.lives > 0)
+          poptarts[p].collisionSound.play();
+      }
     }
   }
 
@@ -493,15 +651,16 @@ class Player
   //update position velocity and acceleration for player and handle input for special moves / jumping
   updatePlayerPosition()
   {
-    var gravityForce = p5.Vector.mult(this.gravity, this.acceleration.add(gravityForce));
-
     //not executing special move
-    if (this.currSpecialMoveCooldown <= 0)
+    if (this.currSpecialMoveCooldown < 0)
     {
       if (keyArray[32] == 1)
       {
-        this.currSpecialMoveCooldown = this.specialMoveCooldown;
-        this.specialMove();
+        if (this.penguin_type == 1)
+          this.currSpecialMoveCooldown = this.throwCooldown;
+        else if (this.penguin_type == 2)
+          this.currSpecialMoveCooldown = this.dashCooldown;
+        this.startSpecialMove();
       }
       //Jump
       else if(keyArray[87] == 1 && this.jump == 0)
@@ -514,7 +673,7 @@ class Player
         this.jump = 1;
       }
       //A/D Movement
-      else if(keyArray[65] == 1 && this.position.x > 20)
+      else if(keyArray[65] == 1 && this.position.x > this.size.x/2)
       {  //player moving to the left
         this.facedDir = -1;
         this.updatePenguinLeft();
@@ -522,7 +681,7 @@ class Player
 
         this.moving = true;
       }
-      else if(keyArray[68] == 1 && this.position.x  + this.size/4 < width)
+      else if(keyArray[68] == 1 && this.position.x + this.size.x/2 < width)
       {  //player moving to the right
         this.facedDir = 1;
         this.updatePenguinRight();
@@ -532,33 +691,36 @@ class Player
       else
       {
         this.moving = false;
-        this.height = this.size;
+        this.height = this.size.y;
       }
     }
     //executing special move
     else
     {
+      this.updateSpecialMove(this.currSpecialMoveCooldown);
       this.currSpecialMoveCooldown--;
       this.moving = true;
     }
-    
-    //update position velocity and acceleration 
-    if(this.jump > 0 || this.fall == true){
-      this.height = this.size*1.05;
-      this.acceleration.add(this.gravity);
-    }
-    if (this.velocity.x > 0) {
-      this.acceleration.add(createVector(-this.drag.x, 0))
-    }
-    else if (this.velocity.x < 0) {
-      this.acceleration.add(createVector(this.drag.x, 0))
-    }
-    this.velocity.add(this.acceleration);
-    if (abs(this.velocity.x) < this.drag.x)
-      this.velocity.x = 0;
-    this.position.add(this.velocity);
 
-    this.acceleration.set(0, 0);
+    if (!this.dashing)
+    {
+      //update position velocity and acceleration 
+      if(this.jump > 0 || this.fall == true){
+        this.height = this.size*1.05;
+        this.acceleration.add(this.gravityForce);
+      }
+      if (this.velocity.x > 0) {
+        this.acceleration.add(createVector(-this.drag.x, 0))
+      }
+      else if (this.velocity.x < 0) {
+        this.acceleration.add(createVector(this.drag.x, 0))
+      }
+      this.velocity.add(this.acceleration);
+      if (abs(this.velocity.x) < this.drag.x)
+        this.velocity.x = 0;
+      this.position.add(this.velocity);
+      this.acceleration.set(0, 0);
+    }
   }
 
   //loop through current player animation
@@ -570,23 +732,27 @@ class Player
       {
         this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
       }
-      image(this.anim[this.currAnimIndex], this.position.x, this.position.y, this.size, this.height);
+      image(this.anim[this.currAnimIndex], this.position.x, this.position.y);
     }
     else{
-      image(this.anim[0], this.position.x, this.position.y, this.size, this.height);
+      image(this.anim[0], this.position.x, this.position.y);
     }
-
+    fill(255,0,0);
+    //rectMode(CENTER);
+    //rect(this.position.x, this.position.y, this.size.x, this.size.y);
   }
 }
 
 //class for tiles that can be collided with by npcs/ player
 class CollisionObj
 {
-  constructor(x, y, w, h, img)
+  constructor(x, y, w, h, img, char)
   {
     this.position = createVector(x, y);
     this.size = createVector(w, h);
     this.img = img;
+    blockingTiles[char] = true;
+    walkableTiles[char] = true;
   }
 
   drawCollisionObj()
@@ -608,7 +774,7 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
   let top2 = y2 - h2/2;
   let bottom2 = y2 + h2/2;
 
-  if (right1 > left2 && left1 < right2 && bottom1 > top2 && top1 < bottom2)
+  if (right1 >= left2 && left1 <= right2 && bottom1 >= top2 && top1 <= bottom2)
   {
     if (abs(x1 - x2) < abs(y1 - y2))
     {
@@ -732,5 +898,26 @@ class GoldFish
   updateFish()
   {
     image(images.goldFish, this.position.x, this.position.y);
+  }
+}
+
+function lerp(a, b, t)
+{
+  return a * (1 - t) + b * t;
+}
+
+class Platform
+{
+  constructor(x, y, w, h, img, char)
+  {
+    this.position = createVector(x, y);
+    this.size = createVector(w, h);
+    this.img = img;
+    walkableTiles[char] = true;
+  }
+
+  drawPlatform()
+  {
+    image(this.img, this.position.x, this.position.y+15);
   }
 }

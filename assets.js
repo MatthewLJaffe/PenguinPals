@@ -1,3 +1,4 @@
+//used to load all static assets in preload function
 class Images
 {
     constructor()
@@ -76,6 +77,14 @@ class Images
         }
         this.iceWallFloorUpImage = loadImage("images/tiles/IceWallFloor1.png");
         this.iceWallFloorDownImage = loadImage("images/tiles/IceWallFloor2.png");
+        this.snowParticleImages = [];
+        this.platformImages = [];
+        this.platformImages.push(loadImage("images/tiles/Platform.png"));
+        for (let i = 1; i <= 3; i++)
+        {
+          this.snowParticleImages.push(loadImage("images/SnowParticles" + i + ".png"));
+          this.platformImages.push(loadImage("images/tiles/Platform" + i + ".png"));
+        }
     }
 
     

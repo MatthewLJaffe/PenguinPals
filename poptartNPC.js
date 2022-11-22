@@ -23,10 +23,10 @@ class poptart
     this.jump = 1;
     this.walkForward = 0;
     this.walkBackward = 0;
-    this.walkForce = createVector(.15, 0);
+    this.walkForce = createVector(.2, 0);
     this.gravity = createVector(0, .25);
     this.dragForce = .25;
-    this.jumpForce = createVector(0, -8);
+    this.jumpForce = createVector(0, -8.5);
     this.idleTime = 0;
     //+1 for right -1 for left
     this.facedDir = 1;
@@ -44,14 +44,16 @@ class poptart
     this.currState = "Idle";
   }
 
+  //used to find the walkable space under the npc
   findCurrentPlatform()
   {
     let currTile = posToTile(this.position.x, this.position.y);
-    this.currPlatform = new Platform(0, 600, this.position.y - 20);
+    this.currPlatform = new WalkableSurface(0, 800, this.position.y - 20);
     currTile.y += 1;
     for (let x = currTile.x - 1; x >= 0; x--)
     {
-      if (tileMap[currTile.y][x] == ' ' || tileMap[currTile.y - 1][x] != ' ')
+      //searching for left end of walkable space
+      if (!walkableTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
       {
         this.currPlatform.minX = tileToPos(x, 0).x + 20;
         break;
@@ -59,7 +61,8 @@ class poptart
     }
     for (let x = currTile.x + 1; x < tileMap[currTile.y].length; x++)
     {
-      if (tileMap[currTile.y][x] == ' ' || tileMap[currTile.y - 1][x] != ' ')
+      //searching for right end of walkable space
+      if (!walkableTiles[tileMap[currTile.y][x]] || blockingTiles[tileMap[currTile.y - 1][x]])
       {
         this.currPlatform.maxX = tileToPos(x, 0).x - 20;
         break;
@@ -67,6 +70,7 @@ class poptart
     }
   }
 
+  //update npc
   update()
   {
     if (!this.enabled) return;
@@ -86,6 +90,7 @@ class poptart
     this.acceleration.add(force);
   }
 
+  //position based on kinematic positoin velocity and acceleration
   updatePos()
   {
     this.acceleration.set(0, 0);
@@ -137,6 +142,7 @@ class poptart
     this.acceleration.set(0, 0);
   }
 
+  //check for collision tiles
   checkCollision()
   {
     var grounded = false;
@@ -160,12 +166,25 @@ class poptart
         this.velocity.y = 0;
       }
     }
+    for (let p = 0; p < platforms.length; p++)
+    {
+      let dir = detectCollision(this.position.x, this.position.y, 40, 40, 
+        platforms[p].position.x, platforms[p].position.y, platforms[p].size.x, platforms[p].size.y);
+      if (dir.y < -.1 && this.velocity.y >= 0)
+      {
+        this.position.y = platforms[p].position.y - platforms[p].size.y/2 - this.size.y/2;
+        grounded = true;
+        this.jump = 0;
+        this.velocity.y = 0;
+      }
+    }
     if (!grounded)
     {
       this.jump = 1;
     }
   }
 
+  //animate npc
   drawAgent()
   {
     if (frameCount % this.frameStepRate == 0)
@@ -177,6 +196,7 @@ class poptart
   }
 }
 
+//state that moves in same direction until landing
 class Jump
 {
   constructor(agent)
@@ -195,6 +215,7 @@ class Jump
   }
 }
 
+//state that paces back and forth
 class Idle
 {
   constructor(agent)
@@ -204,6 +225,8 @@ class Idle
 
   tick()
   {
+    if (this.agent.jump == 1)
+      return "Jump"
     if (this.agent.idleTime > 0)
       this.agent.idleTime -= deltaTime;
     if (this.agent.facedDir == 1)
@@ -242,6 +265,7 @@ class Idle
 
 var currFrame = 0;
 
+//state that chases player and jumps to where player is
 class ChasePlayer
 {
   constructor(agent)
@@ -251,17 +275,11 @@ class ChasePlayer
 
   tick()
   {
+    if (this.agent.jump == 1)
+      return "Jump"
     if (this.agent.position.dist(player.position) > this.agent.maxChaseDistance)
       return "Idle";
     //walk towards player
-    if(this.agent.position.dist(player.position) < 55 && currFrame < (frameCount - 60) ){
-      currFrame = frameCount
-      this.agent.collisionSound.setVolume(this.agent.volume);
-      player.lives--;
-      player.score-=50;
-      if(!this.agent.collisionSound.isPlaying() && player.lives > 0)
-        this.agent.collisionSound.play();
-    }
 
     if (this.agent.position.x - player.position.x > 0)
     {
@@ -274,12 +292,13 @@ class ChasePlayer
       this.agent.walkBackward = 0;
     }
     //if at edge determine if you can make a jump
-    if (this.agent.position.x + this.agent.size.x/2 >= this.agent.currPlatform.maxX 
-    || this.agent.position.x - this.agent.size.x/2 <= this.agent.currPlatform.minX)
+    if ((this.agent.position.x + this.agent.size.x/2 >= this.agent.currPlatform.maxX && this.agent.walkForward == 1)
+    || this.agent.position.x - this.agent.size.x/2 <= this.agent.currPlatform.minX && this.agent.walkBackward == 1)
     {
       var targetPlatform = this.findTargetPlatform();
       //Jump to different platform to reach player
-      if (targetPlatform != this.agent.currPlatform) {
+      if (targetPlatform != this.agent.currPlatform || player.position.y - this.agent.position.y > 80) 
+      {
         this.agent.jump = 2;
         return "Jump";
       }
@@ -303,13 +322,15 @@ class ChasePlayer
       let minTileY = constrain(leftEdgeTile.y - 1, 0, tileMap.length - 1);
       let maxTileY = constrain(leftEdgeTile.y + 2, 0, tileMap.length - 1);
       let newPlatform;
+      //searching for walkable tile that can be jumped to
       for (var tileX = maxTileX; tileX >= minTileX; tileX--)
       {
         for (var tileY = minTileY; tileY <= maxTileY; tileY++)
         {
-          if (tileMap[tileY][tileX] != ' ' && tileMap[tileY - 1][tileX] == ' ')
+          //there is a ground tile and above tile that poptart can walk through
+          if (walkableTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
           {
-            newPlatform = new Platform(0, tileToPos(tileX, tileY).x, tileToPos(tileX, tileY).y - 20);
+            newPlatform = new WalkableSurface(0, tileToPos(tileX, tileY).x, tileToPos(tileX, tileY).y - 20);
             break;
           }
         }
@@ -320,7 +341,7 @@ class ChasePlayer
       }
       for (; tileX > 0; tileX--)
       {
-        if (tileMap[tileY][tileX] == ' ') {
+        if (!walkableTiles[tileMap[tileY][tileX]]) {
           newPlatform.minX = tileToPos(tileX+1, tileY).x - 20;
         }
       }
@@ -335,13 +356,15 @@ class ChasePlayer
       let minTileY = constrain(rightEdgeTile.y - 1, 0, tileMap.length - 1);
       let maxTileY = constrain(rightEdgeTile.y + 2, 0, tileMap.length - 1);
       let newPlatform;
+      //searching for walkable tile that can be jumped to
       for (var tileX = minTileX; tileX <= maxTileX; tileX++)
       {
         for (var tileY = minTileY; tileY <= maxTileY; tileY++)
         {
-          if (tileMap[tileY][tileX] != ' ' && tileMap[tileY - 1][tileX] == ' ')
+          //there is a ground tile and above tile that poptart can walk through
+          if (walkableTiles[tileMap[tileY][tileX]] && !blockingTiles[tileMap[tileY - 1][tileX]])
           {
-            newPlatform = new Platform(tileToPos(tileX, tileY).x, 800, tileToPos(tileX, tileY).y - 20);
+            newPlatform = new WalkableSurface(tileToPos(tileX, tileY).x, 800, tileToPos(tileX, tileY).y - 20);
             break;
           }
         }
@@ -352,7 +375,7 @@ class ChasePlayer
       }
       for (; tileX < tileMap[0].length; tileX++)
       {
-        if (tileMap[tileY][tileX] == ' ') {
+        if (!walkableTiles[tileMap[tileY][tileX]]) {
           newPlatform.maxX = tileToPos(tileX-1, tileY).x + 20;
         }
       }
@@ -361,7 +384,8 @@ class ChasePlayer
   }
 }
 
-class Platform
+//encapsulation of walkable surface
+class WalkableSurface
 {
   constructor(minX, maxX, y)
   {
@@ -371,6 +395,7 @@ class Platform
   }
 }
 
+//conversion functions\
 function tileToPos(x, y)
 {
   var yOffset = (tileMap.length - 15) * -40;
