@@ -88,7 +88,7 @@ class SoundEffects
     this.poofSound = loadSound("sounds/poof.mp3");
     this.gameLoseSound = loadSound("sounds/game_lose.wav");
     this.gameWinSound = loadSound("sounds/game_win.wav");
-    this.loseLifeSound = loadSound("sounds/lose_life.wav");   //or lose_life2.wav
+    this.loseLifeSound = loadSound("sounds/lose_life.wav");
     this.NPCDeathSound = loadSound("sounds/lose_life2.wav");
     this.walkingSound = loadSound("sounds/walking.wav");
   }
