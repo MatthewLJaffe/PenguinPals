@@ -12,12 +12,12 @@ class snowObj
       this.x = random(this.size, 800 + this.size)
       this.y = random(-600, 600);
     }
-    draw()
+    drawSnow()
     {
       fill(255);
       noStroke();
-      //ellipse(this.x, this.y, 10, 10);
-      image(this.img, this.x, this.y);
+      ellipse(this.x, this.y, this.size, this.size);
+      //image(this.img, this.x, this.y);
     }
     //update individual paritcles
     move()
@@ -86,7 +86,7 @@ class snowObj
       //falling snow
       for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();
-        this.snowDrops[i].draw();
+        this.snowDrops[i].drawSnow();
       }
       image(images.topIce, 20, 580, 40, 40);
       for (let x = 20; x < 820; x += 40)

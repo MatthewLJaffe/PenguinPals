@@ -23,14 +23,16 @@ class poptart
     this.jump = 1;
     this.walkForward = 0;
     this.walkBackward = 0;
+    this.normalWalkForce = .2;
     this.walkForce = createVector(.2, 0);
-    this.gravity = createVector(0, .25);
-    this.dragForce = .25;
-    this.jumpForce = createVector(0, -8.5);
+    this.gravity = createVector(0, .3);
+    this.dragForce = createVector(.075, 0);
+    this.jumpForce = createVector(3, -8);
     this.idleTime = 0;
     //+1 for right -1 for left
     this.facedDir = 1;
     this.maxChaseDistance = 400;
+    this.maxChaseYDiff = 100;
     this.findCurrentPlatform();
     //only simulate npc when enabled
     this.enabled = true;
@@ -48,7 +50,7 @@ class poptart
   findCurrentPlatform()
   {
     let currTile = posToTile(this.position.x, this.position.y);
-    this.currPlatform = new WalkableSurface(0, 800, this.position.y - 20);
+    this.currPlatform = new WalkableSurface(0, 800, this.position.y + 20);
     currTile.y += 1;
     for (let x = currTile.x - 1; x >= 0; x--)
     {
@@ -94,17 +96,47 @@ class poptart
   updatePos()
   {
     this.acceleration.set(0, 0);
+    //handle arial movement
+    if (this.jump > 0)
+    {
+      if (this.jump === 2) {
+        if (this.velocity.x >= 0)
+          this.jumpForce.x = abs(this.jumpForce.x);
+        else
+          this.jumpForce.x = -abs(this.jumpForce.x);
+        this.applyForce(this.jumpForce);
+        this.jump = 1;
+      }
+      this.applyForce(this.gravity);
+      if (this.velocity.x > .1) {
+        if (this.dragForce.x > 0)
+          this.dragForce.mult(-1);
+        this.applyForce(this.dragForce);
+      }
+      else if (this.velocity.x < -.1) {
+        if (this.dragForce.x < 0)
+          this.dragForce.mult(-1);
+        this.applyForce(this.dragForce);
+      }
+      this.velocity.add(this.acceleration);
+      this.position.add(this.velocity);
+      if (this.velocity.x > 0)
+        this.facedDir = 1;
+      else if (this.velocity.x < 0)
+        this.facedDir = -1;
+      return;
+    }
 
+    //handle ground movement
     //apply horizontal move forces
     if (this.walkForward === 1) {
-      this.walkForce.x = abs(this.walkForce.x)
+      this.walkForce.x = abs(this.walkForce.x);
       this.applyForce(this.walkForce);
     }
     else if (this.walkBackward === 1) {
-      this.walkForce.x = -abs(this.walkForce.x)
+      this.walkForce.x = -abs(this.walkForce.x);
       this.applyForce(this.walkForce);
     }
-
     //apply drag to npc if not walking in a direction
     else
     {
@@ -121,13 +153,6 @@ class poptart
       else {
         this.velocity.x = 0;
       }
-    }
-    if (this.jump === 2) {
-      this.applyForce(this.jumpForce);
-      this.jump = 1;
-    }
-    if (this.jump > 0) {
-      this.applyForce(this.gravity);
     }
     //limit speed and acceleration
     this.acceleration.x = constrain(this.acceleration.x, -this.maxWalkAcc, this.maxWalkAcc);
@@ -194,6 +219,11 @@ class poptart
     else
       image(images.poptartWalkLeft[this.animIdx], this.position.x, this.position.y);
   }
+
+  inRangeOfPlayer()
+  {
+    return this.position.dist(player.position) < this.maxChaseDistance && abs(this.position.y - player.position.y) < this.maxChaseYDiff;
+  }
 }
 
 //state that moves in same direction until landing
@@ -255,7 +285,7 @@ class Idle
         this.agent.walkBackward = 1;
       }
     }
-    if (this.agent.position.dist(player.position) < this.agent.maxChaseDistance && this.agent.idleTime <= 0)
+    if (this.agent.inRangeOfPlayer() && this.agent.idleTime <= 0)
     {
       return "ChasePlayer";
     }
@@ -277,7 +307,7 @@ class ChasePlayer
   {
     if (this.agent.jump == 1)
       return "Jump"
-    if (this.agent.position.dist(player.position) > this.agent.maxChaseDistance)
+    if (!this.agent.inRangeOfPlayer())
       return "Idle";
     //walk towards player
 
@@ -316,8 +346,8 @@ class ChasePlayer
     //search left
     if (this.agent.position.x - player.position.x > 0)
     {
-      let leftEdgeTile = posToTile(this.agent.currPlatform.minX + 20, this.agent.currPlatform.y - 20);
-      let minTileX = constrain(leftEdgeTile.x - 2, 0, tileMap[0].length - 1);
+      let leftEdgeTile = posToTile(this.agent.currPlatform.minX + 20, this.agent.currPlatform.y + 20);
+      let minTileX = constrain(leftEdgeTile.x - 3, 0, tileMap[0].length - 1);
       let maxTileX = constrain(leftEdgeTile.x - 1, 0, tileMap[0].length - 1);
       let minTileY = constrain(leftEdgeTile.y - 1, 0, tileMap.length - 1);
       let maxTileY = constrain(leftEdgeTile.y + 2, 0, tileMap.length - 1);
@@ -350,9 +380,9 @@ class ChasePlayer
     //search right
     else
     {
-      let rightEdgeTile = posToTile(this.agent.currPlatform.maxX - 20, this.agent.currPlatform.y - 20);
+      let rightEdgeTile = posToTile(this.agent.currPlatform.maxX - 20, this.agent.currPlatform.y + 20);
       let minTileX = constrain(rightEdgeTile.x + 1, 0, tileMap[0].length - 1);
-      let maxTileX = constrain(rightEdgeTile.x + 2, 0, tileMap[0].length - 1);
+      let maxTileX = constrain(rightEdgeTile.x + 3, 0, tileMap[0].length - 1);
       let minTileY = constrain(rightEdgeTile.y - 1, 0, tileMap.length - 1);
       let maxTileY = constrain(rightEdgeTile.y + 2, 0, tileMap.length - 1);
       let newPlatform;
@@ -407,3 +437,4 @@ function posToTile(x, y)
   var yOffset = (tileMap.length - 15) * -40;
   return createVector(Math.round((x-20)/40), Math.round((y-20 - yOffset)/40));
 }
+
