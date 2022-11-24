@@ -4,6 +4,7 @@ var player;
 //RTYU platform
 //ASDFG ice wall
 //ZXCV Ice wall corner
+//wasd spikes
 var tileMap = [
   "                    ",
   " N B                ",
@@ -35,13 +36,13 @@ var tileMap = [
   "                    ",
   "TYYU                ",
   "                    ",
-  "P                   ",
+  "P       !           ",
   "11111  11111        ",
   "11111  1111111      ",
   "11111  111111111    ",
   "                    ",
   "                  11",
-  "        !         11",
+  "           w      11",
   "01111111111111111112",
   "34444444444444444445",
   "34444444444444444445",
@@ -170,6 +171,18 @@ class gameScreen //4
             break;
           case '!':
             player = new Player(x*40+20, yOffset +  y*40+20, 35, 64, 1);
+            break;
+          case 'w':
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+30, 30, 20, images.whiteSpikesUp, 'w', true, createVector(0, -10)));
+            break;
+          case 'a':
+            collisionObjs.push(new CollisionObj(x*40+30, yOffset +  y*40+20, 20, 30, images.whiteSpikesLeft, 'a', true, createVector(-10, 0)));
+            break;
+          case 's':
+            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+10, 30, 20, images.whiteSpikesDown, 's', true, createVector(0, 10)));
+            break;
+          case 'd':
+            collisionObjs.push(new CollisionObj(x*40+10, yOffset +  y*40+20, 20, 30, images.whiteSpikesRight, 'd', true, createVector(10, 0)));
             break;
         }
       }
@@ -612,6 +625,12 @@ class Player
         this.jump = 0;
         this.velocity.y = 0;
       }
+      if(currFrame < (frameCount - 60) && collisionObjs[c].doesDamage) 
+      {
+        currFrame = frameCount;
+        player.lives--;
+        player.score-=50;
+      }
     }
     for(var p = 0; p < platforms.length; p++)
     {
@@ -634,7 +653,7 @@ class Player
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, poptarts[p].position.x, poptarts[p].position.y, poptarts[p].size.x*.9, poptarts[p].size.y*.9);
       if (dir.mag() == 0) continue;
       if(currFrame < (frameCount - 60) ) {
-        currFrame = frameCount
+        currFrame = frameCount;
         poptarts[p].collisionSound.setVolume(poptarts[p].volume);
         player.lives--;
         player.score-=50;
@@ -818,18 +837,26 @@ class Player
 //class for tiles that can be collided with by npcs/ player
 class CollisionObj
 {
-  constructor(x, y, w, h, img, char)
+  constructor(x, y, w, h, img, char, doesDamage, offset)
   {
+    if (offset)
+      this.offset = offset;
+    else
+      this.offset = createVector(0, 0);
     this.position = createVector(x, y);
     this.size = createVector(w, h);
     this.img = img;
+    if (doesDamage)
+      this.doesDamage = true;
+    else
+      this.doesDamage = false;
     blockingTiles[char] = true;
-    walkableTiles[char] = true;
+    walkableTiles[char] = !doesDamage;
   }
 
   drawCollisionObj()
   {
-    image(this.img, this.position.x, this.position.y);
+    image(this.img, this.position.x + this.offset.x, this.position.y+this.offset.y);
   }
 }
 
