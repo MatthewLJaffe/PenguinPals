@@ -349,8 +349,8 @@ class ChasePlayer
       let leftEdgeTile = posToTile(this.agent.currPlatform.minX + 20, this.agent.currPlatform.y + 20);
       let minTileX = constrain(leftEdgeTile.x - 3, 0, tileMap[0].length - 1);
       let maxTileX = constrain(leftEdgeTile.x - 1, 0, tileMap[0].length - 1);
-      let minTileY = constrain(leftEdgeTile.y - 1, 0, tileMap.length - 1);
-      let maxTileY = constrain(leftEdgeTile.y + 2, 0, tileMap.length - 1);
+      let minTileY = constrain(leftEdgeTile.y - 2, 0, tileMap.length - 1);
+      let maxTileY = constrain(leftEdgeTile.y + 3, 0, tileMap.length - 1);
       let newPlatform;
       //searching for walkable tile that can be jumped to
       for (var tileX = maxTileX; tileX >= minTileX; tileX--)
@@ -383,8 +383,8 @@ class ChasePlayer
       let rightEdgeTile = posToTile(this.agent.currPlatform.maxX - 20, this.agent.currPlatform.y + 20);
       let minTileX = constrain(rightEdgeTile.x + 1, 0, tileMap[0].length - 1);
       let maxTileX = constrain(rightEdgeTile.x + 3, 0, tileMap[0].length - 1);
-      let minTileY = constrain(rightEdgeTile.y - 1, 0, tileMap.length - 1);
-      let maxTileY = constrain(rightEdgeTile.y + 2, 0, tileMap.length - 1);
+      let minTileY = constrain(rightEdgeTile.y - 2, 0, tileMap.length - 1);
+      let maxTileY = constrain(rightEdgeTile.y + 3, 0, tileMap.length - 1);
       let newPlatform;
       //searching for walkable tile that can be jumped to
       for (var tileX = minTileX; tileX <= maxTileX; tileX++)
