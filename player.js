@@ -17,6 +17,7 @@ class Player
     this.drag = createVector(.2, 0);
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = .45;
+    this.fallMult = 2;
     this.umbrellaGravity = .15;
     this.gravityForce = new p5.Vector(0, this.gravity);
     this.maxNormalFallSpeed = 8;
@@ -33,7 +34,6 @@ class Player
     ];
 
     this.speed = 2;
-    this.fall = false;
     this.specialMoveFrames = 60;
     this.currSpecialMoveFrames = 0;
     //sound effects
@@ -331,8 +331,12 @@ class Player
     //normal physics so long as we aren't dashing
     if (!this.dashing) {
       //update position velocity and acceleration 
-      if(this.jump > 0 || this.fall == true){
-        this.acceleration.add(this.gravityForce);
+      if(this.jump > 0) 
+      {
+        if (keyArray[87])
+            this.acceleration.add(this.gravityForce);
+        else
+            this.acceleration.add(p5.Vector.mult(this.gravityForce, this.fallMult));
       }
       if (this.velocity.x > 0) {
         this.acceleration.add(createVector(-this.drag.x, 0))
