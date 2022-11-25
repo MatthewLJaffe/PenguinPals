@@ -258,7 +258,7 @@ class Idle
     if (this.agent.jump == 1)
       return "Jump"
     if (this.agent.idleTime > 0)
-      this.agent.idleTime -= deltaTime;
+      this.agent.idleTime -= 1/60;
     if (this.agent.facedDir == 1)
     {
       if (this.agent.position.x + this.agent.size.x/2 >= this.agent.currPlatform.maxX)

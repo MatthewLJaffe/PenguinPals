@@ -17,7 +17,7 @@ class Player
     this.drag = createVector(.2, 0);
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = .45;
-    this.fallMult = 2;
+    this.fallMult = 1.75;
     this.umbrellaGravity = .15;
     this.gravityForce = new p5.Vector(0, this.gravity);
     this.maxNormalFallSpeed = 8;
@@ -33,7 +33,7 @@ class Player
       {'time': 1, 'speed': 0 },
     ];
 
-    this.speed = 2;
+    this.walkSpeed = 2.5;
     this.specialMoveFrames = 60;
     this.currSpecialMoveFrames = 0;
     //sound effects
@@ -319,12 +319,12 @@ class Player
       else if(keyArray[65] == 1)
       {  //player moving to the left
         this.facedDir = -1;
-        this.position.x -= this.speed;
+        this.position.x -= this.walkSpeed;
       }
       else if(keyArray[68] == 1)
       {  //player moving to the right
         this.facedDir = 1;
-        this.position.x += this.speed;
+        this.position.x += this.walkSpeed;
       }
     }
 
