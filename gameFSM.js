@@ -10,7 +10,10 @@ class snowObj
       this.img = images.snowParticleImages[Math.floor(Math.random()*3)];
       this.rate = random(this.lower_limit * 0.1,  this.upper_limit * 0.1);
       this.x = random(this.size, 800 + this.size)
-      this.y = random(-600, 600);
+      let playerOffset = 0;
+      if (player)
+        playerOffset =  height/2 - player.position.y+100;
+      this.y = random(-600 + playerOffset, 600 + playerOffset);
     }
     drawSnow()
     {
@@ -22,11 +25,15 @@ class snowObj
     //update individual paritcles
     move()
     {
-      if(this.y < (height + this.size)){
+      let playerOffset = 0;
+      if (player)
+        playerOffset = height/2 - player.position.y + 100;
+
+      if(this.y < (height + this.size - playerOffset )) {
         this.y += this.rate;
       }
       else{
-        this.y = -5;
+        this.y = -5 - playerOffset;
       }
     }
   }

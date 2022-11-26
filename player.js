@@ -11,7 +11,7 @@ class Player
     this.position = new p5.Vector(this.x, this.y);
     this.jump = 0;
     this.normalJump = -12;
-    this.umbrellaJump = - 8;
+    this.umbrellaJump = -8;
     this.jumpForce = new p5.Vector(0, -12);
     this.velocity = new p5.Vector(0, 0);
     this.drag = createVector(.2, 0);
@@ -46,7 +46,7 @@ class Player
     this.dashing = false;
     this.dashDir = createVector(0, 0);
 
-    this.playerSwitchCooldown = 60;
+    this.playerSwitchCooldown = 30;
     this.currPlayerSwitchCooldown = 0;
 
     this.penguin_type = penguin_type; //1 = black, 2 = blue, 3 = red
@@ -57,7 +57,7 @@ class Player
 
   updatePlayer(volume)
   {
-    this.handlePlayerSwitch(volume);
+    if (this.handlePlayerSwitch(volume)) return;
     if (keyArray[32] == 1 && this.currSpecialMoveCooldown <= 0)
     {
       if (this.penguin_type == 1)
@@ -76,18 +76,28 @@ class Player
       this.currSpecialMoveCooldown--;
       this.moving = true;
     }
-    this.currPlayerSwitchCooldown--;
     this.volume = volume;
     this.walkingSound.setVolume(volume);
     this.updatePlayerPosition();
-    this.updatePlayerCollision();
+    this.updatePlayerCollision(volume);
     this.updatePlayerAnim();
-  }
+  }d
 
   handlePlayerSwitch(volume)
   {    
     //handle input for switching penguins
-    if (this.currPlayerSwitchCooldown > 0 || this.dashing) return;
+    if (this.dashing) return;
+    //switch in progress
+    if (this.currPlayerSwitchCooldown >= 0)
+    {
+      var currTime = 1 - this.currPlayerSwitchCooldown / this.playerSwitchCooldown;
+      var animFrame = images.smokeCloud[Math.ceil(currTime*images.smokeCloud.length)-1];
+      image(animFrame, this.position.x, this.position.y);
+      this.currPlayerSwitchCooldown--;
+      return true;
+    }
+
+    //check for switch
     var prevPenguinType = this.penguin_type;
     if (keyIsDown(69) == 1)
       this.penguin_type = (this.penguin_type % 3) + 1;
@@ -99,38 +109,30 @@ class Player
     }
     if (prevPenguinType != this.penguin_type)
     {
-      this.currPlayerSwitchCooldown = this.playerSwitchCooldown;
+      sounds.poofSound.setVolume(volume*0.4);
+      sounds.poofSound.play();
+      this.currPlayerSwitchCooldown = this.playerSwitchCooldown - 1;
       if (this.penguin_type == 1)
       {
         this.gravityForce.y = this.gravity;
         this.jumpForce.y = this.normalJump;
         this.maxFallSpeed = this.maxNormalFallSpeed;
-        if(!sounds.poofSound.isPlaying()){
-          sounds.poofSound.setVolume(volume*0.2);
-          sounds.poofSound.play();
-        }
       }
       else if (this.penguin_type == 2)
       {
         this.gravityForce.y = this.gravity;
         this.jumpForce.y = this.normalJump;
         this.maxFallSpeed = this.maxNormalFallSpeed;
-        if(!sounds.poofSound.isPlaying()){
-          sounds.poofSound.setVolume(volume*0.2);
-          sounds.poofSound.play();
-        }
       }
       else
       {
         this.gravityForce.y = this.umbrellaGravity;
         this.jumpForce.y = this.umbrellaJump;
         this.maxFallSpeed = this.maxUmbrellaFallSpeed;
-        if(!sounds.poofSound.isPlaying()){
-          sounds.poofSound.setVolume(volume*0.2);
-          sounds.poofSound.play();
-        }
       }
+      return true;
     }
+    return false;
   }
 
   //different special moves for penguins executable with the space key
@@ -239,7 +241,7 @@ class Player
   }
 
   //make sure player does not collide with tiles
-  updatePlayerCollision()
+  updatePlayerCollision(volume)
   {
     var grounded = false;
     //check for collision with tiles
@@ -265,6 +267,8 @@ class Player
         currFrame = frameCount;
         player.lives--;
         player.score-=50;
+        sounds.loseLifeSound.setVolume(volume * .1);
+        sounds.loseLifeSound.play();
       }
     }
     for(var p = 0; p < platforms.length; p++)
@@ -287,7 +291,7 @@ class Player
     {
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, poptarts[p].position.x, poptarts[p].position.y, poptarts[p].size.x*.9, poptarts[p].size.y*.9);
       if (dir.mag() == 0) continue;
-      if(currFrame < (frameCount - 60) ) {
+      if (currFrame < (frameCount - 60) ) {
         currFrame = frameCount;
         poptarts[p].collisionSound.setVolume(poptarts[p].volume);
         player.lives--;
@@ -469,6 +473,11 @@ class Player
     {
       this.currAnimIndex = (this.currAnimIndex + 1) % this.anim.length;
     }
+    //opacity if damaged
+    if (currFrame > (frameCount - 60)) {
+      tint(255, 128);
+    }
     image(this.anim[this.currAnimIndex], this.position.x, this.position.y);
+    noTint();
   }
 }

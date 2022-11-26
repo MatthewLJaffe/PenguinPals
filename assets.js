@@ -58,7 +58,7 @@ class Images
     this.whiteSpikesLeft = loadImage("images/tiles/WhiteSpikesLeft.png");
     this.whiteSpikesRight = loadImage("images/tiles/WhiteSpikesRight.png");
 
-    for (let i = 1; i <= 4; i++)
+    for (let i = 1; i <= 7; i++)
     {
         this.smokeCloud.push(loadImage("images/SmokeCloud" + i + ".png"));
     }
@@ -66,9 +66,13 @@ class Images
     this.background = loadImage("images/Background.png");
     this.foreground = loadImage("images/Foreground.png");
     this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
+    this.springImages = [];
     this.iceCornerImages = [];
     for (let i = 1; i <= 4; i++)
+    {
       this.iceCornerImages.push(loadImage("images/tiles/IceCorner" + i + ".png"));
+      this.springImages.push(loadImage("images/tiles/Spring" + i + ".png"));
+    }
     this.iceFloorImages = [];
     for (let i = 0; i < 4; i++)
       this.iceFloorImages[i] = loadImage("images/tiles/IceFloor" + ( i + 1) + ".png");
@@ -87,9 +91,12 @@ class Images
     this.iceWallFloorDownImage = loadImage("images/tiles/IceWallFloor2.png");
     this.snowParticleImages = [];
     this.platformImages = [];
+    this.penguinPortraits = [];
+    this.penguinUI = loadImage("images/PenguinUI.png");
     this.platformImages.push(loadImage("images/tiles/Platform.png"));
     for (let i = 1; i <= 3; i++)
     {
+      this.penguinPortraits.push(loadImage("images/characters/PenguinPortrait" + i + ".png"));
       this.snowParticleImages.push(loadImage("images/SnowParticles" + i + ".png"));
       this.platformImages.push(loadImage("images/tiles/Platform" + i + ".png"));
     }

@@ -47,7 +47,7 @@ var tileMap = [
   "                    ",
   "111                 ",
   "111                 ",
-  "      !             ",
+  "                    ",
   "      11            ",
   "      11            ",
   "                    ",
@@ -97,7 +97,7 @@ var tileMap = [
   "                    ",
   "TYYU                ",
   "                    ",
-  "P                   ",
+  "P        b          ",
   "11111  11111        ",
   "11111  1111111      ",
   "11111  111111111    ",
@@ -121,6 +121,7 @@ var collisionObjs = [];
 var poptarts = [];
 var snowballs = [];
 var fishes = [];
+var springs = [];
 var goldFish;
 
 //entry point to game loop
@@ -130,7 +131,7 @@ class gameScreen //4
   constructor()
   {
     this.snowDrops = [];
-    for(let i = 0; i < 400; i++){
+    for(let i = 0; i < 100; i++){
       this.snowDrops.push(new snowObj(2, 5));
     }
     //parallax effect with background
@@ -245,6 +246,9 @@ class gameScreen //4
           case 'd':
             collisionObjs.push(new CollisionObj(x*40+10, yOffset +  y*40+20, 20, 30, images.whiteSpikesRight, 'd', true, createVector(10, 0)));
             break;
+          case 'b':
+            springs.push(new Spring(x*40+20, yOffset + y*40+20, 0, 15, 20, 10, 'b'));
+            break;
         }
       }
     }
@@ -258,18 +262,23 @@ class gameScreen //4
       image(images.background, 400, constrain(-this.backgroundScrollSpeed*(player.position.y - 300), 0, 600));
       image(images.foreground, 400, constrain(-this.foregroundScrollSpeed*(player.position.y - 300), 0, 600));
       
+
+
+      push();
+      //translate to center y around player
       //snow falling
+      translate(0, height/2 - player.position.y+100);
       for(let i = 0; i < this.snowDrops.length; i++){
         this.snowDrops[i].move();
         this.snowDrops[i].drawSnow();
       }
-
-      push();
-      //translate to center y around player
-      translate(0, height/2 - player.position.y+100);
       fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
+      for (let i = 0; i < springs.length; i++)
+      {
+        springs[i].updateSpring();
+      }
       //adjust volume
       player.updatePlayer(me.volume*0.1);
       //update poptarts
@@ -295,6 +304,7 @@ class gameScreen //4
       {
         platforms[i].drawPlatform();
       }
+
       goldFish.updateFish();
       pop();
       this.lifeDisplay();
@@ -316,6 +326,25 @@ class gameScreen //4
         me.gameOver = true;
         me.win = true;
         me.currentState = 5;
+      }
+      image(images.penguinUI, width-70, height-40);
+      if (player.penguin_type == 1)
+      {
+        image(images.penguinPortraits[0], width - 70, height - 20);
+        image(images.penguinPortraits[2], width - 70 - 46, height - 20);
+        image(images.penguinPortraits[1], width - 70 + 46, height - 20);
+      }
+      else if (player.penguin_type == 2)
+      {
+        image(images.penguinPortraits[1], width - 70, height - 20);
+        image(images.penguinPortraits[0], width - 70 - 46, height - 20);
+        image(images.penguinPortraits[2], width - 70 + 46, height - 20);
+      }
+      else
+      {
+        image(images.penguinPortraits[2], width - 70, height - 20);
+        image(images.penguinPortraits[1], width - 70 - 46, height - 20);
+        image(images.penguinPortraits[0], width - 70 + 46, height - 20);
       }
   }
   
@@ -409,8 +438,6 @@ class gameScreen //4
       me.highScores = this.newHighScores;
     }
   }
-
-
 }
 
 var keyArray = [];
@@ -634,5 +661,54 @@ class Platform
   drawPlatform()
   {
     image(this.img, this.position.x, this.position.y+15);
+  }
+}
+
+class Spring
+{
+  constructor(x, y, triggerOffsetX, triggerOffsetY, w, h, char)
+  {
+    this.position = createVector(x, y);
+    this.size = createVector(w, h);
+    this.triggerPos = createVector(x + triggerOffsetX, y + triggerOffsetY);
+    blockingTiles[char] = true;
+    this.stepRate = 6;
+    this.currAnimIdx = 0;
+    this.currFrame = 0;
+    this.sprung = false;
+  }
+
+  updateSpring()
+  {
+    //update spring animation
+    if (this.sprung)
+    {
+      this.currFrame++;
+      if (this.currFrame % this.stepRate == 0)
+      {
+        this.currAnimIdx++;
+        if (this.currAnimIdx == images.springImages.length) {
+          this.sprung = false;
+          this.currFrame = 0; 
+          this.currAnimIdx = 0;
+        }
+      }
+    }
+
+    //check for spring collision
+    else
+    {
+      if (detectCollision(this.triggerPos.x, this.triggerPos.y, this.size.x, this.size.y, 
+        player.position.x, player.position.y, player.size.x, player.size.y).mag() > .1)
+      {
+        this.sprung = true;
+        //this.currAnimIdx = 1;
+        player.velocity.y = 0;
+        player.velocity.add(p5.Vector.mult(player.jumpForce, 1.5));
+        player.jump = 1;
+      }
+    }
+    image(images.springImages[this.currAnimIdx], this.position.x, this.position.y);
+    fill(255,0,0);
   }
 }
