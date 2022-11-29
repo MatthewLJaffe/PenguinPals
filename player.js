@@ -267,8 +267,10 @@ class Player
         currFrame = frameCount;
         player.lives--;
         player.score-=50;
-        sounds.loseLifeSound.setVolume(volume * .1);
-        sounds.loseLifeSound.play();
+        if(!sounds.loseLifeSound.isPlaying() && player.lives > 0){
+          sounds.loseLifeSound.setVolume(volume * .1);
+          sounds.loseLifeSound.play();
+        }
       }
     }
     for(var p = 0; p < platforms.length; p++)

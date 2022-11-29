@@ -5,6 +5,7 @@ var player;
 //ASDFG ice wall
 //ZXCV Ice wall corner
 //wasd spikes
+//I icicle
 var tileMap = [
   " N B                ",
   "                    ",
@@ -101,7 +102,7 @@ var tileMap = [
   "11111  11111        ",
   "11111  1111111      ",
   "11111  111111111    ",
-  "                    ",
+  "IIIII               ",
   "                  11",
   "                  11",
   "01111111111111111112",
@@ -123,6 +124,7 @@ var snowballs = [];
 var fishes = [];
 var springs = [];
 var goldFish;
+var icicles = [];
 
 //entry point to game loop
 //contains much of game state 
@@ -249,6 +251,8 @@ class gameScreen //4
           case 'b':
             springs.push(new Spring(x*40+20, yOffset + y*40+20, 0, 15, 20, 10, 'b'));
             break;
+          case 'I':
+            icicles.push(new FallingIcicle(x*40 + 20, yOffset + y*40+15));
         }
       }
     }
@@ -303,6 +307,10 @@ class gameScreen //4
       for (let i = 0; i < platforms.length; i++)
       {
         platforms[i].drawPlatform();
+      }
+
+      for(var i = 0; i < icicles.length; i++){
+        icicles[i].updateIcicle();
       }
 
       goldFish.updateFish();
@@ -395,6 +403,14 @@ class gameScreen //4
       poptarts[i].position = poptarts[i].initialPosition;
       poptarts[i].enabled = true;
       poptarts[i].currState = "Idle";
+    }
+
+    for(var i = 0; i < icicles.length; i++){
+      icicles[i].position = icicles[i].initialPosition;
+      icicles[i].velocity = new p5.Vector(0,0);
+      icicles[i].acceleration = new p5.Vector(0,0);
+
+      icicles[i].show = true;
     }
 
     player.lives = 3;
@@ -534,6 +550,59 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
     }
   }
   return createVector(0, 0);
+}
+
+class FallingIcicle{
+  constructor(x, y){
+    this.position = new p5.Vector(x, y);
+    this.initialPosition = new p5.Vector(x, y);
+
+    //forces
+    this.velocity = new p5.Vector(0, 0);
+    this.acceleration = new p5.Vector(0 , 0);
+    this.gravity = .15;
+    this.gravityForce = new p5.Vector(0, this.gravity);
+
+    this.show = true;
+
+    this.timer = 60;
+    this.currentFrame = 0;
+  }
+
+  updateIcicle(){
+    if(this.show){
+      image(images.fallingIcicleImage, this.position.x, this.position.y, 30, 30);
+    }
+
+    //if player is under the icicle, after a second, the icicle falls
+    if(dist(this.position.x, this.position.y, player.position.x, player.position.y) < 100 && (player.position.y) > (this.position.y ) && abs(player.position.x - this.position.x) < 12 && this.show == true){
+      this.acceleration = this.gravityForce;
+    }
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    //if it hits player, -1 life
+    if (this.currentFrame < (frameCount - 10) ) {
+      this.currentFrame = frameCount;
+      if(abs(this.position.x - player.position.x) < 30 && abs(this.position.y - player.position.y) < 40 && this.show == true){
+        player.lives--;
+        player.score-=50;
+        poptarts[0].collisionSound.setVolume(poptarts[0].volume);
+        if(!poptarts[0].collisionSound.isPlaying() && player.lives > 0)
+          poptarts[0].collisionSound.play();
+        this.show = false;
+      }
+    }
+    //if it hits a platform, it disappears - FIX
+    for(var p = 0; p < platforms.length; p++)
+    {
+      if (dist(this.position.x, this.position.y, platforms[p].position.x, platforms[p].position.y) < 100)
+      {
+        this.velocity = new p5.Vector(0 , 0);
+        this.acceleration = new p5.Vector(0 , 0);
+        this.show = false;
+      }
+    }
+  }
 }
 
 //projectile for player spawned with special move
