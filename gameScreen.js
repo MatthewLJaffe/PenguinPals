@@ -549,23 +549,28 @@ class Snowball
     this.speed = 5;
     this.liveTime = 60;
     this.currTime = 0;
+    this.animStepRate = 6;
+    this.destroyAnimIndex = 1;
+    this.currFrame = 0;
+    this.destroying = false;
   }
 
   //move snowball and check for collision with enemies
   updateSnowBall()
   {
-    if (this.currTime > this.liveTime)
+    var animImages = this.dir > 0 ? images.snowBallRightImages : images.snowBallLeftImages;
+    if (this.destroying)
     {
-      this.destroySnowball();
+      this.destroySnowball(animImages);
       return;
     }
     this.position.x += this.speed * this.dir;
-    image(images.snowBall, this.position.x, this.position.y);
+    image(animImages[0], this.position.x, this.position.y);
     for (let i = 0; i < collisionObjs.length; i++)
     {
       if (detectCollision(this.position.x, this.position.y, 20, 20, collisionObjs[i].position.x, collisionObjs[i].position.y, collisionObjs[i].size.x, collisionObjs[i].size.y).mag() > 0) 
       {
-        this.destroySnowball();
+        this.destroying = true;
       }
     }
     for (let i = 0; i < poptarts.length; i ++)
@@ -577,21 +582,34 @@ class Snowball
           sounds.NPCDeathSound.setVolume(player.volume);
           sounds.NPCDeathSound.play();
         }
-        this.destroySnowball();
+        this.destroying = true;
         return;
       }
     }
     this.currTime++
+    if (this.currTime > this.liveTime)
+      this.destroying = true;
+
   }
 
   //remove snowball from array so it is no longer updated
-  destroySnowball()
+  destroySnowball(animImages)
   {
-    for (let i = 0; i < snowballs.length; i++)
+    this.currFrame++;
+    if (this.currFrame % this.animStepRate == 0)
+      this.destroyAnimIndex++;
+    //animation complete destroy snowball
+    if (this.destroyAnimIndex == animImages.length)
     {
-      if (snowballs[i] == this)
-        snowballs.splice(i, 1);
+      for (let i = 0; i < snowballs.length; i++)
+      {
+        if (snowballs[i] == this)
+          snowballs.splice(i, 1);
+      }
     }
+    //play snowball animation
+    else
+      image(animImages[this.destroyAnimIndex], this.position.x, this.position.y);
   }
 }
 

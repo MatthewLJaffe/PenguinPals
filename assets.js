@@ -31,7 +31,6 @@ class Images
     this.emptyHeart = loadImage("images/Heart2.png");
 
     this.fish = loadImage("images/Fish.png");
-    this.snowBall = loadImage("images/Snowball.png");
 
     this.topIce = loadImage("images/IceBlocks1.png");
     this.bottomIce = loadImage("images/IceBlocks2.png");
@@ -68,10 +67,15 @@ class Images
     this.iceCenterImage = loadImage("images/tiles/IceCenter.png");
     this.springImages = [];
     this.iceCornerImages = [];
+    this.snowBallRightImages = [];
+    this.snowBallLeftImages = []
+    this.snowBall = loadImage("images/Snowball.png");
     for (let i = 1; i <= 4; i++)
     {
       this.iceCornerImages.push(loadImage("images/tiles/IceCorner" + i + ".png"));
       this.springImages.push(loadImage("images/tiles/Spring" + i + ".png"));
+      this.snowBallRightImages.push(loadImage("images/Snowball" + i + ".png"));
+      this.snowBallLeftImages.push(loadImage("images/SnowballLeft" + i + ".png"));
     }
     this.iceFloorImages = [];
     for (let i = 0; i < 4; i++)
