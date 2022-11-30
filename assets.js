@@ -104,6 +104,8 @@ class Images
       this.snowParticleImages.push(loadImage("images/SnowParticles" + i + ".png"));
       this.platformImages.push(loadImage("images/tiles/Platform" + i + ".png"));
     }
+
+    this.fallingIcicleImage = loadImage("images/FallingIcicles.png");
   }
 }
 

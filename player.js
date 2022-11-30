@@ -112,13 +112,7 @@ class Player
       sounds.poofSound.setVolume(volume*0.4);
       sounds.poofSound.play();
       this.currPlayerSwitchCooldown = this.playerSwitchCooldown - 1;
-      if (this.penguin_type == 1)
-      {
-        this.gravityForce.y = this.gravity;
-        this.jumpForce.y = this.normalJump;
-        this.maxFallSpeed = this.maxNormalFallSpeed;
-      }
-      else if (this.penguin_type == 2)
+      if (this.penguin_type == (1 || 2))
       {
         this.gravityForce.y = this.gravity;
         this.jumpForce.y = this.normalJump;
@@ -267,8 +261,10 @@ class Player
         currFrame = frameCount;
         player.lives--;
         player.score-=50;
-        sounds.loseLifeSound.setVolume(volume * .1);
-        sounds.loseLifeSound.play();
+        if(!sounds.loseLifeSound.isPlaying() && player.lives > 0){
+          sounds.loseLifeSound.setVolume(volume * .1);
+          sounds.loseLifeSound.play();
+        }
       }
     }
     for(var p = 0; p < platforms.length; p++)
