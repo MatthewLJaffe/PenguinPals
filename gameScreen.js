@@ -283,6 +283,9 @@ class gameScreen //4
       {
         springs[i].updateSpring();
       }
+      for(var i = 0; i < icicles.length; i++){
+        icicles[i].updateIcicle();
+      }
       //adjust volume
       player.updatePlayer(me.volume*0.1);
       //update poptarts
@@ -304,13 +307,10 @@ class gameScreen //4
       {
         fishes[i].updateFish();
       }
+
       for (let i = 0; i < platforms.length; i++)
       {
         platforms[i].drawPlatform();
-      }
-
-      for(var i = 0; i < icicles.length; i++){
-        icicles[i].updateIcicle();
       }
 
       goldFish.updateFish();
@@ -413,12 +413,18 @@ class gameScreen //4
       icicles[i].show = true;
     }
 
+    //resetting player values to their defaults, which is the black penguin
     player.lives = 3;
     player.score = 0;
     player.position.x = 400;
     player.position.y = 289;
+    player.velocity = new p5.Vector(0, 0);
+    player.acceleration = new p5.Vector(0, 0);
     player.jump = 0;
     player.penguin_type = 1;
+    player.gravityForce.y = player.gravity;
+    player.jumpForce.y = player.normalJump;
+    player.maxFallSpeed = player.maxNormalFallSpeed;
 
     //resetting game variables
     me.gameOver = false;
@@ -562,6 +568,7 @@ class FallingIcicle{
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = .15;
     this.gravityForce = new p5.Vector(0, this.gravity);
+    this.maxNormalFallSpeed = 5;
 
     this.show = true;
 
@@ -570,7 +577,7 @@ class FallingIcicle{
   }
 
   updateIcicle(){
-    if(this.show){
+    if(this.show && this.position.y - this.initialPosition.y < height/2){
       image(images.fallingIcicleImage, this.position.x, this.position.y, 30, 30);
     }
 
@@ -578,7 +585,9 @@ class FallingIcicle{
     if(dist(this.position.x, this.position.y, player.position.x, player.position.y) < 100 && (player.position.y) > (this.position.y ) && abs(player.position.x - this.position.x) < 12 && this.show == true){
       this.acceleration = this.gravityForce;
     }
-    this.velocity.add(this.acceleration);
+    if(this.velocity.mag() < this.maxNormalFallSpeed){
+      this.velocity.add(this.acceleration);
+    }
     this.position.add(this.velocity);
     //if it hits player, -1 life
     if (this.currentFrame < (frameCount - 10) ) {
