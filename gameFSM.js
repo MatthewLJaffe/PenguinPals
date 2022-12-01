@@ -2,14 +2,15 @@
 //particle system that softly rains down snow
 class snowObj
 {
+  //snow has a lower limit and upper limit to the size
     constructor(lower_limit, upper_limit)
     {
       this.lower_limit = lower_limit;
       this.upper_limit = upper_limit;
       this.size = random(this.lower_limit, this.upper_limit);
-      this.img = images.snowParticleImages[Math.floor(Math.random()*3)];
       this.rate = random(this.lower_limit * 0.1,  this.upper_limit * 0.1);
       this.x = random(this.size, 800 + this.size)
+      //handles the offset of when the player is moving so the snow movement looks cleaner
       let playerOffset = 0;
       if (player)
         playerOffset =  height/2 - player.position.y+100;
@@ -22,7 +23,7 @@ class snowObj
       ellipse(this.x, this.y, this.size, this.size);
       //image(this.img, this.x, this.y);
     }
-    //update individual paritcles
+    //update individual particles based on player offset and movement
     move()
     {
       let playerOffset = 0;
@@ -190,6 +191,7 @@ class snowObj
       this.stepRate = stepRate;
     }
 
+    //updates the animation based on a step rate
     update()
     {
       this.pos.x += this.speed;
