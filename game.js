@@ -2,8 +2,9 @@ class gameObj
 {
     constructor()
     {
-      
+      //all of the animations and images used within the game
       this.animations = new Images();
+      //game states
       this.state = [new introScreen(this.animations), new InstructionsScreen(this.animations), new volumeScreen(), new highscoreScreen(), new gameScreen(), new gameoverScreen()];
       this.currentState = 0;
       this.gameOver = false; //true if the game is over
@@ -19,7 +20,7 @@ class gameObj
       this.highScores = [0, 0, 0, 0, 0];    //default high scores
 
       //for volume
-      this.volume = 5;  //starts at 5
+      this.volume = 5;  //starts at 5, which is medium volume
     }
 
   }

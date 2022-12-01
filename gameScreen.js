@@ -465,6 +465,8 @@ class gameScreen //4
 
       goldFish.updateFish();
       pop();
+      
+      //game displays in upper left and right hand corners
       this.lifeDisplay();
       this.scoreDisplay();
 
@@ -473,6 +475,7 @@ class gameScreen //4
         me.lose = true;
         me.currentState = 5;
 
+        //disable poptarts as soon as game is over to prevent post game over deaths
         for (let i = 0; i < poptarts.length; i++)
         {
           poptarts[i].enabled = false;
@@ -485,6 +488,8 @@ class gameScreen //4
         me.win = true;
         me.currentState = 5;
       }
+      //penguin portrait displays at the bottom right hand corner to show the current penguin
+      //and what penguin the Q and E keys will change it to
       image(images.penguinUI, width-70, height-40);
       if (player.penguin_type == 1)
       {
@@ -708,6 +713,7 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
   return createVector(0, 0);
 }
 
+//icicles that fall when the player moves under it
 class FallingIcicle{
   constructor(x, y){
     this.position = new p5.Vector(x, y);
@@ -741,11 +747,12 @@ class FallingIcicle{
       this.velocity.add(this.acceleration);
     }
     this.position.add(this.velocity);
+
     //if it hits player, -1 life
     if (this.currentFrame < (frameCount - 10) ) {
-      this.currentFrame = frameCount;
-      if(abs(this.position.x - player.position.x) < 30 && abs(this.position.y - player.position.y) < 40 && this.show == true){
+      if(abs(this.position.x - player.position.x) < (15) && abs(this.position.y - player.position.y) < 30 && this.show == true){
         if(player.umbrellaUp == false){
+          this.currentFrame = frameCount;
           player.lives--;
           player.score-=50;
           poptarts[0].collisionSound.setVolume(poptarts[0].volume);
@@ -799,7 +806,7 @@ class Snowball
     {
       if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0 && poptarts[i].enabled)
       {
-        //poptarts.splice(i, 1);
+        player.score += 100;
         poptarts[i].enabled = false;
         if(!sounds.NPCDeathSound.isPlaying()){
           sounds.NPCDeathSound.setVolume(player.volume);
@@ -905,6 +912,7 @@ class Platform
   }
 }
 
+//launches player upward
 class Spring
 {
   constructor(x, y, triggerOffsetX, triggerOffsetY, w, h, char)
