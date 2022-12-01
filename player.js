@@ -293,7 +293,7 @@ class Player
     {
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, poptarts[p].position.x, poptarts[p].position.y, poptarts[p].size.x*.9, poptarts[p].size.y*.9);
       if (dir.mag() == 0) continue;
-      if (currFrame < (frameCount - 60) ) {
+      if (currFrame < (frameCount - 60) && poptarts[p].enabled) {
         currFrame = frameCount;
         poptarts[p].collisionSound.setVolume(poptarts[p].volume);
         player.lives--;

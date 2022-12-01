@@ -778,7 +778,8 @@ class Snowball
     {
       if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0)
       {
-        poptarts.splice(i, 1);
+        //poptarts.splice(i, 1);
+        poptarts[i].enabled = false;
         if(!sounds.NPCDeathSound.isPlaying()){
           sounds.NPCDeathSound.setVolume(player.volume);
           sounds.NPCDeathSound.play();
