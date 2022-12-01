@@ -707,6 +707,7 @@ class FallingIcicle{
   }
 
   updateIcicle(){
+    //only draws icicles falling for about 300 pixels
     if(this.show && this.position.y - this.initialPosition.y < height/2){
       image(images.fallingIcicleImage, this.position.x, this.position.y, 30, 30);
     }
@@ -723,21 +724,13 @@ class FallingIcicle{
     if (this.currentFrame < (frameCount - 10) ) {
       this.currentFrame = frameCount;
       if(abs(this.position.x - player.position.x) < 30 && abs(this.position.y - player.position.y) < 40 && this.show == true){
-        player.lives--;
-        player.score-=50;
-        poptarts[0].collisionSound.setVolume(poptarts[0].volume);
-        if(!poptarts[0].collisionSound.isPlaying() && player.lives > 0)
-          poptarts[0].collisionSound.play();
-        this.show = false;
-      }
-    }
-    //if it hits a platform, it disappears - FIX
-    for(var p = 0; p < platforms.length; p++)
-    {
-      if (dist(this.position.x, this.position.y, platforms[p].position.x, platforms[p].position.y) < 100)
-      {
-        this.velocity = new p5.Vector(0 , 0);
-        this.acceleration = new p5.Vector(0 , 0);
+        if(player.umbrellaUp == false){
+          player.lives--;
+          player.score-=50;
+          poptarts[0].collisionSound.setVolume(poptarts[0].volume);
+          if(!poptarts[0].collisionSound.isPlaying() && player.lives > 0)
+            poptarts[0].collisionSound.play();
+        }
         this.show = false;
       }
     }

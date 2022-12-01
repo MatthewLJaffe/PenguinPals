@@ -54,6 +54,7 @@ class Player
     this.moving = false;
     this.stepRate = 6;
     this.currAnimIndex = 0
+    this.umbrellaUp = false;
   }
 
   updatePlayer(volume)
@@ -197,9 +198,14 @@ class Player
         this.umbreallPos.set(-20, 0);
         this.umbreallaSize.set(30, 64);
       }
-      //umbrella up
+      //umbrella is not up
+      else if(!keyArray[32] && !keyArray[68] && !keyArray[65]){
+        this.umbrellaUp = false;
+      }
+      //umbrella is up
       else
       {
+        this.umbrellaUp = true;
         this.umbreallPos.set(0, -20);
         this.umbreallaSize.set(50, 30);
       }
