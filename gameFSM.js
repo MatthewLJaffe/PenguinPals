@@ -444,16 +444,56 @@ class snowObj
   class gameoverScreen //5
   {  
     constructor(){
+      this.snowDrops = [];
+
+      //add snow
+      for(let i = 0; i < 400; i++){
+        this.snowDrops.push(new snowObj(4, 8));
+      }
       this.played = false;
+      this.walkingObjs = [];
+      this.poptartObjs = [];
+
+      //add walking animations
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2, 500), createVector(64, 64), 1, images.bluePenguinWalkRight, 6));
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2 - 50, 500), createVector(64, 64), 1, images.redPenguinWalkRight, 6));
+      this.walkingObjs.push(new WalkingAnimation(
+        createVector(width/2 - 100, 500), createVector(64, 64), 1, images.blackPenguinWalkRight, 6));
+      
+      this.poptartObjs.push(new WalkingAnimation(
+        createVector(width/2 - 300, 500+5), createVector(40, 40), 1, images.poptartWalkRight, 6));
     }
     execute(me){
       background(220, 250, 250);
       fill(135, 206, 250)
-      textSize(48);
       textAlign(CENTER);
+      textSize(24);
+      text("click enter to restart", width/2, height - 100);
+      textSize(48);
+
+      //falling snow
+      for(let i = 0; i < this.snowDrops.length; i++){
+        this.snowDrops[i].move();
+        this.snowDrops[i].drawSnow();
+      }
+
+      fill(135, 206, 250);
+
+      image(images.topIce, 20, 580, 40, 40);
+      for (let x = 20; x < 820; x += 40)
+      {
+        image(images.topIce, x, 540, 40, 40);
+        image(images.bottomIce, x, 580, 40, 40);
+      }
+    
 
       //show correct ui based on win / lose conditions
       if(me.lose == true){
+        //if the player loses, a poptart animation plays
+        this.poptartObjs[0].update();
+
         text("You lose!", width/2, height/3);
         if(!sounds.gameLoseSound.isPlaying() && this.played == false){
           sounds.gameLoseSound.setVolume(me.volume*0.01);
@@ -462,6 +502,11 @@ class snowObj
         }
       }
       if(me.win == true){
+        //if the player wins, there is an animation for each penguin playing
+        for (let i = 0; i < this.walkingObjs.length; i++)
+        {
+          this.walkingObjs[i].update();
+        }
         text("You win!", width/2, height/3);
         if(!sounds.gameWinSound.isPlaying() && this.played == false){
           sounds.gameWinSound.setVolume(me.volume*0.01);
@@ -469,10 +514,11 @@ class snowObj
           sounds.gameWinSound.play();
         }
       }
-      text("Play again?", width/2, height/3 + 80);
-      textSize(24);
-      text("click enter to restart", width/2, height - 100);
 
+      text("Play again?", width/2, height/3 + 80);
+
+      //if the player hits enter, then the game resets and returns the player to the instruction screen to allow
+      //for volume adjustments and to check the high scores
       if(currFrame < (frameCount - 12)){  //return to instructions screen
         currFrame = frameCount;
         if(keyArray[13] == 1) {

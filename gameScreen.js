@@ -33,7 +33,7 @@ var tileMap = [
   "TYYU             3  ",
   "                 3  ",
   "                 3  ",
-  "QETYYU012    !   3bB",
+  "QETYYU012        3bB",
   "      678TYYYYYYY677",
   "                    ",
   "                    ",
@@ -722,9 +722,9 @@ class FallingIcicle{
     this.position.add(this.velocity);
     //if it hits player, -1 life
     if (this.currentFrame < (frameCount - 10) ) {
-      this.currentFrame = frameCount;
-      if(abs(this.position.x - player.position.x) < 30 && abs(this.position.y - player.position.y) < 40 && this.show == true){
+      if(abs(this.position.x - player.position.x) < (15) && abs(this.position.y - player.position.y) < 30 && this.show == true){
         if(player.umbrellaUp == false){
+          this.currentFrame = frameCount;
           player.lives--;
           player.score-=50;
           poptarts[0].collisionSound.setVolume(poptarts[0].volume);
@@ -776,9 +776,9 @@ class Snowball
     }
     for (let i = 0; i < poptarts.length; i ++)
     {
-      if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0)
+      if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0 && poptarts[i].enabled)
       {
-        //poptarts.splice(i, 1);
+        player.score += 100;
         poptarts[i].enabled = false;
         if(!sounds.NPCDeathSound.isPlaying()){
           sounds.NPCDeathSound.setVolume(player.volume);
