@@ -12,7 +12,7 @@ var tileMap = [
   "111111111111111111TU",
   "   IIIIIIIIIIIIIII  ",
   "                    ",
-  "                    ",
+  "                   !",
   "                  TU",
   "                    ",
   "  www  www  www   B ",
@@ -735,7 +735,7 @@ class FallingIcicle{
 
   updateIcicle(){
     //only draws icicles falling for about 300 pixels
-    if(this.show && this.position.y - this.initialPosition.y < height/2){
+    if(this.show && this.position.y - this.initialPosition.y < 3*height/4){
       image(images.fallingIcicleImage, this.position.x, this.position.y, 30, 30);
     }
 
