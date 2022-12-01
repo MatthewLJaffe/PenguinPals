@@ -79,12 +79,17 @@ class Player
       this.currSpecialMoveCooldown--;
       this.moving = true;
     }
+    //handle umbrella seperately
+    if (keyArray[32] == 1 && this.penguin_type == 3)
+      this.umbrellaUp = true;
+    else
+      this.umbrellaUp = false;
     this.volume = volume;
     this.walkingSound.setVolume(volume);
     this.updatePlayerPosition();
     this.updatePlayerCollision(volume);
     this.updatePlayerAnim();
-  }d
+  }
 
   handlePlayerSwitch(volume)
   {    
@@ -198,14 +203,9 @@ class Player
         this.umbreallPos.set(-20, 0);
         this.umbreallaSize.set(30, 64);
       }
-      //umbrella is not up
-      else if(!keyArray[32] && !keyArray[68] && !keyArray[65]){
-        this.umbrellaUp = false;
-      }
       //umbrella is up
       else
       {
-        this.umbrellaUp = true;
         this.umbreallPos.set(0, -20);
         this.umbreallaSize.set(50, 30);
       }
