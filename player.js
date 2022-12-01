@@ -373,7 +373,7 @@ class Player
   }
 
   //loop through current player animation
-  //TODO handle all animation logic here
+  //all animation logic is handled here
   updatePlayerAnim()
   {
     let prevAnim = this.anim;

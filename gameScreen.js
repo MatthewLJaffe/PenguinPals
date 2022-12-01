@@ -12,7 +12,7 @@ var tileMap = [
   "111111111111111111TU",
   "   IIIIIIIIIIIIIII  ",
   "                    ",
-  "                   !",
+  "                    ",
   "                  TU",
   "                    ",
   "  www  www  www   B ",
@@ -289,8 +289,8 @@ class gameScreen //4
       this.snowDrops.push(new snowObj(2, 5));
     }
     //parallax effect with background
-    this.backgroundScrollSpeed = .25;
-    this.foregroundScrollSpeed = .5;
+    this.backgroundScrollSpeed = .12;
+    this.foregroundScrollSpeed = .25;
     player = new Player(400, 289, 35, 64, 1);  //x, y, size, penguin_type
     //correctly position things dynamically based off height of tilemap
     var yOffset = (tileMap.length - 15) * -40;
@@ -749,7 +749,7 @@ class FallingIcicle{
     this.position.add(this.velocity);
 
     //if it hits player, -1 life
-    if (this.currentFrame < (frameCount - 10) ) {
+    if (this.currentFrame < (frameCount - 60) ) {
       if(abs(this.position.x - player.position.x) < (15) && abs(this.position.y - player.position.y) < 30 && this.show == true){
         if(player.umbrellaUp == false){
           this.currentFrame = frameCount;
