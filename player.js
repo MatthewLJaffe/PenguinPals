@@ -112,7 +112,7 @@ class Player
       sounds.poofSound.setVolume(volume*0.4);
       sounds.poofSound.play();
       this.currPlayerSwitchCooldown = this.playerSwitchCooldown - 1;
-      if (this.penguin_type == (1 || 2))
+      if (this.penguin_type == 1 || this.penguin_type == 2)
       {
         this.gravityForce.y = this.gravity;
         this.jumpForce.y = this.normalJump;
