@@ -42,13 +42,14 @@ class Images
       this.redPenguinWalkRight.push(loadImage("images/characters/RedPenguinWalkRight" + i + ".png") );
       this.redPenguinWalkLeft.push(loadImage("images/characters/RedPenguinWalkLeft" + i + ".png") );
       this.blackPenguinWalkRight.push(loadImage("images/characters/BlackPenguin" + i + ".png"));
-      this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguin" + i + ".png"));
       this.blackPenguinWalkLeft.push(loadImage("images/characters/BlackPenguinWalkLeft" + i + ".png"));
       this.bluePenguinWalkLeft.push(loadImage("images/characters/BluePenguinWalkLeft" + i + ".png"));
     }
 
+
     for (let i = 1; i <= 5; i ++)
     {
+        this.bluePenguinWalkRight.push(loadImage("images/BluePenguin" + i + ".png"));
         this.poptartWalkRight.push(loadImage("images/characters/PoptartWalkRight" + i + ".png"));
         this.poptartWalkLeft.push(loadImage("images/characters/PoptartWalkLeft" + i + ".png"));
     }
