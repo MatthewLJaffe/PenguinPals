@@ -8,7 +8,7 @@ var player;
 //I icicle
 var tileMap = [
   "                    ",
-  "B                   ",
+  "N                   ",
   "111111111111111111TU",
   "   IIIIIIIIIIIIIII  ",
   "                    ",
@@ -797,7 +797,7 @@ class Snowball
     }
     for (let i = 0; i < poptarts.length; i ++)
     {
-      if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0)
+      if (detectCollision(this.position.x, this.position.y, 20, 20, poptarts[i].position.x, poptarts[i].position.y, poptarts[i].size.x, poptarts[i].size.y).mag() > 0 && poptarts[i].enabled)
       {
         //poptarts.splice(i, 1);
         poptarts[i].enabled = false;
@@ -947,6 +947,7 @@ class Spring
         player.velocity.y = 0;
         player.velocity.add(p5.Vector.mult(player.jumpForce, 2));
         player.jump = 1;
+        player.usedDash = false;
       }
     }
     image(images.springImages[this.currAnimIdx], this.position.x, this.position.y);

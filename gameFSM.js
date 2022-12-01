@@ -95,11 +95,10 @@ class snowObj
         this.snowDrops[i].move();
         this.snowDrops[i].drawSnow();
       }
-      image(images.topIce, 20, 580, 40, 40);
       for (let x = 20; x < 820; x += 40)
       {
-        image(images.topIce, x, 540, 40, 40);
-        image(images.bottomIce, x, 580, 40, 40);
+        image(images.iceFloorImages[0], x, 540, 40, 40);
+        image(images.iceCenterImage, x, 580, 40, 40);
       }
       //make penguins walk
       for (let i = 0; i < this.walkingObjs.length; i++)
@@ -308,7 +307,7 @@ class snowObj
       let specialFrame = frameCount % 96;
       if (specialFrame < 36)
       {
-        image(images.blackPenguinSpecialRight[Math.floor(specialFrame/6)], 435, 315, 40, 40);
+        image(images.blackPenguinSpecialRight[Math.floor(specialFrame/6)], 435, 315, 32, 32);
       }
       if (specialFrame > 24)
       {
@@ -316,7 +315,7 @@ class snowObj
       }
       if (specialFrame >= 36)
       {
-        image(images.blackPenguinSpecialRight[5], 435, 315, 40, 40);
+        image(images.blackPenguinSpecialRight[5], 435, 315, 32, 32);
       }
 
       image(images.fish, 425, 220);
