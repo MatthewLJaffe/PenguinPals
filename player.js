@@ -25,6 +25,7 @@ class Player
     this.maxFallSpeed = this.maxNormalFallSpeed;
     this.umbreallaSize = createVector(0, 0);
     this.umbreallPos = createVector(0, 0);
+    this.usedDash = false;
     this.maxDashSpeed = 8;
     this.dashSpeedTimeGraph = [
       {'time': 0, 'speed': 0 },
@@ -58,7 +59,8 @@ class Player
   updatePlayer(volume)
   {
     if (this.handlePlayerSwitch(volume)) return;
-    if (keyArray[32] == 1 && this.currSpecialMoveCooldown <= 0)
+    if (keyArray[32] == 1 && this.currSpecialMoveCooldown <= 0 
+      && (!this.usedDash || this.penguin_type != 2))
     {
       if (this.penguin_type == 1)
         this.currSpecialMoveCooldown = this.throwCooldown;
@@ -143,6 +145,7 @@ class Player
     else if (this.penguin_type == 2)
     {
       this.dashing = true;
+      this.usedDash = true;
       //up right
       if (keyArray[87] && keyArray[68])
       {
@@ -254,6 +257,7 @@ class Player
         this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - this.size.y/2;
         grounded = true;
         this.jump = 0;
+        this.usedDash = false;
         this.velocity.y = 0;
       }
       if(currFrame < (frameCount - 60) && collisionObjs[c].doesDamage) 
@@ -275,6 +279,7 @@ class Player
         this.position.y = platforms[p].position.y - platforms[p].size.y/2 - this.size.y/2;
         grounded = true;
         this.jump = 0;
+        this.usedDash = false;
         this.velocity.y = 0;
       }
     }
