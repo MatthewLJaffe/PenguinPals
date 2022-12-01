@@ -7,10 +7,30 @@ var player;
 //wasd spikes
 //I icicle
 var tileMap = [
-  " N B                ",
+  "                    ",
+  "B                   ",
+  "111111111111111111TU",
+  "   IIIIIIIIIIIIIII  ",
   "                    ",
   "                    ",
-  "TYYYYYYYYYYYYYYYYYYU",
+  "                  TU",
+  "                    ",
+  "  www  www  www   B ",
+  "TU111111111111111111",
+  "  IIIIII   IIIIII   ",
+  "                    ",
+  "TU                  ",
+  "                    ",
+  "        P           ",
+  "     P  111        B",
+  "111111111111111111TU",
+  "     IIII  III  II  ",
+  "                    ",
+  "                  TU",
+  "         1    1     ",
+  "         1    1     ",
+  "         1    1     ",
+  "TYYYU111111111111111",
   "                    ",
   "                    ",
   "TYYU                ",
@@ -33,7 +53,7 @@ var tileMap = [
   "TYYU             3  ",
   "                 3  ",
   "                 3  ",
-  "QETYYU012    !   3bB",
+  "QETYYU012        3bB",
   "      678TYYYYYYY677",
   "                    ",
   "                    ",
@@ -232,9 +252,9 @@ var tileMap = [
   "                    ",
   "P                   ",
   "01112  01112        ",
-  "34445  3444X1112     ",
+  "34445  3444X1112    ",
   "67778  677777778    ",
-  "IIIII               ",
+  "                    ",
   "                  01",
   "                  34",
   "011111111111111111Z4",
@@ -699,6 +719,7 @@ class FallingIcicle{
     this.gravity = .15;
     this.gravityForce = new p5.Vector(0, this.gravity);
     this.maxNormalFallSpeed = 5;
+    this.maxDropDist = 200;
 
     this.show = true;
 
@@ -713,7 +734,7 @@ class FallingIcicle{
     }
 
     //if player is under the icicle, after a second, the icicle falls
-    if(dist(this.position.x, this.position.y, player.position.x, player.position.y) < 100 && (player.position.y) > (this.position.y ) && abs(player.position.x - this.position.x) < 12 && this.show == true){
+    if(dist(this.position.x, this.position.y, player.position.x, player.position.y) < this.maxDropDist && (player.position.y) > (this.position.y ) && abs(player.position.x - this.position.x) < 12 && this.show == true){
       this.acceleration = this.gravityForce;
     }
     if(this.velocity.mag() < this.maxNormalFallSpeed){
