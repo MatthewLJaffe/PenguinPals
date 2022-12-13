@@ -44,12 +44,12 @@ class Images
       this.blackPenguinWalkRight.push(loadImage("images/characters/BlackPenguin" + i + ".png"));
       this.blackPenguinWalkLeft.push(loadImage("images/characters/BlackPenguinWalkLeft" + i + ".png"));
       this.bluePenguinWalkLeft.push(loadImage("images/characters/BluePenguinWalkLeft" + i + ".png"));
+      this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguinWalkRight" + i + ".png"));
     }
 
 
     for (let i = 1; i <= 5; i ++)
     {
-        this.bluePenguinWalkRight.push(loadImage("images/BluePenguin" + i + ".png"));
         this.poptartWalkRight.push(loadImage("images/characters/PoptartWalkRight" + i + ".png"));
         this.poptartWalkLeft.push(loadImage("images/characters/PoptartWalkLeft" + i + ".png"));
     }

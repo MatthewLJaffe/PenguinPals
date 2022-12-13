@@ -75,7 +75,7 @@ class poptart
   //update npc
   update()
   {
-    if (!this.enabled) return;
+    if (!this.enabled || !inViewOfPlayer(this.position.x, this.position.y, this.size.x, this.size.y)) return;
     this.updateStateMachine();
     this.updatePos();
     this.checkCollision();

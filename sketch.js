@@ -36,10 +36,4 @@ function setup() {
 
 function draw() {
   game.state[game.currentState].execute(game);
-
-  //use for debugging
-  textSize(50);
-  fill(0);
-
-  //text(round(mouseX) + ", " + round(mouseY), mouseX, mouseY - 25);
 }

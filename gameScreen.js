@@ -650,8 +650,15 @@ class CollisionObj
 
   drawCollisionObj()
   {
-    image(this.img, this.position.x + this.offset.x, this.position.y+this.offset.y);
+    if (inViewOfPlayer(this.position.x + this.offset.x, this.position.y + this.offset.y, this.size.x, this.size.y))
+      image(this.img, this.position.x + this.offset.x, this.position.y+this.offset.y);
   }
+}
+
+function inViewOfPlayer(x, y, w, h)
+{
+  var distToPlayer = abs(player.position.y - y) + h/2;
+  return distToPlayer < 500;
 }
 
 //return normal vector of collision if there is one otherwise return zero vector
@@ -908,7 +915,8 @@ class Platform
 
   drawPlatform()
   {
-    image(this.img, this.position.x, this.position.y+15);
+    if (inViewOfPlayer(this.position.x, this.position.y, this.size.x, this.size.h))
+      image(this.img, this.position.x, this.position.y+15);
   }
 }
 
@@ -962,3 +970,4 @@ class Spring
     fill(255,0,0);
   }
 }
+
