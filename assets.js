@@ -44,7 +44,6 @@ class Images
       this.blackPenguinWalkRight.push(loadImage("images/characters/BlackPenguin" + i + ".png"));
       this.blackPenguinWalkLeft.push(loadImage("images/characters/BlackPenguinWalkLeft" + i + ".png"));
       this.bluePenguinWalkLeft.push(loadImage("images/characters/BluePenguinWalkLeft" + i + ".png"));
-      this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguinWalkRight" + i + ".png"));
     }
 
 
@@ -52,6 +51,7 @@ class Images
     {
         this.poptartWalkRight.push(loadImage("images/characters/PoptartWalkRight" + i + ".png"));
         this.poptartWalkLeft.push(loadImage("images/characters/PoptartWalkLeft" + i + ".png"));
+        this.bluePenguinWalkRight.push(loadImage("images/characters/BluePenguinWalkRight" + i + ".png"));
     }
     this.whiteSpikesDown = loadImage("images/tiles/WhiteSpikesDown.png");
     this.whiteSpikesUp = loadImage("images/tiles/WhiteSpikesUp.png");

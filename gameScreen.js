@@ -915,7 +915,7 @@ class Platform
 
   drawPlatform()
   {
-    if (inViewOfPlayer(this.position.x, this.position.y, this.size.x, this.size.h))
+    if (inViewOfPlayer(this.position.x, this.position.y, this.size.x, this.size.y))
       image(this.img, this.position.x, this.position.y+15);
   }
 }
