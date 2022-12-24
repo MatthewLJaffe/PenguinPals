@@ -8,7 +8,8 @@ Katherine: game FSM, different screens general layout, snow and icicles on intro
 var keyArray = [];
 var startImages;
 var instructionImages;
-//I do this to get intellisense working images should be constructed in preload
+var pixelBodyFont;
+var pixelHeaderFont;
 var images;
 var sounds;
 function keyPressed() {
@@ -23,6 +24,8 @@ function preload()
 {
   images = new Images();
   sounds = new SoundEffects();
+  pixelBodyFont = loadFont("FFFFORWA.ttf");
+  pixelHeaderFont = loadFont("ka1.ttf");
 }
 
 
@@ -31,9 +34,11 @@ function setup() {
   imageMode(CENTER);
   createCanvas(800, 600);
   game = new gameObj();
+  textFont(pixelBodyFont);
 }
 
 
 function draw() {
   game.state[game.currentState].execute(game);
 }
+

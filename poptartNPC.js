@@ -3,8 +3,6 @@ class poptart
   constructor(x, y)
   {
     this.volume = 0;
-    this.collisionSound = sounds.loseLifeSound;
-
     this.poptartWalkRight = [];
     this.poptartWalkLeft = [];
     this.position = createVector(x, y);

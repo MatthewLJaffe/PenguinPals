@@ -15,6 +15,8 @@ class Images
     this.poptartWalkLeft = [];
     this.smokeCloud = [];
 
+    this.UIBorder = loadImage("images/UIBorder.png");
+    this.UIBorderUnlock = loadImage("images/UIBorderUnlock.png");
     this.blackPenguinJumpLeft = loadImage("images/characters/BlackPenguinJumpLeft.png");
     this.blackPenguinJumpRight = loadImage("images/characters/BlackPenguinJumpRight.png");
     this.bluePenguinJumpLeft = loadImage("images/characters/BluePenguinJumpLeft.png");
@@ -46,7 +48,6 @@ class Images
       this.bluePenguinWalkLeft.push(loadImage("images/characters/BluePenguinWalkLeft" + i + ".png"));
     }
 
-
     for (let i = 1; i <= 5; i ++)
     {
         this.poptartWalkRight.push(loadImage("images/characters/PoptartWalkRight" + i + ".png"));
@@ -57,6 +58,11 @@ class Images
     this.whiteSpikesUp = loadImage("images/tiles/WhiteSpikesUp.png");
     this.whiteSpikesLeft = loadImage("images/tiles/WhiteSpikesLeft.png");
     this.whiteSpikesRight = loadImage("images/tiles/WhiteSpikesRight.png");
+
+    this.slicedUI = [];
+    for (let i = 1; i <= 9; i++) {
+      this.slicedUI.push(loadImage("images/9SliceUIBorder" + i + ".png"));
+    }
 
     for (let i = 1; i <= 7; i++)
     {
@@ -71,12 +77,14 @@ class Images
     this.snowBallRightImages = [];
     this.snowBallLeftImages = []
     this.snowBall = loadImage("images/Snowball.png");
+    this.fallingIcicles = [];
     for (let i = 1; i <= 4; i++)
     {
       this.iceCornerImages.push(loadImage("images/tiles/IceCorner" + i + ".png"));
       this.springImages.push(loadImage("images/tiles/Spring" + i + ".png"));
       this.snowBallRightImages.push(loadImage("images/Snowball" + i + ".png"));
       this.snowBallLeftImages.push(loadImage("images/SnowballLeft" + i + ".png"));
+      this.fallingIcicles.push(loadImage("images/FallingIcicles" + i + ".png"));
     }
     this.iceFloorImages = [];
     for (let i = 0; i < 4; i++)
@@ -97,16 +105,18 @@ class Images
     this.snowParticleImages = [];
     this.platformImages = [];
     this.penguinPortraits = [];
-    this.penguinUI = loadImage("images/PenguinUI.png");
+    this.penguinUI = [];
     this.platformImages.push(loadImage("images/tiles/Platform.png"));
     for (let i = 1; i <= 3; i++)
     {
       this.penguinPortraits.push(loadImage("images/characters/PenguinPortrait" + i + ".png"));
       this.snowParticleImages.push(loadImage("images/SnowParticles" + i + ".png"));
       this.platformImages.push(loadImage("images/tiles/Platform" + i + ".png"));
+      this.penguinUI.push(loadImage("images/PenguinUI" + i + ".png"));
     }
 
-    this.fallingIcicleImage = loadImage("images/FallingIcicles.png");
+    this.checkpointFlagWhite = loadImage("images/CheckpointFlag1.png");
+    this.checkpointFlagGreen = loadImage("images/CheckpointFlag2.png");
   }
 }
 
@@ -114,11 +124,30 @@ class SoundEffects
 {
   constructor()
   {
+    this.soundVolumeDict = new Map();
     this.poofSound = loadSound("sounds/poof.mp3");
+    this.soundVolumeDict.set(this.poofSound, 1);
     this.gameLoseSound = loadSound("sounds/game_lose.wav");
+    this.soundVolumeDict.set(this.gameLoseSound, .5);
     this.gameWinSound = loadSound("sounds/game_win.wav");
+    this.soundVolumeDict.set(this.gameWinSound, 1);
     this.loseLifeSound = loadSound("sounds/lose_life.wav");
+    this.soundVolumeDict.set(this.loseLifeSound, .25);
     this.NPCDeathSound = loadSound("sounds/lose_life2.wav");
+    this.soundVolumeDict.set(this.NPCDeathSound, .75);
     this.walkingSound = loadSound("sounds/walking.wav");
+    this.soundVolumeDict.set(this.walkingSound, .75);
+    this.checkPointSound = loadSound("sounds/checkpoint.wav");
+    this.soundVolumeDict.set(this.checkPointSound, .75);
+
+  }
+
+  playSound(sound)
+  {
+    if (sound.isPlaying()) return;
+    console.log(this.soundVolumeDict.get(sound));
+    sound.setVolume(this.soundVolumeDict.get(sound) * volume/10);
+    sound.play();
   }
 }
+

@@ -18,15 +18,21 @@ class Player
     this.acceleration = new p5.Vector(0 , 0);
     this.gravity = .45;
     this.fallMult = 1.75;
+    this.snowBallStartDelay = 15;
     this.umbrellaGravity = .15;
+    this.facedDir = -1;
     this.gravityForce = new p5.Vector(0, this.gravity);
     this.maxNormalFallSpeed = 8;
     this.maxUmbrellaFallSpeed = 3;
     this.maxFallSpeed = this.maxNormalFallSpeed;
-    this.umbreallaSize = createVector(0, 0);
-    this.umbreallPos = createVector(0, 0);
+    this.umbrellaSize = createVector(0, 0);
+    this.umbrellaPos = createVector(0, 0);
     this.usedDash = false;
+    this.damageCooldown = 60;
+    this.currDamageCooldown = 0;
     this.maxDashSpeed = 8;
+    this.bluePenguinUnlocked = false;
+    this.redPenguinUnlocked = false;
     this.dashSpeedTimeGraph = [
       {'time': 0, 'speed': 0 },
       {'time': .25, 'speed': 1 },
@@ -38,8 +44,6 @@ class Player
     this.specialMoveFrames = 60;
     this.currSpecialMoveFrames = 0;
     //sound effects
-    this.walkingSound = sounds.walkingSound;
-
     this.size = createVector(w, h);
     this.dashCooldown = 35;
     this.throwCooldown = 30;
@@ -55,11 +59,18 @@ class Player
     this.stepRate = 6;
     this.currAnimIndex = 0
     this.umbrellaUp = false;
+
+    //save player progress
+    this.savedPos = createVector(x, y);
+    this.savedScore = 0;
+    this.savedRedPenguin = false;
+    this.savedBluePenguin = false;
   }
 
-  updatePlayer(volume)
+  updatePlayer()
   {
-    if (this.handlePlayerSwitch(volume)) return;
+    if (this.handlePlayerSwitch()) return;
+    this.currDamageCooldown--;
     if (keyArray[32] == 1 && this.currSpecialMoveCooldown <= 0 
       && (!this.usedDash || this.penguin_type != 2))
     {
@@ -84,14 +95,12 @@ class Player
       this.umbrellaUp = true;
     else
       this.umbrellaUp = false;
-    this.volume = volume;
-    this.walkingSound.setVolume(volume);
     this.updatePlayerPosition();
-    this.updatePlayerCollision(volume);
+    this.updatePlayerCollision();
     this.updatePlayerAnim();
   }
 
-  handlePlayerSwitch(volume)
+  handlePlayerSwitch()
   {    
     //handle input for switching penguins
     if (this.dashing) return;
@@ -107,18 +116,15 @@ class Player
 
     //check for switch
     var prevPenguinType = this.penguin_type;
-    if (keyIsDown(69) == 1)
-      this.penguin_type = (this.penguin_type % 3) + 1;
-    if (keyIsDown(81) == 1)
-    {
-      this.penguin_type--;
-      if (this.penguin_type <= 0)
-        this.penguin_type = 3;
-    }
+    if (keyArray[49] == 1)
+      this.penguin_type = 1;
+    if (keyArray[50] == 1 && this.bluePenguinUnlocked)
+      this.penguin_type = 2;
+    if (keyArray[51] & this.redPenguinUnlocked)
+      this.penguin_type = 3; 
     if (prevPenguinType != this.penguin_type)
     {
-      sounds.poofSound.setVolume(volume*0.4);
-      sounds.poofSound.play();
+      sounds.playSound(sounds.poofSound);
       this.currPlayerSwitchCooldown = this.playerSwitchCooldown - 1;
       if (this.penguin_type == 1 || this.penguin_type == 2)
       {
@@ -140,11 +146,9 @@ class Player
   //different special moves for penguins executable with the space key
   startSpecialMove()
   {
-    //black penguin throw snowball
     if (this.penguin_type == 1)
     {
       this.currAnimIndex = 0;
-      snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
     }
     
     //blue penguin lateral dash in faced direction
@@ -194,26 +198,31 @@ class Player
       //umbrella right
       if (keyArray[68] && this.jump == 0)
       {
-        this.umbreallPos.set(20, 0);
-        this.umbreallaSize.set(30, 64);
+        this.umbrellaPos.set(20, 0);
+        this.umbrellaSize.set(30, 64);
       }
       //umbrella left
       else if (keyArray[65] && this.jump == 0)
       {
-        this.umbreallPos.set(-20, 0);
-        this.umbreallaSize.set(30, 64);
+        this.umbrellaPos.set(-20, 0);
+        this.umbrellaSize.set(30, 64);
       }
       //umbrella is up
       else
       {
-        this.umbreallPos.set(0, -20);
-        this.umbreallaSize.set(50, 30);
+        this.umbrellaPos.set(0, -20);
+        this.umbrellaSize.set(50, 30);
       }
     }
   }
 
   updateSpecialMove(frame)
   {
+    //black penguin throw snowball
+    if (this.penguin_type == 1 && frame == this.snowBallStartDelay)
+    {
+      snowballs.push(new Snowball(this.position.x, this.position.y, this.facedDir));
+    }
     if (this.penguin_type == 2)
     {
       let t = 1 - frame / this.dashCooldown;
@@ -238,13 +247,13 @@ class Player
     if (this.penguin_type == 3)
     {
       //player is not holding space so put umbrella away
-      this.umbreallPos.set(0, 0);
-      this.umbreallaSize.set(0, 0);
+      this.umbrellaPos.set(0, 0);
+      this.umbrellaSize.set(0, 0);
     }
   }
 
   //make sure player does not collide with tiles
-  updatePlayerCollision(volume)
+  updatePlayerCollision()
   {
     var grounded = false;
     //check for collision with tiles
@@ -257,8 +266,11 @@ class Player
       if (dir.x < -.1)
         this.position.x = collisionObjs[c].position.x - collisionObjs[c].size.x/2 - this.size.x/2;
       if (dir.y > .1)
+      {
         this.position.y = collisionObjs[c].position.y + collisionObjs[c].size.y/2 + this.size.y/2;
-      if (dir.y < -.1)
+        this.velocity.y = 0;
+      }
+      if (dir.y < -.1 && player.velocity.y >= 0)
       {
         this.position.y = collisionObjs[c].position.y - collisionObjs[c].size.y/2 - this.size.y/2;
         grounded = true;
@@ -266,15 +278,8 @@ class Player
         this.usedDash = false;
         this.velocity.y = 0;
       }
-      if(currFrame < (frameCount - 60) && collisionObjs[c].doesDamage) 
-      {
-        currFrame = frameCount;
-        player.lives--;
-        player.score-=50;
-        if(!sounds.loseLifeSound.isPlaying() && player.lives > 0){
-          sounds.loseLifeSound.setVolume(volume * .1);
-          sounds.loseLifeSound.play();
-        }
+      if (collisionObjs[c].doesDamage) {
+        this.damagePlayer();
       }
     }
     for(var p = 0; p < platforms.length; p++)
@@ -289,6 +294,18 @@ class Player
         this.velocity.y = 0;
       }
     }
+    for (let i = 0; i < flags.length; i++)
+    {
+      if (flags[i].reached) continue;
+      let flagObj = flags[i].collisionObj;
+      if (detectCollision(this.position.x, this.position.y, this.size.x, this.size.y, flagObj.position.x, flagObj.position.y, flagObj.size.x, flagObj.size.y).magSq() > 0)
+      {
+        flags[i].collisionObj.img = images.checkpointFlagGreen;
+        sounds.playSound(sounds.checkPointSound);
+        flags[i].reached = true;
+        this.saveProgress(flagObj);
+      }
+    }
     if (!grounded)
     {
       this.jump = 1;
@@ -298,17 +315,20 @@ class Player
     {
       let dir = detectCollision(this.position.x, this.position.y, 35, 64, poptarts[p].position.x, poptarts[p].position.y, poptarts[p].size.x*.9, poptarts[p].size.y*.9);
       if (dir.mag() == 0) continue;
-      if (currFrame < (frameCount - 60) && poptarts[p].enabled) {
-        currFrame = frameCount;
-        poptarts[p].collisionSound.setVolume(poptarts[p].volume);
-        player.lives--;
-        player.score-=50;
-        if(!poptarts[p].collisionSound.isPlaying() && player.lives > 0)
-          poptarts[p].collisionSound.play();
+      if (poptarts[p].enabled) {
+        this.damagePlayer();
       }
     }
   }
 
+  saveProgress(flag)
+  {
+    this.savedPos.x = flag.position.x;
+    this.savedPos.y = flag.position.y - 20;
+    this.savedBluePenguin = this.bluePenguinUnlocked;
+    this.savedRedPenguin = this.redPenguinUnlocked;
+    this.savedScore = this.score;
+  }
 
   //update position velocity and acceleration for player and handle input for special moves / jumping
   updatePlayerPosition()
@@ -320,9 +340,7 @@ class Player
       if(keyArray[87] == 1 && this.jump == 0)
       {  //player jumping
         //sound effect
-        if(!this.walkingSound.isPlaying()){
-          this.walkingSound.play();
-        }
+        sounds.playSound(sounds.walkingSound);
         this.acceleration.add(this.jumpForce);
         this.jump = 1;
       }
@@ -340,7 +358,8 @@ class Player
     }
 
     //normal physics so long as we aren't dashing
-    if (!this.dashing) {
+    if (!this.dashing) 
+    {
       //update position velocity and acceleration 
       if(this.jump > 0) 
       {
@@ -372,8 +391,24 @@ class Player
     this.acceleration.set(0, 0);
   }
 
+  getUmbrellaPos()
+  {
+    return createVector(this.position.x + this.umbrellaPos.x, this.position.y + this.umbrellaPos.y);
+  }
+
+  damagePlayer()
+  {
+    if (this.currDamageCooldown > 0) return;
+    this.currDamageCooldown = this.damageCooldown;
+    this.lives--;
+    this.score -= 50;
+    if(player.lives > 0)
+      sounds.playSound(sounds.loseLifeSound);
+  }
+
   //loop through current player animation
   //all animation logic is handled here
+  //TODO refactor into fsm
   updatePlayerAnim()
   {
     let prevAnim = this.anim;

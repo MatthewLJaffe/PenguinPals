@@ -5,38 +5,46 @@ var player;
 //ASDFG ice wall
 //ZXCV Ice wall corner
 //wasd spikes
+//!-( UIBorder
 //I icicle
+//,./ penguins
 var tileMap = [
   "                    ",
   "N                   ",
-  "111111111111111111TU",
+  "QWWWWWWWWWWWWWWWWETU",
   "   IIIIIIIIIIIIIII  ",
   "                    ",
   "                    ",
   "                  TU",
   "                    ",
+  "                    ",
   "  www  www  www   B ",
-  "TU111111111111111111",
+  "TUQWWWWWWWWWWWWWWWWE",
   "  IIIIII   IIIIII   ",
+  "                    ",
   "                    ",
   "TU                  ",
   "                    ",
   "        P           ",
   "     P  111        B",
-  "111111111111111111TU",
-  "     IIII  III  II  ",
+  "QWWWWWWWWWWWWWWWWETU",
   "                    ",
-  "                  TU",
-  "         1    1     ",
-  "         1    1     ",
-  "         1    1     ",
-  "TYYYU111111111111111",
+  "                    ",
+  "                    ",
+  "               TYYYU",
+  "                    ",
+  "            P       ",
+  "          TYYU      ",
+  "                    ",
+  "       P            ",
+  "     TYYU           ",
   "                    ",
   "                    ",
   "TYYU                ",
   "                    ",
   "                    ",
   "TYYU                ",
+  "                    ",
   "                    ",
   "                    ",
   "                    ",
@@ -52,7 +60,7 @@ var tileMap = [
   "                 3  ",
   "TYYU             3  ",
   "                 3  ",
-  "                 3  ",
+  "   f             3  ",
   "QETYYU012        3bB",
   "      678TYYYYYYY677",
   "                    ",
@@ -167,23 +175,68 @@ var tileMap = [
   "          3444444445",
   "          3444444445",
   "        b 3444444445",
-  "TYQ11111116777777778",
-  "  ssssssssssssssssss",
-  "                    ",
-  "                    ",
-  "           P      P ",
-  "11111  111111  111RR",
-  "11111 B111111  111  ",
-  "111111111111111111  ",
-  "111111111111111111  ",
-  "111111111111111111RR",
+  "TYQWWWWWE 6777777778",
   "                    ",
   "                    ",
   "                    ",
-  "               TYYYU",
+  "TYYYU               ",
   "                    ",
   "                    ",
-  "                 P B",
+  "       TYU          ",
+  "                    ",
+  "                    ",
+  "            TYU     ",
+  "                    ",
+  "                    ",
+  "                 TYU",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                 TYU",
+  "                    ",
+  "                    ",
+  "                    ",
+  "TYU              TYU",
+  "                    ",
+  "                    ",
+  "                    ",
+  "TYU              TYU",
+  "                    ",
+  "                    ",
+  "                  B ",
+  "TYU              TYU",
+  "                    ",
+  "                    ",
+  "                    ",
+  "     QWE            ",
+  "     III            ",
+  "                    ",
+  "                    ",
+  "QWE                 ",
+  "III                 ",
+  "                    ",
+  "                    ",
+  "     QWE            ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "QWE                 ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "TYYUQWWWWWWWWWWWWWWE",
+  "          IIIII     ",
+  "                    ",
+  "                    ",
+  "TYYU       !@# !@@# ",
+  "      0112 &*( &**( ",
+  "      3445          ",
+  "      3445     f/   ",
+  "011111Z44X111112TYYU",
+  "6777777777777778    ",
+  "                    ",
+  "                    ",
+  "                   B",
   "              w01112",
   "             w0Z4445",
   "            w0Z44445",
@@ -191,38 +244,108 @@ var tileMap = [
   "       w0111Z4444445",
   "      w0Z44444444445",
   "     w0Z444444444445",
-  "    w0Z4444444444448",
-  "TYYYAd              ",
+  "    w0Z4444444444445",
+  "TYYYA677777777777778",
   "   aSd              ",
   "   aDd              ",
   "TYYYs               ",
   "                    ",
   "                    ",
+  "                    ",
   "012                 ",
   "678                 ",
   "                    ",
-  "      02            ",
-  "      68            ",
+  "                    ",
+  "                    ",
+  "    QWE    QWE      ",
+  "    III    III      ",
+  "                    ",
+  "                  TU",
   "                    ",
   "                    ",
   "                    ",
-  "          02        ",
-  "          68        ",
+  "       wwww   wwww  ",
+  "  012222222222222223",
+  "TU677777777777777778",
+  "     III    III     ",
   "                    ",
   "                    ",
   "                    ",
-  "                 P  ",
-  "     QE       TYYYYU",
+  "         B          ",
+  "0112     02     02  ",
+  "6778     68     68  ",
   "                    ",
   "                    ",
   "                    ",
-  "    wwww   www    PB",
-  "TYYYQWWETYUQWETYYYYU",
   "                    ",
+  "    wwwwwwwww   P   ",
+  "QWWWWWWWWWWWWETYYYYU",
+  "    IIII  III       ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "    wwww  www  P  B ",
+  "TYYYQWWETUQWETYYYYYU",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "B  P                ",
+  "TYYYYYYYYYU         ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "  TYU               ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "        TYU         ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "  TYU               ",
+  "                    ",
+  "    !@@#            ",
+  "    &**(            ",
+  "                    ",
+  "                    ",
+  "       QWWE      TYU",
+  "       ssss         ",
+  "                    ",
+  "                 TYU",
+  "                    ",
+  "        B           ",
+  "       wwww         ",
+  "TYUQWWWWWWWWWWWWWWWE",
+  "                    ",
+  "                    ",
+  "                    ",
+  "        !@@#        ",
+  "TYU     &**(        ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "                    ",
+  "QWWWWWE     QWETYYYU",
+  "                !@@#",
+  "                &**(",
+  "       !@@#         ",
+  "       &**(         ",
+  "                    ",
+  "  .  f              ",
+  "TYYUQWWWWWWWWWWWWWWE",
   "                    ",
   "                    ",
   "TYYU                ",
   "                    ",
+  "                    ",
+  "TYYU                ",
   "                    ",
   "       P    P       ",
   "TYYU  TYU  TYU  TYYU",
@@ -233,10 +356,32 @@ var tileMap = [
   "                  P ",
   "                0112",
   "B     P         3445",
-  "0112ww02ww02TYYU6778",
-  "344444444445        ",
-  "344444444445        ",
-  "677777777778TYYU    ",
+  "012ww02ww02     3445",
+  "34X11ZX11Z5TYYYU3445",
+  "34444444445     3445",
+  "67777777778  f  6778",
+  "           TYYYU    ",
+  "                    ",
+  "                    ",
+  "             TU     ",
+  "                    ",
+  "                    ",
+  "                 TYU",
+  "                    ",
+  "         B          ",
+  "    TU  TU  TU  TYYU",
+  "                    ",
+  "                    ",
+  "02                  ",
+  "35                  ",
+  "35  02              ",
+  "35ww35              ",
+  "3X11Z5ww02          ",
+  "34444X11Z5          ",
+  "3444444445ww02TYYYYU",
+  "344444444X11Z5       ",
+  "67777777777778      ",
+  "                TYYU",
   "                    ",
   "                    ",
   "            TYYU    ",
@@ -269,14 +414,20 @@ var tileMap = [
 var blockingTiles = [];
 var walkableTiles = [];
 var platforms = [];
+var UIBorders = [];
 //objects that need to be updated every frame
 var collisionObjs = [];
+var flags = [];
+var numFlags = 4;
 var poptarts = [];
 var snowballs = [];
 var fishes = [];
 var springs = [];
 var goldFish;
 var icicles = [];
+var penguinUnlocks = [];
+var textAnchorPositions = [];
+var worldUI = [];
 
 //entry point to game loop
 //contains much of game state 
@@ -293,126 +444,218 @@ class gameScreen //4
     this.foregroundScrollSpeed = .25;
     player = new Player(400, 289, 35, 64, 1);  //x, y, size, penguin_type
     //correctly position things dynamically based off height of tilemap
-    var yOffset = (tileMap.length - 15) * -40;
+
+    worldUI.push(new WorldSpaceUI("2 key switch\n\nto blue penguin", 12, 0, -5));
+    worldUI.push(new WorldSpaceUI("A/D + Space\n\nhorizontal dash", 12, 0, -7));
+    worldUI.push(new WorldSpaceUI("W + Space\n\nvertical dash", 12, 0, -7));
+    worldUI.push(new WorldSpaceUI("W + A/D + Space\n\ndiagonal dash", 12, 0, -7));
+    worldUI.push(new WorldSpaceUI("3 key switch\n\nto red penguin", 12, 0, -5));
+    worldUI.push(new WorldSpaceUI("space to use\n\numbrella", 12, 0, -5));
+    this.loadTileMap();
+  }
+
+  loadTileMap()
+  {
+    blockingTiles = [];
+    walkableTiles = [];
+    platforms = [];
+    UIBorders = [];
+    collisionObjs = [];
+    poptarts = [];
+    snowballs = [];
+    fishes = [];
+    springs = [];
+    goldFish;
+    icicles = [];
+    penguinUnlocks = [];
+    textAnchorPositions = [];
     //iterate through tilemap and instantiate objects
-    for (let y = 0; y < tileMap.length; y++)
-    {
-      for (let x = 0; x < tileMap[y].length; x++)
-      {
-        switch (tileMap[y][x])
-        {
-          case '0':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0], '0'));
+     var yOffset = (tileMap.length - 15) * -40;
+     for (let y = 0; y < tileMap.length; y++)
+     {
+       for (let x = 0; x < tileMap[y].length; x++)
+       {
+         switch (tileMap[y][x])
+         {
+           case '0':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[0], '0'));
+             break;
+           case '1':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0], '1'));
+             break;
+           case '2':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[1], '2'));
+             break;
+           case '3':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3], '3'));
+             break;
+           case '4':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage, '4'));
+             break;
+           case '5':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1], '5'));
+             break;
+           case '6':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[2], '6'));
+             break;
+           case '7':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[2], '7'));
+             break;
+           case '8':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[3], '8'));
+             break;
+           case 'Q':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.icePlatformImages[0], 'Q'));
+             break;
+           case 'W':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[1], 'W'));
+             break;
+           case 'E':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[2], 'E'));
+             break;
+           case 'A':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[0], 'A'));
+             break;
+           case 'S':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[1], 'S'));
+             break;
+           case 'D':
+             collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[2], 'D'));
+             break;
+           case 'F':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorUpImage, 'F'));
+             break;
+           case 'G':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorDownImage, 'G'));
+             break;
+           case 'Z':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[0], 'Z'));
+             break;
+           case 'X':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[1], 'X'));
+             break;
+           case 'C':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[2], 'C'));
+             break;
+           case 'V':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[3], 'V'));
+             break;
+           case 'P':
+             poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40, 'P'));
+             break;
+           case 'B':
+             fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40, 'B'));
+             break;
+           case 'N':
+             goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40, 'N');
+             break;
+           case 'R':
+             platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[0], 'R'));
+             break;
+           case 'T':
+             platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[1], 'T'));
+             break;
+           case 'Y':
+             platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[2], 'Y'));
+             break;
+           case 'U':
+             platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[3], 'U'));
+             break;
+           case ',':
+             player = new Player(x*40+20, yOffset +  y*40+20, 35, 64, 1);
+             break;
+           case 'w':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+30, 30, 20, images.whiteSpikesUp, 'w', true, createVector(0, -10)));
+             break;
+           case 'a':
+             collisionObjs.push(new CollisionObj(x*40+30, yOffset +  y*40+20, 20, 30, images.whiteSpikesLeft, 'a', true, createVector(-10, 0)));
+             break;
+           case 's':
+             collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+10, 30, 20, images.whiteSpikesDown, 's', true, createVector(0, 10)));
+             break;
+           case 'd':
+             collisionObjs.push(new CollisionObj(x*40+10, yOffset +  y*40+20, 20, 30, images.whiteSpikesRight, 'd', true, createVector(10, 0)));
+             break;
+           case 'b':
+             springs.push(new Spring(x*40+20, yOffset + y*40+20, 0, 15, 20, 10, 'b'));
+             break;
+           case 'I':
+             icicles.push(new FallingIcicle(x*40 + 20, yOffset + y*40+15));
+             break;
+           case '.':
+             penguinUnlocks.push(new PenguinUnlock(x*40+20, yOffset +  y*40+8, 64, 64, images.bluePenguinWalkLeft[0], 2));
+             break;
+           case '/':
+             penguinUnlocks.push(new PenguinUnlock(x*40+20, yOffset +  y*40+8, 64, 64, images.redPenguinWalkLeft[0], 3));
+             break;
+           case '!':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[0]));
+             for (let i = worldUI.length-1; i >= 0; i--)
+             {
+               //worldUI Position not set
+               if (worldUI[i].topLeftAnchor.magSq() <= .01)
+               {
+                 worldUI[i].topLeftAnchor.x = x*40+20;
+                 worldUI[i].topLeftAnchor.y = yOffset + y*40+20;
+                 break;
+               }
+             }
+             break;
+           case '@':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[1]));
+             break;
+           case '#':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[2]));
+             break;
+           case '$':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[3]));
+             break;
+           case '%':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[4]));
+             break;
+           case '^':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[5]));
+             break;
+           case '&':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[6]));
+             break;
+           case '*':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[7]));
+             break;
+           case '(':
+             UIBorders.push(new VisibleObject(x*40+20, yOffset + y*40+20, images.slicedUI[8]));
+             for (let i = worldUI.length-1; i >= 0; i--)
+             {
+               //worldUI Position not set
+               if (worldUI[i].bottomRightAnchor.magSq() <= .01)
+               {
+                 worldUI[i].bottomRightAnchor.x = x*40+20;
+                 worldUI[i].bottomRightAnchor.y = yOffset + y*40+20;
+                 worldUI[i].centerAnchor.x = (worldUI[i].bottomRightAnchor.x + worldUI[i].topLeftAnchor.x)/2;
+                 worldUI[i].centerAnchor.y = (worldUI[i].bottomRightAnchor.y + worldUI[i].topLeftAnchor.y)/2;
+                 break;
+               }
+             }
+             break;
+           case 'f':
+            if (flags.length < numFlags)
+            {
+              flags.push(
+                {
+                  collisionObj: new CollisionObj(x*40+20, yOffset +  y*40, 40, 80, images.checkpointFlagWhite, 'f'),
+                  reached: false
+                });
+            }
             break;
-          case '1':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceFloorImages[0], '1'));
-            break;
-          case '2':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCornerImages[1], '2'));
-            break;
-          case '3':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceFloorImages[3], '3'));
-            break;
-          case '4':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.iceCenterImage, '4'));
-            break;
-          case '5':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[1], '5'));
-            break;
-          case '6':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[2], '6'));
-            break;
-          case '7':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceFloorImages[2], '7'));
-            break;
-          case '8':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceCornerImages[3], '8'));
-            break;
-          case 'Q':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset + y*40+20, 40, 40, images.icePlatformImages[0], 'Q'));
-            break;
-          case 'W':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[1], 'W'));
-            break;
-          case 'E':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.icePlatformImages[2], 'E'));
-            break;
-          case 'A':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[0], 'A'));
-            break;
-          case 'S':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[1], 'S'));
-            break;
-          case 'D':
-            collisionObjs.push(new CollisionObj(x*40+20,  yOffset + y*40+20, 40, 40, images.iceWallImages[2], 'D'));
-            break;
-          case 'F':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorUpImage, 'F'));
-            break;
-          case 'G':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallFloorDownImage, 'G'));
-            break;
-          case 'Z':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[0], 'Z'));
-            break;
-          case 'X':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[1], 'X'));
-            break;
-          case 'C':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[2], 'C'));
-            break;
-          case 'V':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+20, 40, 40, images.iceWallCornerImages[3], 'V'));
-            break;
-          case 'P':
-            poptarts.push(new poptart(x*40+20, yOffset +  y*40+20, 40, 40, 'P'));
-            break;
-          case 'B':
-            fishes.push(new Fish(x*40+20, yOffset +  y*40+20, 40, 40, 'B'));
-            break;
-          case 'N':
-            goldFish = new GoldFish(x*40+20, yOffset +  y*40+20, 40, 40, 'N');
-            break;
-          case 'R':
-            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[0], 'R'));
-            break;
-          case 'T':
-            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[1], 'T'));
-            break;
-          case 'Y':
-            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[2], 'Y'));
-            break;
-          case 'U':
-            platforms.push(new Platform(x*40+20, yOffset +  y*40+20-15, 40, 10, images.platformImages[3], 'U'));
-            break;
-          case '!':
-            player = new Player(x*40+20, yOffset +  y*40+20, 35, 64, 1);
-            break;
-          case 'w':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+30, 30, 20, images.whiteSpikesUp, 'w', true, createVector(0, -10)));
-            break;
-          case 'a':
-            collisionObjs.push(new CollisionObj(x*40+30, yOffset +  y*40+20, 20, 30, images.whiteSpikesLeft, 'a', true, createVector(-10, 0)));
-            break;
-          case 's':
-            collisionObjs.push(new CollisionObj(x*40+20, yOffset +  y*40+10, 30, 20, images.whiteSpikesDown, 's', true, createVector(0, 10)));
-            break;
-          case 'd':
-            collisionObjs.push(new CollisionObj(x*40+10, yOffset +  y*40+20, 20, 30, images.whiteSpikesRight, 'd', true, createVector(10, 0)));
-            break;
-          case 'b':
-            springs.push(new Spring(x*40+20, yOffset + y*40+20, 0, 15, 20, 10, 'b'));
-            break;
-          case 'I':
-            icicles.push(new FallingIcicle(x*40 + 20, yOffset + y*40+15));
-        }
-      }
-    }
+         }
+       }
+     }
   }
 
   //game loop
   execute(me)
   {
+      noSmooth();
       background(220, 250, 250);
       //scrolling foreground and background layers at different speeds
       image(images.background, 400, constrain(-this.backgroundScrollSpeed*(player.position.y - 300), 0, 600));
@@ -429,6 +672,14 @@ class gameScreen //4
       fill(135, 206, 250);
       textSize(64);
       textAlign(LEFT);
+      for (let i = 0; i < UIBorders.length; i++)
+      {
+        UIBorders[i].drawObject();
+      }
+      for (let i = 0; i < worldUI.length; i++)
+      {
+        worldUI[i].writeText();
+      }
       for (let i = 0; i < springs.length; i++)
       {
         springs[i].updateSpring();
@@ -436,13 +687,14 @@ class gameScreen //4
       for(var i = 0; i < icicles.length; i++){
         icicles[i].updateIcicle();
       }
+      for (let i =  0; i < flags.length; i++)
+        flags[i].collisionObj.drawCollisionObj();
       //adjust volume
-      player.updatePlayer(me.volume*0.1);
+      player.updatePlayer();
       //update poptarts
       for (let i = 0; i < poptarts.length; i++)
       {
         poptarts[i].update();
-        poptarts[i].volume = me.volume*0.005;
       }
       //draw tiles
       for (let i = 0; i < collisionObjs.length; i++){
@@ -464,6 +716,11 @@ class gameScreen //4
       }
 
       goldFish.updateFish();
+      for (let i = 0; i < penguinUnlocks.length; i++)
+      {
+        penguinUnlocks[i].updatePenguinUnlock();
+      }
+
       pop();
       
       //game displays in upper left and right hand corners
@@ -490,96 +747,67 @@ class gameScreen //4
       }
       //penguin portrait displays at the bottom right hand corner to show the current penguin
       //and what penguin the Q and E keys will change it to
-      image(images.penguinUI, width-70, height-40);
-      if (player.penguin_type == 1)
-      {
-        image(images.penguinPortraits[0], width - 70, height - 20);
-        image(images.penguinPortraits[2], width - 70 - 46, height - 20);
-        image(images.penguinPortraits[1], width - 70 + 46, height - 20);
-      }
-      else if (player.penguin_type == 2)
-      {
+      image(images.penguinUI[player.penguin_type-1], width-70, height-40);
+      textSize(20);
+      fill(0);
+      text("1", width - 120, height - 50);
+      text("2", width - 77, height - 50);
+      text("3", width - 30, height - 50);
+      image(images.penguinPortraits[0], width - 70 - 46, height - 20);
+      if (player.bluePenguinUnlocked)
         image(images.penguinPortraits[1], width - 70, height - 20);
-        image(images.penguinPortraits[0], width - 70 - 46, height - 20);
+      if (player.redPenguinUnlocked)
         image(images.penguinPortraits[2], width - 70 + 46, height - 20);
-      }
-      else
-      {
-        image(images.penguinPortraits[2], width - 70, height - 20);
-        image(images.penguinPortraits[1], width - 70 - 46, height - 20);
-        image(images.penguinPortraits[0], width - 70 + 46, height - 20);
-      }
+
   }
   
   //ui display of current life count
   lifeDisplay()
   {
-    if(player.lives > 0){
+    if(player.lives > 0) {
       image(images.fullHeart, width - 105, 25, 45, 45);
     }
-    else{
+    else {
       image(images.emptyHeart, width - 105, 25, 45, 45);
     }
     if(player.lives > 1){
       image(images.fullHeart, width - 65, 25, 45, 45);
     }
-    else{
+    else {
       image(images.emptyHeart, width - 65, 25, 45, 45);
     }
-
-    if(player.lives > 2){
+    if(player.lives > 2) {
       image(images.fullHeart, width - 25, 25, 45, 45);
     }
-    else{
+    else {
       image(images.emptyHeart, width - 25, 25, 45, 45);
     }
   }
 
   //show score ui
-  scoreDisplay(){
-    fill(200, 245, 255, 230);
-    noStroke();
-    rect(0, 0, 180, 50);
-    fill(100, 200, 245);
+  scoreDisplay()
+  {
+    image(images.UIBorder, 100, 25);
+    fill(0);
+    textFont(pixelBodyFont);
     textAlign(LEFT);
-    textSize(32);
-    text("Score: " + player.score, 10, 32);
+    textSize(20);
+    text("Score " + player.score, 10, 36);
   }
 
   //reseting the variables to replay
-  resetVariables(me){
-    for (let i = 0; i < fishes.length; i++)
-    {
-      fishes[i].show = true;
-    }
-
-    for (let i = 0; i < poptarts.length; i++)
-    {
-      poptarts[i].position = poptarts[i].initialPosition;
-      poptarts[i].enabled = true;
-      poptarts[i].currState = "Idle";
-    }
-
-    for(var i = 0; i < icicles.length; i++){
-      icicles[i].position = icicles[i].initialPosition;
-      icicles[i].velocity = new p5.Vector(0,0);
-      icicles[i].acceleration = new p5.Vector(0,0);
-
-      icicles[i].show = true;
-    }
-
-    //resetting player values to their defaults, which is the black penguin
-    player.lives = 3;
-    player.score = 0;
-    player.position.x = 400;
-    player.position.y = 289;
-    player.velocity = new p5.Vector(0, 0);
-    player.acceleration = new p5.Vector(0, 0);
-    player.jump = 0;
-    player.penguin_type = 1;
-    player.gravityForce.y = player.gravity;
-    player.jumpForce.y = player.normalJump;
-    player.maxFallSpeed = player.maxNormalFallSpeed;
+  resetVariables(me)
+  {
+    this.loadTileMap();
+    var newPlayer = new Player(player.savedPos.x, player.savedPos.y, 35, 64, 1);
+    newPlayer.savedPos = player.savedPos;
+    newPlayer.score = player.savedScore;
+    newPlayer.savedScore = player.savedScore;
+    newPlayer.redPenguinUnlocked = player.savedRedPenguin;
+    newPlayer.bluePenguinUnlocked = player.savedBluePenguin;
+    newPlayer.savedRedPenguin = player.savedRedPenguin;
+    newPlayer.savedBluePenguin = player.savedBluePenguin;
+    player = newPlayer;
 
     //resetting game variables
     me.gameOver = false;
@@ -721,9 +949,13 @@ function detectCollision(x1, y1, w1, h1, x2, y2, w2, h2)
 }
 
 //icicles that fall when the player moves under it
-class FallingIcicle{
-  constructor(x, y){
+class FallingIcicle
+{
+  constructor(x, y)
+  {
     this.position = new p5.Vector(x, y);
+    this.size = createVector(35, 20);
+    this.collisionOffset = createVector(0, -10);
     this.initialPosition = new p5.Vector(x, y);
 
     //forces
@@ -732,42 +964,77 @@ class FallingIcicle{
     this.gravity = .15;
     this.gravityForce = new p5.Vector(0, this.gravity);
     this.maxNormalFallSpeed = 5;
-    this.maxDropDist = 200;
-
-    this.show = true;
-
+    this.maxDropDist = 300;
     this.timer = 60;
-    this.currentFrame = 0;
+    this.currAnimIdx = 0;
+    this.frameStep = 6;
+    this.destroyed = false;
   }
 
-  updateIcicle(){
-    //only draws icicles falling for about 300 pixels
-    if(this.show && this.position.y - this.initialPosition.y < 3*height/4){
-      image(images.fallingIcicleImage, this.position.x, this.position.y, 30, 30);
-    }
+  updateIcicle()
+  {
+    //destroy icicle when it falls too far
+    if (this.position.y - this.initialPosition.y > 3*height/4)
+      this.destroyed = true;
+    this.updateIciclePosition();
+    this.checkIcicleCollision();
+    this.drawIcicle();
+  }
 
-    //if player is under the icicle, after a second, the icicle falls
-    if(dist(this.position.x, this.position.y, player.position.x, player.position.y) < this.maxDropDist && (player.position.y) > (this.position.y ) && abs(player.position.x - this.position.x) < 12 && this.show == true){
+  updateIciclePosition()
+  {
+    if (this.destroyed) return;
+    if(dist(this.position.x, this.position.y, player.position.x, player.position.y) < this.maxDropDist && 
+    (player.position.y) > (this.position.y ) && abs(player.position.x - this.position.x) < 12){
       this.acceleration = this.gravityForce;
     }
-    if(this.velocity.mag() < this.maxNormalFallSpeed){
+    if(this.velocity.mag() < this.maxNormalFallSpeed) {
       this.velocity.add(this.acceleration);
     }
     this.position.add(this.velocity);
+  }
 
-    //if it hits player, -1 life
-    if (this.currentFrame < (frameCount - 60) ) {
-      if(abs(this.position.x - player.position.x) < (15) && abs(this.position.y - player.position.y) < 30 && this.show == true){
-        if(player.umbrellaUp == false){
-          this.currentFrame = frameCount;
-          player.lives--;
-          player.score-=50;
-          poptarts[0].collisionSound.setVolume(poptarts[0].volume);
-          if(!poptarts[0].collisionSound.isPlaying() && player.lives > 0)
-            poptarts[0].collisionSound.play();
-        }
-        this.show = false;
+  checkIcicleCollision()
+  {
+    if (this.destroyed) return;
+    var umbreallaPos = player.getUmbrellaPos();
+    //collision with umbrella
+    if (detectCollision(this.position.x + this.collisionOffset.x, this.position.y + this.collisionOffset.y,
+      this.size.x, this.size.y, umbreallaPos.x, umbreallaPos.y, player.umbrellaSize.x, player.umbrellaSize.y).magSq() > 0)
+      {
+        this.destroyed = true;
       }
+    //collision with player
+    else if (detectCollision(this.position.x + this.collisionOffset.x, this.position.y + this.collisionOffset.y,
+      this.size.x, this.size.y, player.position.x, player.position.y, player.size.x, player.size.y).magSq() > 0)
+      {
+        this.destroyed = true;
+        player.damagePlayer();
+      }
+  }
+
+  drawIcicle()
+  {
+    if (this.destroyed)
+    {
+      if (frameCount % this.frameStep == 0)
+        this.currAnimIdx++;
+      //if animation is complete remove icicle from active icicles list;
+      if (this.currAnimIdx >= images.fallingIcicles.length)
+      {
+        for (let i = 0; i < icicles.length; i++)
+        {
+          if (icicles[i] == this) {
+            icicles.splice(i, 1);
+            return;
+          }
+        }
+      }
+      image(images.fallingIcicles[this.currAnimIdx], this.position.x,  this.position.y);
+    }
+    else
+    {
+      image(images.fallingIcicles[0], this.position.x, this.position.y);
     }
   }
 }
@@ -783,7 +1050,7 @@ class Snowball
       this.position = createVector(x-10, y);
     this.dir = dir;
     this.speed = 5;
-    this.liveTime = 60;
+    this.liveTime = 55;
     this.currTime = 0;
     this.animStepRate = 6;
     this.destroyAnimIndex = 1;
@@ -815,15 +1082,11 @@ class Snowball
       {
         player.score += 100;
         poptarts[i].enabled = false;
-        if(!sounds.NPCDeathSound.isPlaying()){
-          sounds.NPCDeathSound.setVolume(player.volume);
-          sounds.NPCDeathSound.play();
-        }
+        sounds.playSound(sounds.NPCDeathSound);
         this.destroying = true;
         return;
       }
     }
-    this.currTime++
     if (this.currTime > this.liveTime)
       this.destroying = true;
 
@@ -970,4 +1233,132 @@ class Spring
     fill(255,0,0);
   }
 }
+
+class PenguinUnlock
+{
+  constructor(x, y, w, h, penguinImage, unlockPenguin)
+  {
+    this.position = createVector(x, y);
+    this.size = createVector(w, h);
+    this.img = penguinImage;
+    this.triggered = false;
+    this.frameStep = 6;
+    this.currAnimIdx = 0;
+    this.unlockPenguin = unlockPenguin;
+  }
+
+  updatePenguinUnlock()
+  {
+    this.drawPenguinUnlock();
+    this.checkForPlayerCollision();
+  }
+
+  drawPenguinUnlock()
+  {
+    //draw normal penguin
+    if (!this.triggered)
+    {
+      if (this.unlockPenguin == 2 && !player.bluePenguinUnlocked || 
+        this.unlockPenguin == 3 && !player.redPenguinUnlocked)
+      {
+        image(this.img, this.position.x, this.position.y);
+      }
+      return;
+    }
+    //poof animation
+    if (frameCount % this.frameStep == 0)
+      this.currAnimIdx++;
+    //if animation duration has ended unlock penguin
+    if (this.currAnimIdx >= images.smokeCloud.length)
+    {
+      for (let i = 0; i < penguinUnlocks.length; i++)
+      {
+        if (penguinUnlocks[i] == this)
+          penguinUnlocks.splice(i, 1);
+        if (this.unlockPenguin == 2)
+          player.bluePenguinUnlocked = true;
+        if (this.unlockPenguin == 3)
+          player.redPenguinUnlocked = true;
+        return;
+      }
+    }
+    image(images.smokeCloud[this.currAnimIdx], this.position.x, this.position.y);
+    this.penguinUnlockedNotification();
+
+  }
+
+  async checkForPlayerCollision()
+  {
+    if (detectCollision(this.position.x, this.position.y, this.size.x, this.size.y,
+      player.position.x, player.position.y, player.size.x, player.size.y).magSq() > 0)
+      {
+        if (this.triggered) return;
+        this.triggered = true;
+        sounds.playSound(sounds.gameWinSound);
+        frameRate(0);
+        this.penguinUnlockedNotification();
+        await resolveAfterTime(2500);
+        frameRate(60);
+        sounds.playSound(sounds.poofSound);
+      }
+  }
+
+  penguinUnlockedNotification()
+  {
+    push();
+    translate(0, -(height/2 - player.position.y+100));
+    textFont(pixelBodyFont);
+    fill(0);
+    image(images.UIBorderUnlock, width/2, height/2);
+    textSize(30);
+    text("New Penguin\n\nPal Unlocked!", width/2, height/2-20);
+    pop();
+  }
+}
+
+class VisibleObject
+{
+  constructor(x, y, img)
+  {
+    this.position = createVector(x, y);
+    this.img = img;
+  }
+
+  drawObject()
+  {
+    image(this.img, this.position.x, this.position.y);
+  }
+}
+
+class WorldSpaceUI
+{
+  constructor(text, textSize, x, y)
+  {
+    this.topLeftAnchor = createVector(0, 0);
+    this.bottomRightAnchor = createVector(0, 0);
+    this.centerAnchor = createVector(0, 0);
+    this.centerOffset = createVector(x, y);
+    this.message = text;
+    this.textSize = textSize;
+  }
+
+  writeText()
+  {
+    fill(0);
+    textAlign(CENTER);
+    textSize(this.textSize);
+    text(this.message, this.centerAnchor.x + this.centerOffset.x, this.centerAnchor.y + this.centerOffset.y);
+  }
+}
+
+function resolveAfterTime(time)
+{
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
+}
+
+
 

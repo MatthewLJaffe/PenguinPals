@@ -1,3 +1,5 @@
+var volume = 5;
+
 class gameObj
 {
     constructor()
@@ -19,8 +21,6 @@ class gameObj
       //for high scores
       this.highScores = [0, 0, 0, 0, 0];    //default high scores
 
-      //for volume
-      this.volume = 5;  //starts at 5, which is medium volume
     }
 
   }

@@ -44,7 +44,7 @@ class snowObj
   {
     if(game.currentState == 0){
       game.currentState = 1; //changes to options screen
-      //return;
+      return;
     }
 
     var buttons = game.state[game.currentState].buttons;
@@ -264,12 +264,13 @@ class snowObj
     //loop for intro screen
     execute(me)
     {
+      //rgb(63, 63, 116)
+      //rgb(99, 155, 255)
+      //rgb(91, 110, 225)
+      //rgb(116, 116, 176)
+      textFont(pixelBodyFont);
       background(220, 250, 250);
       //update state based on ui presses
-      for (let i = 0; i < this.buttons.length; i++)
-      {
-        this.buttons[i].drawButton();
-      }
       if (this.buttonPressed == "Start")
       {
         me.currentState = 4;
@@ -322,9 +323,10 @@ class snowObj
 
       image(images.fish, 425, 220);
       
-      fill(135, 206, 250);
-      textSize(64);
+      fill(99, 155, 255);
+      textSize(48);
       textAlign(LEFT);
+      textFont(pixelHeaderFont);
       text("INSTRUCTIONS", 20, 75);
       /*
       WASD keys to move
@@ -333,18 +335,20 @@ class snowObj
       Q / E to switch penguins
 
       */
-      fill(50, 140, 220);
-      textSize(32);
+      textFont(pixelBodyFont);
+      fill(91, 110, 225);
+      textSize(20);
       textAlign(LEFT);
       text("WASD keys to move", 25, 125);
       text("Avoid angry Poptarts", 25, 175);
       text("Collect fish for extra lives", 25, 225);
-      text("Q/E to switch penguins", 25, 275);
+      text("1/2/3 to switch penguins", 25, 275);
       text("Space to use special move", 25, 325);
 
       //menu
       textSize(48);
-      fill(25, 100, 175);    //font color of menu
+      textFont(pixelHeaderFont);
+      fill(99, 155, 255);
       textAlign(CENTER);
       text("Start", width/2, 392);
       text("Volume", width/2, 468);
@@ -355,7 +359,8 @@ class snowObj
   
   //screen in state maching for updating volume
   class volumeScreen{  //2
-    execute(me){
+    execute(me)
+    {
         background(220, 250, 250);
       
         fill(135, 206, 250);
@@ -373,7 +378,7 @@ class snowObj
         textAlign(LEFT);
         text(vol, 25, 100, 775, 400);
 
-        for(var i = 0; i < me.volume; i++){
+        for(var i = 0; i < volume; i++) {
           rect(100 + i*60, 350, 58, 50);
         }
         
@@ -389,7 +394,6 @@ class snowObj
         rect(100, 400, 600, 2);
         rect(698, 350, 2, 50);
 
-        //setVolume(me.volume * 0.1); //setVolume ranges from 0.0 to 1.0 so we scale accordingly
 
         if(currFrame < (frameCount - 12)){  //return to instructions screen
             currFrame = frameCount;
@@ -398,14 +402,14 @@ class snowObj
             }
 
             if(keyArray[LEFT_ARROW] == 1){  //lower volume
-              if(me.volume > 0){
-                me.volume--;
+              if(volume > 0){
+                volume--;
               }
             }
     
             if(keyArray[RIGHT_ARROW] == 1){ //increase volume
-              if(me.volume < 10){
-                me.volume++;
+              if(volume < 10){
+                volume++;
               }
             }
           }
@@ -496,10 +500,9 @@ class snowObj
         this.poptartObjs[0].update();
 
         text("You lose!", width/2, height/3);
-        if(!sounds.gameLoseSound.isPlaying() && this.played == false){
-          sounds.gameLoseSound.setVolume(me.volume*0.01);
+        if(this.played == false){
           this.played = true;
-          sounds.gameLoseSound.play();
+          sounds.playSound(sounds.gameLoseSound);
         }
       }
       if(me.win == true){
@@ -509,10 +512,9 @@ class snowObj
           this.walkingObjs[i].update();
         }
         text("You win!", width/2, height/3);
-        if(!sounds.gameWinSound.isPlaying() && this.played == false){
-          sounds.gameWinSound.setVolume(me.volume*0.01);
+        if(this.played == false){
           this.played = true;
-          sounds.gameWinSound.play();
+          sounds.playSound(sounds.gameWinSound);
         }
       }
 
