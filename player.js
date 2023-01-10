@@ -32,7 +32,7 @@ class Player
     this.currDamageCooldown = 0;
     this.maxDashSpeed = 8;
     this.bluePenguinUnlocked = false;
-    this.redPenguinUnlocked = false;
+    this.redPenguinUnlocked = true;
     this.dashSpeedTimeGraph = [
       {'time': 0, 'speed': 0 },
       {'time': .25, 'speed': 1 },
@@ -195,24 +195,8 @@ class Player
     }
     else
     {
-      //umbrella right
-      if (keyArray[68] && this.jump == 0)
-      {
-        this.umbrellaPos.set(20, 0);
-        this.umbrellaSize.set(30, 64);
-      }
-      //umbrella left
-      else if (keyArray[65] && this.jump == 0)
-      {
-        this.umbrellaPos.set(-20, 0);
-        this.umbrellaSize.set(30, 64);
-      }
-      //umbrella is up
-      else
-      {
-        this.umbrellaPos.set(0, -20);
-        this.umbrellaSize.set(50, 30);
-      }
+      this.umbrellaPos.set(0, -20);
+      this.umbrellaSize.set(50, 30);      
     }
   }
 
@@ -408,7 +392,6 @@ class Player
 
   //loop through current player animation
   //all animation logic is handled here
-  //TODO refactor into fsm
   updatePlayerAnim()
   {
     let prevAnim = this.anim;
@@ -424,11 +407,7 @@ class Player
       }
       else if (this.penguin_type == 3)
       {
-        if (keyArray[68] && this.jump == 0)
-          this.anim = [images.redPenguinUmbrellaRight];
-        else if (keyArray[65] && this.jump == 0)
-          this.anim = [images.redPenguinUmbrellaLeft];
-        else if (this.facedDir == 1)
+        if (this.facedDir == 1)
           this.anim = [images.redPenguinUmbrellaUpRight];
         else
           this.anim = [images.redPenguinUmbrellaUpLeft];

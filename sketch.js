@@ -33,7 +33,7 @@ function setup() {
   noSmooth();
   imageMode(CENTER);
   createCanvas(800, 600);
-  game = new gameObj();
+  game = new GameObj();
   textFont(pixelBodyFont);
 }
 

@@ -1,4 +1,4 @@
-class poptart
+class Poptart
 {
   constructor(x, y)
   {
@@ -90,7 +90,7 @@ class poptart
     this.acceleration.add(force);
   }
 
-  //position based on kinematic positoin velocity and acceleration
+  //position based on kinematic position velocity and acceleration
   updatePos()
   {
     this.acceleration.set(0, 0);
@@ -124,7 +124,6 @@ class poptart
         this.facedDir = -1;
       return;
     }
-
     //handle ground movement
     //apply horizontal move forces
     if (this.walkForward === 1) {
@@ -307,8 +306,8 @@ class ChasePlayer
       return "Jump"
     if (!this.agent.inRangeOfPlayer())
       return "Idle";
+      
     //walk towards player
-
     if (this.agent.position.x - player.position.x > 0)
     {
       this.agent.walkForward = 0;
@@ -338,6 +337,7 @@ class ChasePlayer
     }
     return "ChasePlayer";
   }
+  
 
   findTargetPlatform()
   {

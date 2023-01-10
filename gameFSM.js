@@ -1,6 +1,6 @@
 
 //particle system that softly rains down snow
-class snowObj
+class SnowParticle
 {
   //snow has a lower limit and upper limit to the size
     constructor(lower_limit, upper_limit)
@@ -21,7 +21,6 @@ class snowObj
       fill(255);
       noStroke();
       ellipse(this.x, this.y, this.size, this.size);
-      //image(this.img, this.x, this.y);
     }
     //update individual particles based on player offset and movement
     move()
@@ -55,12 +54,11 @@ class snowObj
         buttons[i].checkPressed();
       }
     }
-
   }
 
   var currFrame = 0;
   
-  //state encapslating functionality of intro screen
+  //state encapsulating functionality of intro screen
   class introScreen //0
   {
     constructor()
@@ -71,7 +69,7 @@ class snowObj
       
       //add snow
       for(let i = 0; i < 400; i++){
-        this.snowDrops.push(new snowObj(4, 8));
+        this.snowDrops.push(new SnowParticle(4, 8));
       }
       //add walking animations
       this.walkingObjs.push(new WalkingAnimation(
@@ -118,7 +116,7 @@ class snowObj
       text('PALS', width/2, 400 - yOffset);
       
       textSize(32);
-      text('By Katherine Pajares and Matthew Jaffe', width/2, 450 - yOffset);
+      text('By Matthew Jaffe and Katherine Pajares', width/2, 450 - yOffset);
       //flash effect
       if (frameCount % 80 < 40)
         fill(135, 206, 250, 0);
@@ -256,9 +254,9 @@ class snowObj
       this.pacingPenguin = new WalkBackAndForthAnimation(createVector(415, 110), createVector(32, 32), 1, images.blackPenguinWalkRight, images.blackPenguinWalkLeft, 6, 415 - 50, 415+ 50);
       this.buttonPressed = "";
       this.buttons = [];
-      this.buttons.push(new button(createVector(width/2, 380), createVector(120, 60),"Start", this));
-      this.buttons.push(new button(createVector(width/2, 453), createVector(180, 60), "Volume", this));
-      this.buttons.push(new button(createVector(width/2, 531), createVector(270, 60), "High Scores", this));
+      this.buttons.push(new Button(createVector(width/2, 380), createVector(120, 60),"Start", this));
+      this.buttons.push(new Button(createVector(width/2, 453), createVector(180, 60), "Volume", this));
+      this.buttons.push(new Button(createVector(width/2, 531), createVector(270, 60), "High Scores", this));
     }
 
     //loop for intro screen
@@ -358,7 +356,7 @@ class snowObj
   }
   
   //screen in state maching for updating volume
-  class volumeScreen{  //2
+  class VolumeScreen{  //2
     execute(me)
     {
         background(220, 250, 250);
@@ -417,7 +415,7 @@ class snowObj
   }
   
   //screen in state machine for displaying high scores
-  class highscoreScreen{  //3
+  class HighscoreScreen{  //3
     execute(me){
       background(220, 250, 250);
     
@@ -446,14 +444,14 @@ class snowObj
   }
   
   //screen in state machine for displaying loss or win
-  class gameoverScreen //5
+  class GameoverScreen //5
   {  
     constructor(){
       this.snowDrops = [];
 
       //add snow
       for(let i = 0; i < 400; i++){
-        this.snowDrops.push(new snowObj(4, 8));
+        this.snowDrops.push(new SnowParticle(4, 8));
       }
       this.played = false;
       this.walkingObjs = [];

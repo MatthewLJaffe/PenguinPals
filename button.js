@@ -1,5 +1,5 @@
 //simple button that can be checked for if it is pressed in game loop
-class button
+class Button
 {
     constructor(pos, size, name, state)
     {
