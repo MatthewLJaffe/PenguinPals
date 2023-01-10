@@ -24,7 +24,7 @@ function preload()
 {
   images = new Images();
   sounds = new SoundEffects();
-  pixelBodyFont = loadFont("FFFFORWA.ttf");
+  pixelBodyFont = loadFont("FFFFORWA.TTF");
   pixelHeaderFont = loadFont("ka1.ttf");
 }
 

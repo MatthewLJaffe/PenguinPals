@@ -32,7 +32,7 @@ class Player
     this.currDamageCooldown = 0;
     this.maxDashSpeed = 8;
     this.bluePenguinUnlocked = false;
-    this.redPenguinUnlocked = true;
+    this.redPenguinUnlocked = false;
     this.dashSpeedTimeGraph = [
       {'time': 0, 'speed': 0 },
       {'time': .25, 'speed': 1 },

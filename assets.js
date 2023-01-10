@@ -74,7 +74,7 @@ class Images
       this.iceCornerImages.push(loadImage("images/tiles/IceCorner" + i + ".png"));
       this.springImages.push(loadImage("images/tiles/Spring" + i + ".png"));
       this.snowBallRightImages.push(loadImage("images/Snowball" + i + ".png"));
-      this.snowBallLeftImages.push(loadImage("images/SnowballLeft" + i + ".png"));
+      this.snowBallLeftImages.push(loadImage("images/SnowBallLeft" + i + ".png"));
       this.fallingIcicles.push(loadImage("images/FallingIcicles" + i + ".png"));
     }
 
